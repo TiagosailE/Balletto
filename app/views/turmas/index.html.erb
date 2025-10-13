@@ -1,0 +1,24 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <header class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-semibold">Gestão de Turmas</h1>
+    <%= link_to 'Criar Nova Turma +', new_turma_path, class: 'bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700' %>
+  </header>
+
+  <div class="space-y-4">
+    <% @turmas.each do |turma| %>
+      <%= render partial: 'card', locals: { turma: turma } %>
+    <% end %>
+
+    <% if @turmas.empty? %>
+      <div class="text-gray-500">Nenhuma turma cadastrada ainda.</div>
+    <% end %>
+  </div>
+
+  <!-- footer -->
+  <nav class="fixed bottom-4 left-0 right-0 flex justify-around bg-white/80 py-2 shadow-md max-w-3xl mx-auto rounded-md">
+    <%= link_to 'Início', root_path, class: 'text-gray-600' %>
+    <%= link_to 'Alunos', '#', class: 'text-gray-600' %>
+    <%= link_to 'Financeiro', '#', class: 'text-gray-600' %>
+    <%= link_to 'Turmas', turmas_path, class: 'font-semibold text-blue-600' %>
+  </nav>
+</div>
