@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
-  root 'turmas#index'
+  get "pages/home"
+  devise_for :users
+  root 'pages#home'
   resources :turmas
 end
