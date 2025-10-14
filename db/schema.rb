@@ -10,58 +10,23 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_13_230403) do
+ActiveRecord::Schema[7.1].define(version: 2025_10_14_194433) do
   # These are extensions that must be enabled in order to support this database
-  enable_extension "pg_catalog.plpgsql"
-
-  create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
-    t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
-    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
-    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
-  end
-
-  create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
-    t.string "service_name", null: false
-    t.bigint "byte_size", null: false
-    t.string "checksum"
-    t.datetime "created_at", null: false
-    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
-  end
-
-  create_table "active_storage_variant_records", force: :cascade do |t|
-    t.bigint "blob_id", null: false
-    t.string "variation_digest", null: false
-    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
+  enable_extension "plpgsql"
 
   create_table "alunos", primary_key: "alu_codigo", force: :cascade do |t|
     t.string "alu_nome", limit: 100, null: false
     t.integer "alu_tur_codigo"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "possiveis_alunos", primary_key: "pos_codigo", force: :cascade do |t|
-    t.string "pos_nome", limit: 100, null: false
-    t.datetime "pos_data_contato"
-    t.string "pos_telefone", limit: 20
-    t.string "pos_email", limit: 100
-    t.string "pos_status", limit: 1, default: "P"
-    t.text "pos_observacao"
-    t.datetime "pos_data_cad"
-    t.string "avatar_url", limit: 255
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["pos_email"], name: "index_possiveis_alunos_on_pos_email"
-    t.index ["pos_nome"], name: "index_possiveis_alunos_on_pos_nome"
+    t.date "alu_data_nascimento"
+    t.string "alu_responsavel"
+    t.string "alu_status", default: "matriculado"
+    t.date "alu_data_cadastro"
+    t.text "alu_endereco"
+    t.string "alu_foto"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_alunos_on_user_id"
   end
 
   create_table "turmas", primary_key: "tur_codigo", force: :cascade do |t|
@@ -71,10 +36,29 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_230403) do
     t.integer "tur_capacidade", limit: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "tur_dia_da_semana"
+    t.string "tur_dia_da_semana", limit: 20
   end
 
-  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  create_table "users", force: :cascade do |t|
+    t.string "nome", default: "", null: false
+    t.string "usuario", default: "", null: false
+    t.integer "role", default: 0
+    t.string "telefone"
+    t.date "data_cont"
+    t.string "status", default: "ativo"
+    t.text "especialidades"
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
+    t.index ["usuario"], name: "index_users_on_usuario", unique: true
+  end
+
   add_foreign_key "alunos", "turmas", column: "alu_tur_codigo", primary_key: "tur_codigo"
+  add_foreign_key "alunos", "users"
 end

@@ -1,4 +1,4 @@
-class CreateAlunos < ActiveRecord::Migration[8.0]
+class CreateAlunos < ActiveRecord::Migration[7.0]
   def change
     create_table :alunos, id: false do |t|
       t.primary_key :alu_codigo

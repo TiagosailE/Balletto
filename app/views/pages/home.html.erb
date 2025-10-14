@@ -1,0 +1,21 @@
+<header class="main-header">
+  <h1>Olá, <%= current_user.nome %></h1>
+  <%= link_to "Sair", destroy_user_session_path, data: { "turbo-method": :delete }, class: "logout-button" %>
+</header>
+
+<main class="container">
+  <section class="info-card">
+    <p>Total de alunos matriculados</p>
+    <h2><%= @total_alunos %></h2>
+  </section>
+
+  <section class="quick-access">
+    <p>Acesso rápido</p>
+    <div class="button-group">
+      <%= link_to "Cadastrar Alunos", '#', class: 'button' %>
+      <% if current_user.admin? %>
+        <%= link_to "Cadastrar Professor", new_user_registration_path, class: 'button' %>
+      <% end %>
+    </div>
+  </section>
+</main>
