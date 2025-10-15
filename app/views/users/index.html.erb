@@ -1,0 +1,25 @@
+<div class="max-w-3xl mx-auto px-4 py-8">
+  <header class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-semibold">Gerenciar Professores</h1>
+    <%= link_to 'Cadastrar Novo Professor +', new_user_path, class: 'bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700' %>
+  </header>
+
+  <div class="space-y-4">
+    <% @users.each do |user| %>
+      <div class="bg-white border rounded-lg p-4 shadow-sm flex justify-between items-center">
+        <div>
+          <p class="font-medium"><%= user.nome %></p>
+          <p class="text-sm text-gray-600"><%= user.email %></p>
+        </div>
+        <div class="flex gap-2">
+          <%= link_to 'Editar', edit_user_path(user), class: 'text-sm px-3 py-1 border rounded text-gray-700 hover:bg-gray-50' %>
+          <%= button_to 'Excluir', user_path(user), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'text-sm px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700' %>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @users.empty? %>
+      <p class="text-gray-500">Nenhum professor cadastrado ainda.</p>
+    <% end %>
+  </div>
+</div>

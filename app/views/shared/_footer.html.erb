@@ -1,8 +1,9 @@
 <nav class="fixed bottom-4 left-0 right-0 flex justify-around bg-white/80 py-2 shadow-md max-w-3xl mx-auto rounded-md">
 
-  <%= link_to 'Início', pages_home_path, class: (current_page?(pages_home_path) ? 'font-semibold text-blue-600' : 'text-gray-600') %>
+  <%= link_to 'Início', root_path, class: (current_page?(root_path) ? 'font-semibold text-blue-600' : 'text-gray-600') %>
 
   <%= link_to 'Alunos', '#', class: 'text-gray-600' %>
+  
   <%= link_to 'Financeiro', '#', class: 'text-gray-600' %>
 
   <%= link_to 'Turmas', turmas_path, class: (current_page?(turmas_path) ? 'font-semibold text-blue-600' : 'text-gray-600') %>

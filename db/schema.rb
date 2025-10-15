@@ -90,11 +90,17 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_15_220135) do
     t.integer "tur_capacidade", limit: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+<<<<<<< HEAD
     t.string "tur_dia_da_semana"
     t.string "status"
     t.string "professor"
     t.string "sala"
     t.integer "max_alunos", default: 20
+=======
+    t.string "tur_dia_da_semana", limit: 20
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_turmas_on_user_id"
+>>>>>>> 124c8d729c501955b7ec749d530555510ef057b9
   end
 
   create_table "users", force: :cascade do |t|
@@ -121,4 +127,5 @@ ActiveRecord::Schema[7.1].define(version: 2025_10_15_220135) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "alunos", "turmas", column: "alu_tur_codigo", primary_key: "tur_codigo"
   add_foreign_key "alunos", "users"
+  add_foreign_key "turmas", "users"
 end

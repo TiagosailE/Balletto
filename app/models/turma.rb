@@ -8,6 +8,8 @@ class Turma < ApplicationRecord
 
   has_many :alunos, foreign_key: 'alu_tur_codigo', primary_key: 'tur_codigo', dependent: :nullify
 
+  belongs_to :professor, class_name: 'User', foreign_key: 'user_id', optional: true
+
   def vagas_ocupadas
     alunos.count
   rescue
