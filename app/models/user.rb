@@ -6,4 +6,6 @@ class User < ApplicationRecord
 
   validates :nome, presence: true
   validates :usuario, presence: true, uniqueness: true
+
+  has_many :turmas
 end

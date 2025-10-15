@@ -13,8 +13,8 @@
     <p>Acesso rápido</p>
     <div class="button-group">
       <%= link_to "Cadastrar Alunos", '#', class: 'button' %>
-      <% if current_user.admin? %>
-        <%= link_to "Cadastrar Professor", new_user_registration_path, class: 'button' %>
+      <% if current_user&.admin? %>
+        <%= link_to 'Professores', users_path, class: (request.path.starts_with?('/users') ? 'font-semibold text-blue-600' : 'text-gray-600') %>
       <% end %>
     </div>
   </section>

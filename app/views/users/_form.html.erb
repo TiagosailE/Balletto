@@ -1,0 +1,37 @@
+<%= form_with(model: user, class: "space-y-4") do |form| %>
+    <% if user.errors.any? %>
+        <div>
+            <h2><%= pluralize(user.errors.count, "error") %> prohibited user from being saved:</h2>
+            <ul>
+                <% user.errors.each do |error| %>
+                    <li><%= error.full_messages %></li>
+                <% end %>
+            </ul>
+        </div>
+    <% end %>
+
+    <div>
+        <%= form.label :nome, class: 'block font-medium' %>
+        <%= form.text_field :nome, class: 'w-full border rounded-md p-2' %>
+    </div>
+
+    <div>
+        <%= form.label :usuario, class: 'block font-medium' %>
+        <%= form.text_field :usuario, class: 'w-full border rounded-md p-2' %>
+    </div>
+
+    <div>
+        <%= form.label :email, class: 'block font-medium' %>
+        <%= form.email_field :email, class: 'w-full border rounded-md p-2' %>
+    </div>
+
+    <div>
+        <%= form.label :password, "Senha (deixe em branco para não alterar)", class: 'block font-medium' %>
+        <%= form.password_field :password, class: 'w-full border rounded-md p-2' %>
+    </div>
+
+    <div class="actions">
+        <%= form.submit "Salvar", class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 cursor-pointer' %>
+    </div>
+
+<% end %>

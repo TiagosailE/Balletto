@@ -2,7 +2,7 @@ class TurmasController < ApplicationController
   before_action :set_turma, only: %i[ show edit update destroy ]
 
   def index
-    @turmas = Turma.order(:tur_nome).all
+    @turmas = Turma.includes(:professor).order(:tur_nome)
   end
 
   def show
@@ -53,6 +53,6 @@ class TurmasController < ApplicationController
   end
   
   def turma_params
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_nivel, :tur_capacidade, :tur_dia_da_semana)
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_nivel, :tur_capacidade, :tur_dia_da_semana, :user_id) # <-- ADICIONE :user_id AQUI
   end
 end
