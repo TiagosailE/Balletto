@@ -3,6 +3,9 @@
     <div>
       <h2 class="text-lg font-medium"><%= link_to turma.tur_nome, turma_path(turma), class: 'hover:underline' %></h2>
       <p class="text-sm text-gray-600 mt-1">
+        <strong>Professor:</strong> <%= turma.professor&.nome.presence || 'Não atribuído' %>
+      </p>
+      <p class="text-sm text-gray-600 mt-1">
         <strong>Nível:</strong> <%= turma.tur_nivel.presence || '—' %>
       </p>
       <p class="text-sm text-gray-600 mt-1">
