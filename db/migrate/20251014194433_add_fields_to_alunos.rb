@@ -1,4 +1,4 @@
-class AddFieldsToAlunos < ActiveRecord::Migration[7.0]
+class AddFieldsToAlunos < ActiveRecord::Migration[8.0]
   def change
     # Colunas que faltam no modelo de Aluno dele
     add_column :alunos, :alu_data_nascimento, :date
