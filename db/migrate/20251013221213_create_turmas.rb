@@ -1,4 +1,4 @@
-class CreateTurmas < ActiveRecord::Migration[7.0]
+class CreateTurmas < ActiveRecord::Migration[8.0]
   def change
     create_table :turmas, id: false do |t|
       t.primary_key :tur_codigo

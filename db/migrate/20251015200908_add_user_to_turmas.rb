@@ -1,4 +1,4 @@
-class AddUserToTurmas < ActiveRecord::Migration[7.1]
+class AddUserToTurmas < ActiveRecord::Migration[8.0]
   def change
     add_reference :turmas, :user, null: true, foreign_key: true
   end
