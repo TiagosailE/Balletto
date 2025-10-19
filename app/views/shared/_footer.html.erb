@@ -1,11 +1,31 @@
-<nav class="fixed bottom-4 left-0 right-0 flex justify-around bg-white/80 py-2 shadow-md max-w-3xl mx-auto rounded-md">
+<footer class="bg-[#0A1E3F] text-white w-full flex-shrink-0 fixed bottom-0 left-0 z-50">
+  <nav class="flex justify-around md:justify-center md:gap-x-10 items-center h-16 md:h-auto md:py-4 px-4">
+    <%= link_to root_path,
+      class:"flex flex-col md:flex-row md:gap-x-2 items-center text-gray-300 hover:text-white transition-colors p-2 rounded-lg #{'font-bold text-white bg-blue-600' if current_page?(root_path)}" do %>
+      <i class="fas fa-home text-xl md:text-base"></i>
+      <span class="text-xs md:text-sm font-medium">Início</span>
+    <% end %>
 
-  <%= link_to 'Início', root_path, class: (current_page?(root_path) ? 'font-semibold text-blue-600' : 'text-gray-600') %>
+    <%= link_to '#',
+      class:"flex flex-col md:flex-row md:gap-x-2 items-center text-gray-300 hover:text-white transition-colors p-2 rounded-lg" do %>
+      <i class="fas fa-users text-xl md:text-base"></i>
+      <span class="text-xs md:text-sm font-medium">Alunos</span>
+    <% end %>
 
-  <%= link_to 'Alunos', '#', class: 'text-gray-600' %>
-  
-  <%= link_to 'Financeiro', '#', class: 'text-gray-600' %>
+    <%= link_to '#',
+      class:"flex flex-col md:flex-row md:gap-x-2 items-center text-gray-300 hover:text-white transition-colors p-2 rounded-lg" do %>
+      <i class="fas fa-wallet text-xl md:text-base"></i>
+      <span class="text-xs md:text-sm font-medium">Financeiro</span>
+    <% end %>
 
-  <%= link_to 'Turmas', turmas_path, class: (current_page?(turmas_path) ? 'font-semibold text-blue-600' : 'text-gray-600') %>
+    <%= link_to turmas_path,
+      class:"flex flex-col md:flex-row md:gap-x-2 items-center text-white font-bold md:font-medium bg-blue-600 transition-colors p-2 rounded-lg #{'bg-blue-600 text-white' if current_page?(turmas_path)}" do %>
+      <i class="fas fa-layer-group text-xl md:text-base"></i>
+      <span class="text-xs md:text-sm">Turmas</span>
+    <% end %>
+  </nav>
 
-</nav>
+  <div class="hidden md:block text-center text-gray-400 text-xs pb-3">
+    &copy; <%= Time.current.year %> Balletto.
+  </div>
+</footer>
