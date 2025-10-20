@@ -20,4 +20,12 @@ class Turma < ApplicationRecord
     cap = tur_capacidade || 0
     "#{vagas_ocupadas}/#{cap}"
   end
+
+  before_validation :set_default_capacidade
+
+  private
+
+  def set_default_capacidade
+    self.tur_capacidade ||= 0
+  end
 end
