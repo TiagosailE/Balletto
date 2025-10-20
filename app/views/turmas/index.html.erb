@@ -71,14 +71,37 @@
                   </div>
                 </div>
               </div>
-
+              
               <div class="bg-[#111111] px-5 py-3 border-t border-[#2E2E2E] flex items-center justify-between text-sm">
+                
                 <div class="flex items-center gap-2 text-gray-400">
                   <i class="fas fa-users text-[#C5A300]"></i>
                   <span class="font-semibold text-[#E5E5E5]"><%= turma.alunos.count %> / <%= turma.tur_capacidade %></span>
                   <span class="text-gray-500">alunos</span>
                 </div>
-                <%= link_to "Editar →", edit_turma_path(turma), class: "font-semibold text-[#C5A300] hover:text-[#D4AF37] transition-colors", data: { turbo: false } %>
+
+                <div class="flex items-center gap-4">
+                  
+                  <%= link_to "Editar →", edit_turma_path(turma), 
+                      class: "font-semibold text-[#C5A300] hover:text-[#D4AF37] transition-colors", 
+                      data: { turbo: false },
+                      onclick: "event.stopPropagation()" %>
+
+                  <button 
+                    type="button"
+                    class="text-gray-500 hover:text-red-500 transition-colors"
+                    title="Excluir Turma"
+                    data-confirm-modal="true"
+                    data-confirm-title="Excluir Turma"
+                    data-confirm-body="Tem certeza que deseja excluir a turma '<%= turma.tur_nome %>'? Esta ação não pode ser desfeita."
+                    data-confirm-path="<%= turma_path(turma) %>"
+                    data-confirm-text="Excluir"
+                    data-confirm-class="bg-red-600 hover:bg-red-500"
+                    onclick="event.stopPropagation()">
+                    <i class="fas fa-trash-alt"></i>
+                  </button>
+                </div>
+
               </div>
             </div>
           <% end %>
