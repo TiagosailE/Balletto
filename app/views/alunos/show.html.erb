@@ -1,0 +1,31 @@
+<div class="max-w-2xl mx-auto px-4 py-8">
+  <h1 class="text-2xl font-semibold mb-4"><%= @aluno.alu_nome %></h1>
+  
+  <div class="bg-white border rounded-lg p-4 space-y-2">
+    <p><strong>Status:</strong> <%= @aluno.alu_status %></p>
+    <p><strong>Data de Nascimento:</strong> <%= @aluno.alu_data_nascimento %></p>
+    <p><strong>Turma:</strong> <%= @aluno.turma&.tur_nome || 'Sem turma' %></p>
+    <p><strong>Endereço:</strong> <%= @aluno.alu_endereco %></p>
+    <p><strong>Data de Cadastro:</strong> <%= @aluno.alu_data_cadastro %></p>
+    
+    <hr>
+    
+    <h2 class="font-medium">Informações do Responsável</h2>
+    <p><strong>Nome:</strong> <%= @aluno.responsavel_nome %></p>
+    <p><strong>Telefone:</strong> <%= @aluno.responsavel_telefone %></p>
+    <p><strong>Email:</strong> <%= @aluno.responsavel_email %></p>
+    
+    <hr>
+    
+    <div>
+      <strong>Condições Médicas (Descrição):</strong>
+      <p class="text-gray-700"><%= @aluno.condicoes_medicas.presence || 'Nenhuma condição informada.' %></p>
+    </div>
+  </div>
+  
+  <div class="mt-4 flex gap-2">
+    <%= link_to 'Editar Aluno', edit_aluno_path(@aluno), class: 'bg-blue-600 text-white px-4 py-2 rounded' %>
+    <%= button_to 'Excluir Aluno', aluno_path(@aluno), method: :delete, data: { confirm: 'Tem certeza?' }, class: 'bg-red-600 text-white px-4 py-2 rounded' %>
+    <%= link_to "Voltar", alunos_path, class: 'bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 inline-block text-center' %>
+  </div>
+</div>
