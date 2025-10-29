@@ -5,7 +5,6 @@
       Organize, crie e gerencie todos os professores em um só lugar.
     </p>
   </div>
-
   <div class="flex flex-col md:flex-row md:gap-8 items-start justify-center">
     <aside class="w-full md:w-auto mb-6 md:mb-0 flex justify-center md:block">
       <%= link_to new_user_path,
@@ -15,7 +14,6 @@
       <% end %>
     </aside>
   </div>
-
   <div lass="flex-1 w-full">
     <div id="turmas-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
       <% @users.each do |user| %>
@@ -30,7 +28,6 @@
           </div>
         </div>
       <% end %>
-
       <% if @users.empty? %>
         <p class="text-gray-500">Nenhum professor cadastrado ainda.</p>
       <% end %>

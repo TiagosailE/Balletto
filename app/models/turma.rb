@@ -3,7 +3,6 @@ class Turma < ApplicationRecord
   self.primary_key = 'tur_codigo'
 
   validates :tur_nome, presence: true, length: { maximum: 50 }
-  validates :tur_nivel, length: { maximum: 25 }, allow_blank: true
   validates :tur_capacidade, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to:255 }, allow_nil: true
 
   has_many :alunos, foreign_key: 'alu_tur_codigo', primary_key: 'tur_codigo', dependent: :nullify

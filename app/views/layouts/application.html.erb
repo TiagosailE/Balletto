@@ -17,6 +17,28 @@
         padding: 0;
         font-family: 'Inter', sans-serif;
       }
+      
+      label {
+        display: block;
+        font-size: 0.875rem; 
+        font-weight: 500; 
+        color: #A1A1AA; 
+        margin-bottom: 0.25rem; 
+      }
+
+      ::placeholder {
+        color: #6B7280; 
+        opacity: 1; 
+      }
+      
+      input[type="time"]::-webkit-calendar-picker-indicator,
+      input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.8); 
+      }
+      select option {
+        background-color: #111111;
+        color: #E5E5E5;
+      }
     </style>
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
@@ -37,3 +59,4 @@
     <%= render 'shared/confirm_modal' %>
   </body>
 </html>
+
