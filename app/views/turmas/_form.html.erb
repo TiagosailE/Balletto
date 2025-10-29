@@ -13,48 +13,43 @@
   <div class="space-y-4">
     <div>
       <%= f.label :user_id, 'Professor Responsável', class: 'block text-sm font-medium text-gray-700' %>
-      <%# Este helper cria um dropdown (select) a partir de uma coleção de objetos %>
-      <%= f.collection_select :user_id, 
-        User.where(role: :professor).order(:nome),  # A lista de opções (só professores)
-        :id,                                        # O valor de cada opção (o ID do usuário)
-        :nome,                                      # O texto de cada opção (o nome do usuário)
-        { include_blank: 'Nenhum (opcional)' },     # Opção em branco
-        class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
-      </div>
       
-      <div>
-        <%= f.label :tur_nome, 'Nome da Turma', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.text_field :tur_nome, class: 'mt-1 block w-full border rounded-md px-3 py-2', maxlength: 50 %>
-      </div>
-
-      <div>
-        <%= f.label :tur_dia_da_semana, 'Dia da Semana', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.select :tur_dia_da_semana, 
-          ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-          { include_blank: 'Selecione' },
-          class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
-      </div>
-
-      <div>
-        <%= f.label :tur_horario, 'Horário', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.time_field :tur_horario, 
-            value: (turma.tur_horario&.strftime('%H:%M')), 
+      <%= f.collection_select :user_id, 
+            @professores, 
+            :id, 
+            :nome, 
+            { include_blank: 'Nenhum (opcional)' },
             class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
-      </div>
-
-      <div>
-        <%= f.label :tur_nivel, 'Nível', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.text_field :tur_nivel, class: 'mt-1 block w-full border rounded-md px-3 py-2', maxlength: 25 %>
-      </div>
-
-      <div>
-        <%= f.label :tur_capacidade, 'Capacidade', class: 'block text-sm font-medium text-gray-700' %>
-        <%= f.number_field :tur_capacidade, class: 'mt-1 block w-36 border rounded-md px-3 py-2', min: 1, max: 255 %>
-      </div>
-
-      <div class="pt-2">
-        <%= f.submit class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' %>
-        <%= link_to 'Cancelar', turmas_path, class: 'ml-2 text-gray-600' %>
-      </div>
     </div>
+      
+    <div>
+      <%= f.label :tur_nome, 'Nome da Turma', class: 'block text-sm font-medium text-gray-700' %>
+      <%= f.text_field :tur_nome, class: 'mt-1 block w-full border rounded-md px-3 py_2', maxlength: 50 %>
+    </div>
+
+    <div>
+      <%= f.label :tur_dia_da_semana, 'Dia da Semana', class: 'block text-sm font-medium text-gray-700' %>
+      <%= f.select :tur_dia_da_semana, 
+        ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+        { include_blank: 'Selecione' },
+        class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
+    </div>
+
+    <div>
+      <%= f.label :tur_horario, 'Horário', class: 'block text-sm font-medium text-gray-700' %>
+      <%= f.time_field :tur_horario, 
+          value: (turma.tur_horario&.strftime('%H:%M')), 
+          class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
+    </div>
+
+    <div>
+      <%= f.label :tur_capacidade, 'Capacidade', class: 'block text-sm font-medium text-gray-700' %>
+      <%= f.number_field :tur_capacidade, class: 'mt-1 block w-36 border rounded-md px-3 py-2', min: 1, max: 255 %>
+    </div>
+
+    <div class="pt-2">
+      <%= f.submit class: 'bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700' %>
+      <%= link_to 'Cancelar', turmas_path, class: 'ml-2 text-gray-600' %>
+    </div>
+  </div>
 <% end %>

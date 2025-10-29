@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_22_084825) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_28_233747) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -48,12 +48,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_084825) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "alu_data_nascimento"
+    t.string "responsavel_nome"
     t.string "alu_status", default: "matriculado"
     t.date "alu_data_cadastro"
     t.text "alu_endereco"
     t.string "alu_foto"
     t.bigint "user_id"
-    t.string "responsavel_nome"
     t.string "responsavel_telefone"
     t.string "responsavel_email"
     t.text "condicoes_medicas"
@@ -89,13 +89,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_084825) do
   create_table "turmas", primary_key: "tur_codigo", force: :cascade do |t|
     t.string "tur_nome", limit: 50, null: false
     t.datetime "tur_horario"
-    t.string "tur_nivel", limit: 25
     t.integer "tur_capacidade", limit: 2
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "tur_dia_da_semana"
     t.string "status"
-    t.string "professor"
     t.string "sala"
     t.integer "max_alunos", default: 20
     t.bigint "user_id"
@@ -126,5 +124,5 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_22_084825) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "alunos", "turmas", column: "alu_tur_codigo", primary_key: "tur_codigo"
   add_foreign_key "alunos", "users"
-  add_foreign_key "turmas", "users"
+  add_foreign_key "turmas", "users", on_delete: :nullify
 end

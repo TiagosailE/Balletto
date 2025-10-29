@@ -1,13 +1,15 @@
 class TurmasController < ApplicationController
-  before_action :set_turma, only: %i[ show edit update destroy ]
+  before_action :set_turma, only: %i[show edit update destroy]
+  
+  # --- MUDANÇA AQUI ---
+  # O 'before_action' agora também ordena
+  before_action :set_professores, only: %i[new edit create update]
 
   def index
     @turmas = Turma.includes(:professor).order(:tur_nome)
   end
 
   def show
-    # @Turma carregado em set_turma
-    # @alunos placeholder: se houver modelo Aluno, a associação trará os registros relacionados
     @alunos = @turma.alunos
   end
 
@@ -17,7 +19,7 @@ class TurmasController < ApplicationController
 
   def edit
   end
-  
+
   def create
     @turma = Turma.new(turma_params)
 
@@ -33,6 +35,7 @@ class TurmasController < ApplicationController
     if @turma.update(turma_params)
       redirect_to @turma, notice: "Turma atualizada com sucesso."
     else
+      # O update está falhando e te mandando para cá
       flash.now[:alert] = "Erro ao atualizar turma."
       render :edit, status: :unprocessable_entity
     end
@@ -47,12 +50,15 @@ class TurmasController < ApplicationController
 
   def set_turma
     @turma = Turma.find(params[:id])
-
   rescue ActiveRecord::RecordNotFound
     redirect_to turmas_url, alert: "Turma não encontrada."
   end
-  
+
+  def set_professores
+    @professores = User.where(role: 'professor').order(:nome)
+  end
+
   def turma_params
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_nivel, :tur_capacidade, :tur_dia_da_semana, :user_id) # <-- ADICIONE :user_id AQUI
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :tur_dia_da_semana, :user_id)
   end
 end

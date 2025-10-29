@@ -52,10 +52,6 @@
 
                 <div class="space-y-3 text-sm text-gray-400">
                   <div class="flex items-center">
-                    <i class="fas fa-certificate w-5 text-center text-gray-500 mr-3"></i>
-                    <span>Nível: <%= turma.tur_nivel %></span>
-                  </div>
-                  <div class="flex items-center">
                     <i class="fas fa-calendar-alt w-5 text-center text-gray-500 mr-3"></i>
                     <span><%= turma.tur_dia_da_semana %>, <%= turma.tur_horario&.strftime("%H:%M") %></span>
                   </div>
@@ -83,9 +79,9 @@
                 <div class="flex items-center gap-4">
                   
                   <%= link_to "Editar →", edit_turma_path(turma), 
-                      class: "font-semibold text-[#C5A300] hover:text-[#D4AF37] transition-colors", 
-                      data: { turbo: false },
-                      onclick: "event.stopPropagation()" %>
+                        class: "font-semibold text-[#C5A300] hover:text-[#D4AF37] transition-colors", 
+                        data: { turbo: false },
+                        onclick: "event.stopPropagation()" %>
 
                   <button 
                     type="button"
