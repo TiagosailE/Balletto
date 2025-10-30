@@ -1,13 +1,12 @@
 class TurmasController < ApplicationController
   before_action :set_turma, only: %i[ show edit update destroy ]
+  before_action :set_professores, only: %i[ new edit create update show ]
 
   def index
     @turmas = Turma.includes(:professor).order(:tur_nome)
   end
 
   def show
-    # @Turma carregado em set_turma
-    # @alunos placeholder: se houver modelo Aluno, a associação trará os registros relacionados
     @alunos = @turma.alunos
   end
 
@@ -47,12 +46,15 @@ class TurmasController < ApplicationController
 
   def set_turma
     @turma = Turma.find(params[:id])
-
   rescue ActiveRecord::RecordNotFound
     redirect_to turmas_url, alert: "Turma não encontrada."
   end
   
   def turma_params
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_nivel, :tur_capacidade, :tur_dia_da_semana, :user_id) # <-- ADICIONE :user_id AQUI
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :tur_dia_da_semana, :user_id)
+  end
+
+  def set_professores
+    @professores = User.order(:nome)
   end
 end

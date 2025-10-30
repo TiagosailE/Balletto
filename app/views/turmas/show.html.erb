@@ -1,42 +1,86 @@
-<div class="max-w-3xl mx-auto px-4 py-8">
-  <div class="flex items-center justify-between mb-4">
-    <h1 class="text-2xl font-semibold"><%= @turma.tur_nome %></h1>
-    <div class="text-sm text-gray-500">Vagas: <strong><%= @turma.vagas_info %></strong></div>
+<div class="w-full max-w-3xl mx-auto px-4 py-6">
+
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-extrabold text-[#C5A300] sm:text-5xl">
+      <%= @turma.tur_nome %>
+    </h1>
+    <p class="mt-3 max-w-xl mx-auto text-lg text-gray-400">
+      Professor: <%= @turma.professor&.nome.presence || 'Não atribuído' %>
+    </p>
   </div>
 
-  <div class="bg-white border rounded-lg p-4 mb-6">
-    <p><strong>Professor:</strong> <%= @turma.professor&.nome.presence || 'Não atribuído' %></p>
-    <p><strong>Nível:</strong> <%= @turma.tur_nivel.presence || '—' %></p>
-    <p class="text-sm text-gray-600 mt-1">
-  <p>
-  <strong>Horário:</strong>
-  <% if @turma.tur_dia_da_semana.present? && @turma.tur_horario.present? %>
-    <%= @turma.tur_dia_da_semana %>, <%= @turma.tur_horario.strftime('%H:%M') %>
-  <% elsif @turma.tur_horario.present? %>
-    <%= @turma.tur_horario.strftime('%H:%M') %>
-  <% else %>
-    —
-  <% end %>
-</p>
-    <div class="mt-4">
-      <%= link_to 'Editar', edit_turma_path(@turma), class: 'text-sm px-3 py-1 border rounded text-gray-700' %>
-      <%= link_to 'Voltar', turmas_path, class: 'ml-2 text-sm text-gray-600' %>
+  <div class="bg-[#1C1C1C] rounded-2xl shadow-lg border border-[#2E2E2E] p-5 mb-8 flex items-center justify-between">
+    
+    <div class="flex items-center gap-3">
+      <i class="fas fa-calendar-alt w-6 text-center text-2xl text-gray-500"></i>
+      <div>
+        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Horário</h3>
+        <p class="text-lg font-semibold text-[#E5E5E5]">
+          <% if @turma.tur_dia_da_semana.present? && @turma.tur_horario.present? %>
+            <%= @turma.tur_dia_da_semana %>, <%= @turma.tur_horario.strftime('%H:%M') %>
+          <% elsif @turma.tur_horario.present? %>
+            <%= @turma.tur_horario.strftime('%H:%M') %>
+          <% else %>
+            A definir
+          <% end %>
+        </p>
+      </div>
+    </div>
+    
+    <div class="flex items-center gap-3">
+      <i class="fas fa-users w-6 text-center text-2xl text-[#C5A300]"></i>
+      <div class="text-right">
+        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Vagas</h3>
+        <p class="text-lg font-semibold text-[#E5E5E5]"><%= @turma.vagas_info %></p>
+      </div>
     </div>
   </div>
 
   <section>
-    <h2 class="text-lg font-medium mb-2">Alunos da turma</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold text-gray-300">
+        Alunos da Turma
+      </h2>
+      </div>
 
-    <% if @alunos.present? && @alunos.any? %>
-      <ul class="space-y-2">
-        <% @alunos.each do |aluno| %>
-          <li class="bg-white border rounded p-3">
-            <%= aluno.try(:nome) || "Aluno ##{aluno.id}" %>
-          </li>
-        <% end %>
-      </ul>
-    <% else %>
-      <div class="text-gray-500">Nenhum aluno cadastrado nesta turma.</div>
-    <% end %>
+    <div class="bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-[#2E2E2E]">
+      <% if @alunos.any? %>
+        <ul class="divide-y divide-[#2E2E2E]">
+          <% @alunos.each do |aluno| %>
+            <li class="p-4 flex items-center justify-between hover:bg-[#252525] transition-colors duration-150">
+              <div class="flex items-center gap-3">
+                <span class="flex items-center justify-center h-8 w-8 rounded-full bg-[#0A0A0A] text-gray-400">
+                  <i class="fas fa-user text-sm"></i>
+                </span>
+                <span class="font-medium text-[#E5E5E5]">
+                  <%= aluno.try(:nome) || "Aluno ##{aluno.id}" %>
+                </span>
+              </div>
+              <%#= link_to 'Ver', aluno_path(aluno), class: "text-sm text-[#C5A300] hover:text-[#D4AF37]" %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="p-8 text-center text-gray-500">
+          <i class="fas fa-user-slash text-4xl mb-3"></i>
+          <p class="font-medium">Nenhum aluno cadastrado nesta turma.</p>
+        </div>
+      <% end %>
+    </div>
   </section>
+
+  <div class="mt-8 flex items-center justify-end gap-3">
+    <%= link_to turmas_path, 
+        class: 'flex items-center gap-2 px-5 py-2.5 bg-transparent text-gray-400 font-semibold rounded-lg hover:bg-[#2E2E2E] hover:text-gray-200 transition-colors duration-200' do %>
+      <i class="fas fa-arrow-left text-xs"></i>
+      <span>Voltar</span>
+    <% end %>
+    
+    <%= link_to edit_turma_path(@turma), 
+        class: 'inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer' do %>
+      <i class="fas fa-pencil-alt text-xs"></i>
+      <span>Editar</span>
+    <% end %>
+  </div>
+
 </div>

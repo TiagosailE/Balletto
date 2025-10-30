@@ -1,26 +1,45 @@
-# README
+# 📘 Projeto Rails
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Este projeto utiliza Ruby on Rails para desenvolvimento web. Abaixo estão as instruções básicas para configurar e iniciar o ambiente de desenvolvimento.
 
-Things you may want to cover:
+---
 
-* Rails version(8.0.3)
+## 🚀 Versões
 
-* Ruby version(3.4.7)
+- **Ruby**: 3.4.7  
+- **Rails**: 8.0.3  
 
-* System dependencies
+---
 
-* Configuration
+## ⚙️ Inicialização do Projeto
 
-* Database creation
+Para iniciar o ambiente de desenvolvimento com o Foreman:
 
-* Database initialization
+```bash
+foreman start -f Procfile.dev
+```
 
-* How to run the test suite
+---
 
-* Services (job queues, cache servers, search engines, etc.)
+## 🛠️ Console Rails
 
-* Deployment instructions
+Para acessar o console do Rails, utilize:
 
-* ...
+```bash
+rails console
+```
+
+Criação de um usuário administrador:
+
+```ruby
+User.create!(
+  nome: 'Admin Host',
+  usuario: 'admin',
+  email: 'admin@exemplo.com',
+  password: '123456',
+  password_confirmation: '123456',
+  role: :admin
+)
+```
+
+---

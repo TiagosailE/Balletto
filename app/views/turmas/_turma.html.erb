@@ -6,9 +6,6 @@
         <strong>Professor:</strong> <%= turma.professor&.nome.presence || 'Não atribuído' %>
       </p>
       <p class="text-sm text-gray-600 mt-1">
-        <strong>Nível:</strong> <%= turma.tur_nivel.presence || '—' %>
-      </p>
-      <p class="text-sm text-gray-600 mt-1">
   <strong>Horário:</strong>
   <% if turma.tur_dia_da_semana.present? && turma.tur_horario.present? %>
     <%= turma.tur_dia_da_semana %>, <%= turma.tur_horario.strftime('%H:%M') %>
