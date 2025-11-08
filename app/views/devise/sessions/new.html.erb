@@ -1,8 +1,8 @@
-<div class="min-h-full flex items-center justify-center text-white">
-  <div class="bg-[#1c1c1c]/80 border border-[#2c2c2c] shadow-2xl backdrop-blur-md rounded-2xl p-10 w-full max-w-sm text-center">
+<div class="min-h-full flex items-center justify-center">
+  <div class="bg-white dark:bg-[#1c1c1c] border border-gray-200 dark:border-[#2E2E2E] shadow-2xl rounded-2xl p-10 w-full max-w-sm text-center">
     <!-- Logo circular -->
     <div class="flex justify-center mb-6">
-      <div class="w-32 h-32 rounded-full overflow-hidden border-4">
+      <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100 dark:border-[#2E2E2E]">
         <%= image_tag "balletto.png", alt: "Logo Balletto", class: "w-full h-full object-cover" %>
       </div>
     </div>
@@ -15,25 +15,25 @@
             autofocus: true,
             autocomplete: "username",
             placeholder: "Usuário",
-            class: "w-80 mb-4 px-4 py-3 bg-[#111]/60 border border-[#444] rounded-md text-[wheat] placeholder-gray-400 focus:border-[#c5a300] focus:ring-1 focus:ring-[#c5a300] outline-none transition" %>
+            class: "w-80 mb-4 px-4 py-3 bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-[#2E2E2E] rounded-md text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-[#c5a300] focus:ring-1 focus:ring-[#c5a300] outline-none transition" %>
       <!-- Senha -->
       <%= f.password_field :password,
             autocomplete: "current-password",
             placeholder: "Senha",
-            class: "w-80 mb-4 px-4 py-3 bg-[#111]/60 border border-[#444] rounded-md text-[wheat] placeholder-gray-400 focus:border-[#c5a300] focus:ring-1 focus:ring-[#c5a300] outline-none transition" %>
+            class: "w-80 mb-4 px-4 py-3 bg-gray-50 dark:bg-[#111111] border border-gray-200 dark:border-[#2E2E2E] rounded-md text-gray-900 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500 focus:border-[#c5a300] focus:ring-1 focus:ring-[#c5a300] outline-none transition" %>
       <!-- Lembrar -->
       <% if devise_mapping.rememberable? %>
-        <div class="flex items-center gap-2 text-sm text-gray-300 mb-4">
+        <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300 mb-4">
           <%= f.check_box :remember_me, class: "accent-[#c5a300]" %>
           <%= f.label :remember_me, "Lembrar-me" %>
         </div>
       <% end %>
       <!-- Botão -->
       <%= f.submit "Entrar",
-            class: "w-80 inline-flex justify-center items-center gap-2 px-6 py-3 bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105" %>
+            class: "w-80 inline-flex justify-center items-center gap-2 px-6 py-3 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105" %>
     <% end %>
     <!-- Links Devise -->
-    <div class="mt-6 text-sm text-gray-400">
+    <div class="mt-6 text-sm text-gray-600 dark:text-gray-400">
       <%= render "devise/shared/links" %>
     </div>
   </div>
