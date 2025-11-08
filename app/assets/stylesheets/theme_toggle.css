@@ -1,0 +1,125 @@
+.theme-toggle-button {:root {
+
+  display: inline-flex !important;  --color-bg: #F5F5F5;
+
+  align-items: center !important;  --color-text: #1A1A1A;
+
+  justify-content: center !important;  --color-translucent-primary: rgba(255, 255, 255, 0.9);
+
+  width: 40px !important;  --color-translucent-secondary: #0A0A0A;
+
+  height: 40px !important;  --toggle-bg: #E5E5E5;
+
+  padding: 8px !important;  --toggle-icon: #1A1A1A;
+
+  margin-left: 16px !important;  --toggle-bg-hover: #D1D1D1;
+
+  border: 2px solid #C5A300 !important;}
+
+  border-radius: 9999px !important;
+
+  background-color: #262626 !important;html.dark {
+
+  cursor: pointer !important;  --color-bg: #0A0A0A;
+
+  transition: all 0.3s ease !important;  --color-text: #E5E5E5;
+
+  position: relative !important;  --color-translucent-primary: rgba(10, 10, 10, 0.9);
+
+  z-index: 60 !important;  --color-translucent-secondary: #FFFFFF;
+
+}  --toggle-bg: #333333;
+
+  --toggle-icon: #E5E5E5;
+
+.theme-toggle-button:hover {  --toggle-bg-hover: #444444;
+
+  background-color: #404040 !important;}
+
+  border-color: #FFD700 !important;
+
+}body {
+
+  background-color: var(--color-bg);
+
+.theme-toggle-button svg {  color: var(--color-text);
+
+  width: 20px !important;  transition: background-color 0.3s ease, color 0.3s ease;
+
+  height: 20px !important;  min-height: 100vh;
+
+  stroke: #C5A300 !important;}
+
+}
+
+.theme-toggle-button {
+
+.dark .theme-toggle-button .icon-sun {  background-color: #E5E5E5 !important;
+
+  display: none !important;  color: #1A1A1A !important;
+
+}  border: 2px solid #C5A300 !important;
+
+  padding: 0.5rem !important;
+
+.theme-toggle-button .icon-moon {  border-radius: 9999px !important;
+
+  display: none !important;  cursor: pointer !important;
+
+}  width: 2.5rem !important;
+
+  height: 2.5rem !important;
+
+.dark .theme-toggle-button .icon-moon {  display: flex !important;
+
+  display: block !important;  align-items: center !important;
+
+}  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3) !important;
+  position: relative !important;
+  z-index: 100 !important;
+  margin-left: 1rem !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.theme-toggle-button:hover,
+.theme-toggle-button:focus-visible {
+  background-color: var(--toggle-bg-hover);
+  border-color: #FFD700;
+}
+
+.theme-toggle-button:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 2px;
+}
+
+.theme-toggle-button svg {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  stroke: currentColor !important;
+  color: #1A1A1A !important;
+  display: block !important;
+}
+
+html.dark .theme-toggle-button {
+  background-color: #333333 !important;
+  color: #E5E5E5 !important;
+}
+
+html.dark .theme-toggle-button svg {
+  color: #E5E5E5 !important;
+}
+
+.theme-toggle-button .icon-moon {
+  display: none;
+}
+
+html.dark .theme-toggle-button .icon-sun {
+  display: none;
+}
+
+html.dark .theme-toggle-button .icon-moon {
+  display: block;
+}
