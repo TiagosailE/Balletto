@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl mx-auto px-4 py-6">
+<div class="w-full max-w-3xl mx-auto px-4 py-6" style="color-scheme: light dark;">
 
   <div class="text-center mb-6">
     <h1 class="text-4xl font-extrabold text-[#C5A300] sm:text-5xl">
@@ -9,13 +9,13 @@
     </p>
   </div>
 
-  <div class="bg-[#1C1C1C] rounded-2xl shadow-lg border border-[#2E2E2E] p-5 mb-8 flex items-center justify-between">
+  <div class="bg-gray-100 dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-5 mb-8 flex items-center justify-between">
     
     <div class="flex items-center gap-3">
       <i class="fas fa-calendar-alt w-6 text-center text-2xl text-gray-500"></i>
       <div>
         <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Horário</h3>
-        <p class="text-lg font-semibold text-[#E5E5E5]">
+        <p class="text-lg font-semibold text-gray-900 dark:text-[#E5E5E5]">
           <% if @turma.tur_dia_da_semana.present? && @turma.tur_horario.present? %>
             <%= @turma.tur_dia_da_semana %>, <%= @turma.tur_horario.strftime('%H:%M') %>
           <% elsif @turma.tur_horario.present? %>
@@ -31,15 +31,18 @@
       <i class="fas fa-users w-6 text-center text-2xl text-[#C5A300]"></i>
       <div class="text-right">
         <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Vagas</h3>
-        <p class="text-lg font-semibold text-[#E5E5E5]"><%= @turma.vagas_info %></p>
+        <!-- 
+          CORREÇÃO 1: Adicionado "text-gray-900" para modo claro 
+        -->
+        <p class="text-lg font-semibold text-gray-900 dark:text-[#E5E5E5]"><%= @turma.vagas_info %></p>
       </div>
     </div>
   </div>
 
-  <%= form_with(model: @turma, local: true, class: "bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-[#2E2E2E]") do |form| %>
+  <%= form_with(model: @turma, local: true, class: "bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-[#2E2E2E]", style: "color-scheme: light dark;") do |form| %>
     
     <% if form.object.errors.any? %>
-      <div class="bg-red-900 bg-opacity-50 text-red-300 p-4 border-b border-red-800">
+      <div class="bg-red-100 dark:bg-red-900 bg-opacity-50 text-red-700 dark:text-red-300 p-4 border-b border-red-200 dark:border-red-800">
         <h3 class="font-bold mb-2"><%= pluralize(form.object.errors.count, "erro") %> impediu esta turma de ser salva:</h3>
         <ul class="list-disc list-inside text-sm">
           <% form.object.errors.full_messages.each do |message| %>
@@ -52,13 +55,13 @@
     <div class="p-6">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
         <div class="md:col-span-2">
-          <%= form.label :tur_nome, "Nome da Turma", class: "flex items-center text-sm font-medium text-gray-300 mb-1.5" %>
-          <% border_class = form.object.errors[:tur_nome].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class}">
+          <%= form.label :tur_nome, "Nome da Turma", class: "flex items-center text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+          <% border_class = form.object.errors[:tur_nome].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class} text-gray-900 dark:text-[#E5E5E5]">
             <div class="pl-3.5 flex items-center pointer-events-none">
               <i class="fas fa-chalkboard-teacher w-5 text-center text-gray-500"></i>
             </div>
-            <%= form.text_field :tur_nome, class: "block w-full bg-transparent text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "Ex: Ballet Adulto - Iniciante" %>
+            <%= form.text_field :tur_nome, class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "Ex: Ballet Adulto - Iniciante", "data-color-scheme": "light dark", style: "color-scheme: light dark; color: rgb(75 85 99);" %>
           </div>
           <% if form.object.errors[:tur_nome].any? %>
             <p class="text-red-500 text-xs mt-1"><%= form.object.errors.full_messages_for(:tur_nome).first %></p>
@@ -66,13 +69,13 @@
         </div>
 
         <div class="md:col-span-2">
-          <%= form.label :tur_capacidade, "Capacidade", class: "flex items-center text-sm font-medium text-gray-300 mb-1.5" %>
-          <% border_class = form.object.errors[:tur_capacidade].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class}">
+          <%= form.label :tur_capacidade, "Capacidade", class: "flex items-center text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+          <% border_class = form.object.errors[:tur_capacidade].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class} text-gray-900 dark:text-[#E5E5E5]">
             <div class="pl-3.5 flex items-center pointer-events-none">
               <i class="fas fa-users-cog w-5 text-center text-gray-500"></i>
             </div>
-            <%= form.number_field :tur_capacidade, class: "block w-full bg-transparent text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-500 border-none focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", placeholder: "Ex: 20" %>
+            <%= form.number_field :tur_capacidade, class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none", placeholder: "Ex: 20", "data-color-scheme": "light dark", style: "color-scheme: light dark; color: rgb(75 85 99);" %>
           </div>
           <% if form.object.errors[:tur_capacidade].any? %>
             <p class="text-red-500 text-xs mt-1"><%= form.object.errors.full_messages_for(:tur_capacidade).first %></p>
@@ -80,17 +83,19 @@
         </div>
 
         <div>
-          <%= form.label :tur_dia_da_semana, "Dia da Semana", class: "flex items-center text-sm font-medium text-gray-300 mb-1.5" %>
-          <% border_class = form.object.errors[:tur_dia_da_semana].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center relative bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class}">
+          <%= form.label :tur_dia_da_semana, "Dia da Semana", class: "flex items-center text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+          <% border_class = form.object.errors[:tur_dia_da_semana].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+          <div class="flex items-center relative bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class} text-gray-900 dark:text-[#E5E5E5]">
             <div class="pl-3.5 flex items-center pointer-events-none">
               <i class="fas fa-calendar-day w-5 text-center text-gray-500"></i>
             </div>
-            <%= form.select :tur_dia_da_semana, 
-                  options_for_select(['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'], @turma.tur_dia_da_semana), 
-                  { prompt: 'Selecione o dia' }, 
-                  class: "block w-full appearance-none bg-transparent text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0" 
-            %>
+    <%= form.select :tur_dia_da_semana, 
+      options_for_select(['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado', 'Domingo'], @turma.tur_dia_da_semana), 
+      { prompt: 'Selecione o dia' }, 
+      class: "block w-full appearance-none bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0",
+      "data-color-scheme": "light dark", 
+      style: "color-scheme: light dark; color: rgb(75 85 99);"
+    %>
             <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
               <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
             </div>
@@ -101,13 +106,13 @@
         </div>
 
         <div>
-          <%= form.label :tur_horario, "Horário", class: "flex items-center text-sm font-medium text-gray-300 mb-1.5" %>
-          <% border_class = form.object.errors[:tur_horario].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class}">
+          <%= form.label :tur_horario, "Horário", class: "flex items-center text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+          <% border_class = form.object.errors[:tur_horario].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class} text-gray-900 dark:text-[#E5E5E5]">
             <div class="pl-3.5 flex items-center pointer-events-none">
               <i class="fas fa-clock w-5 text-center text-gray-500"></i>
             </div>
-            <%= form.time_field :tur_horario, class: "block w-full bg-transparent text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-500 border-none focus:outline-none focus:ring-0 [color-scheme:dark]" %>
+            <%= form.time_field :tur_horario, class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", "data-color-scheme": "light dark", style: "color-scheme: light dark; color: rgb(75 85 99);" %>
           </div>
           <% if form.object.errors[:tur_horario].any? %>
             <p class="text-red-500 text-xs mt-1"><%= form.object.errors.full_messages_for(:tur_horario).first %></p>
@@ -115,17 +120,19 @@
         </div>
 
         <div class="md:col-span-2">
-          <%= form.label :user_id, "Professor(a)", class: "flex items-center text-sm font-medium text-gray-300 mb-1.5" %>
-          <% border_class = (form.object.errors[:user_id].any? || form.object.errors[:professor].any?) ? 'border-red-600 ring-1 ring-red-600' : 'border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center relative bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class}">
+          <%= form.label :user_id, "Professor(a)", class: "flex items-center text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+          <% border_class = (form.object.errors[:user_id].any? || form.object.errors[:professor].any?) ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+          <div class="flex items-center relative bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 #{border_class} text-gray-900 dark:text-[#E5E5E5]">
             <div class="pl-3.5 flex items-center pointer-events-none">
               <i class="fas fa-user-tie w-5 text-center text-gray-500"></i>
             </div>
-            <%= form.collection_select :user_id, 
-                  @professores, :id, :nome, 
-                  { prompt: 'Selecione um(a) professor(a)' }, 
-                  class: "block w-full appearance-none bg-transparent text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0" 
-            %>
+    <%= form.collection_select :user_id,
+      @professores, :id, :nome,
+      { prompt: 'Selecione um(a) professor(a)' },
+      { class: "block w-full appearance-none bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0",
+        "data-color-scheme": "light dark",
+        style: "color-scheme: light dark; color: rgb(75 85 99);" }
+    %>
             <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
               <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
             </div>
@@ -138,15 +145,15 @@
       </div>
     </div>
 
-    <div class="bg-[#111111] px-6 py-3 border-t border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+    <div class="bg-gray-50 dark:bg-[#111111] px-6 py-3 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
       
       <%= link_to turmas_path, 
-          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg shadow-md border border-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-red-500 transition-all transform hover:scale-105 cursor-pointer' do %>
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg shadow-md border border-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-red-500 transition-all transform hover:scale-105 cursor-pointer' do %>
           <span>Cancelar</span>
       <% end %>
       
       <%= form.submit 'Salvar Alterações', 
-          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer' 
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer' 
       %>
     </div>
     <% end %>
