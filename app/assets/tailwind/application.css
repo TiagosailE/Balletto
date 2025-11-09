@@ -1,2 +1,25 @@
 @import "tailwindcss";
 
+@layer components {
+  /* Estilos para as Abas de Navegação (Alunos Matriculados / Possíveis) */
+  .tab-nav-container {
+    @apply flex p-1 bg-[#2E2E2E] rounded-lg;
+  }
+  .tab-nav-link {
+    @apply flex-1 text-center px-4 py-2 rounded-md text-sm font-medium text-gray-400 transition-all;
+  }
+  .tab-nav-link-active {
+    @apply bg-black text-white shadow-md;
+  }
+
+  /* Estilo para o campo de busca com ícone */
+  .search-input {
+    @apply w-full pl-10 pr-4 py-2 rounded-lg bg-[#2E2E2E] border border-[#444] text-gray-300 placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-[#C5A300];
+  }
+  .search-input-wrapper {
+    @apply relative text-gray-400;
+  }
+  .search-input-icon {
+    @apply absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none;
+  }
+}

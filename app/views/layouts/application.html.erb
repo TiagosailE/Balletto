@@ -2,11 +2,14 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Balletto Core" %></title>
+
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
     <style>
       @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
       html, body {
@@ -16,7 +19,6 @@
         padding: 0;
         font-family: 'Inter', sans-serif;
       }
-
       label {
         display: block;
         font-size: 0.875rem;
@@ -24,12 +26,10 @@
         color: #A1A1AA;
         margin-bottom: 0.25rem;
       }
-
       ::placeholder {
         color: #6B7280;
         opacity: 1;
       }
-
       input[type="time"]::-webkit-calendar-picker-indicator,
       input[type="date"]::-webkit-calendar-picker-indicator {
         filter: invert(0.8);
@@ -38,21 +38,81 @@
         background-color: #111111;
         color: #E5E5E5;
       }
+      @keyframes fade-in-down {
+        0% {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .animate-fade-in-down {
+        animation: fade-in-down 0.4s ease-out;
+      }
+
     </style>
+
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
+
   <body class="bg-[#0A0A0A] text-[#E5E5E5] antialiased">
+
+    <!-- 🔥 FLASH GLOBAL (FUNCIONA EM QUALQUER VIEW, INCLUINDO DEPOIS DO LOGIN) -->
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
+      <% flash.each do |type, message| %>
+        <% next if message.blank? %>
+
+        <% color =
+          case type.to_sym
+          when :notice then "bg-green-600/90 border-green-400"
+          when :alert  then "bg-red-600/90 border-red-400"
+          else "bg-gray-700/90 border-gray-500"
+          end
+        %>
+
+        <div class="<%= color %> text-white p-4 rounded-xl shadow-lg text-center border backdrop-blur-lg animate-fade-in-down">
+          <p class="font-semibold"><%= message %></p>
+        </div>
+      <% end %>
+    </div>
+    <!-- 🔥 FIM DO FLASH -->
+
+
     <div id="balletto-app" class="h-screen flex flex-col">
+
       <%= render 'shared/header' %>
-      <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 lg:p-8" 
+
+      <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 lg:p-8"
             style="padding-top: 5rem; padding-bottom: 6rem;">
         <%= yield %>
       </main>
+
       <% unless controller_name == 'sessions' && action_name == 'new' %>
         <%= render 'shared/footer' %>
       <% end %>
     </div>
+
     <%= render 'shared/confirm_modal' %>
+        <script>
+          document.addEventListener("turbo:load", () => {
+            const flashes = document.querySelectorAll(".animate-fade-in-down");
+
+            flashes.forEach(flash => {
+              setTimeout(() => {
+                flash.style.transition = "opacity 0.6s ease, transform 0.6s ease";
+                flash.style.opacity = "0";
+                flash.style.transform = "translateY(-10px)";
+
+                // Remove do DOM depois da animação
+                setTimeout(() => flash.remove(), 600);
+              }, 2500); // tempo antes de começar a desaparecer
+            });
+          });
+        </script>
+
   </body>
 </html>

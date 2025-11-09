@@ -1,17 +1,22 @@
 class AlunosController < ApplicationController
   before_action :authenticate_user!
-
-  # Agora só precisamos carregar as Turmas para o formulário
   before_action :load_turmas, only: [:new, :edit, :create, :update]
-
   before_action :set_aluno, only: [:show, :edit, :update, :destroy]
 
   def index
-    @alunos = Aluno.includes(:turma).order(:alu_nome)
+    # Começa com a consulta base otimizada
+    # Adicionamos .with_attached_foto para otimizar a lista
+    @alunos = Aluno.includes(:turma).with_attached_foto.order(:alu_nome)
+    
+    # Filtra por nome se um parâmetro de busca for enviado
+    if params[:query].present?
+      # Usamos ILIKE para busca case-insensitive (funciona bem no PostgreSQL)
+      @alunos = @alunos.where("alu_nome ILIKE ?", "%#{params[:query]}%")
+    end
   end
 
   def show
-    # @aluno é carregado
+    # @aluno é carregado pelo set_aluno
   end
 
   def new
@@ -20,7 +25,7 @@ class AlunosController < ApplicationController
 
   def create
     @aluno = Aluno.new(aluno_params)
-    @aluno.user = current_user # Atribui o usuário logado como o criador
+    @aluno.user = current_user
 
     if @aluno.save
       redirect_to @aluno, notice: 'Aluno cadastrado com sucesso.'
@@ -49,15 +54,14 @@ class AlunosController < ApplicationController
   private
 
   def set_aluno
-    @aluno = Aluno.find(params[:id])
+    # Garante que a foto seja carregada junto
+    @aluno = Aluno.with_attached_foto.find(params[:id])
   end
 
-  # Método simplificado
   def load_turmas
     @turmas = Turma.order(:tur_nome)
   end
 
-  # Parâmetros simplificados
   def aluno_params
     params.require(:aluno).permit(
       :alu_nome,
@@ -66,12 +70,11 @@ class AlunosController < ApplicationController
       :alu_data_cadastro,
       :alu_endereco,
       :alu_tur_codigo,
-
-      # Nossos novos campos de texto simples
       :responsavel_nome,
       :responsavel_telefone,
       :responsavel_email,
-      :condicoes_medicas
+      :condicoes_medicas,
+      :foto
     )
   end
 end

@@ -1,33 +1,79 @@
-<div class="w-full max-w-screen-2xl mx-auto">
-  <div class="text-center mb-10">
-    <h2 class="text-4xl font-extrabold text-[#C5A300] sm:text-5xl">Gerenciar Alunos</h2>
-    <p class="mt-4 max-w-2xl mx-auto text-lg text-gray-400">
-      Organize, crie e gerencie todos os alunos em um só lugar.
-    </p>
+
+<div class="w-full max-w-lg px-6 py-10 font-sans text-gray-300 rounded-lg absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+
+  <!-- Abas de Navegação -->
+  <div class="p-1 bg-[#1C1C1C] border border-[#2E2E2E] rounded-lg flex items-center justify-around">
+    <!-- Aba Ativa: Fundo dourado, texto preto -->
+    <a href="<%= alunos_path %>" class="flex-1 text-center px-5 py-2 font-bold bg-[#C5A300] text-black rounded-lg shadow-md">
+      Alunos Matriculados
+    </a>
+    <!-- Aba Inativa: Fundo escuro, texto cinza -->
+    <a href="#" class="flex-1 text-center px-5 py-2 font-medium text-gray-400 hover:bg-gray-700 hover:text-white rounded-lg">
+      Possíveis Alunos
+    </a>
   </div>
 
-  <div class="flex flex-col md:flex-row md:gap-8 items-start justify-center">
-    <aside class="w-full md:w-auto mb-6 md:mb-0 flex justify-center md:block">
-      <%= link_to new_aluno_path,
-        class: "inline-flex justify-center items-center gap-2 px-6 py-3 bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105" do %>
-        <i class="fas fa-plus"></i>
-        <span>Cadastrar Novo Aluno</span>
-      <% end %>
-    </aside>
+  <!-- Barra de Busca -->
+  <div class="mt-6">
+    <!-- Este formulário envia a busca para a ação 'index' do AlunosController -->
+    <%= form_with(url: alunos_path, method: :get, class: "relative") do |form| %>
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <i class="fas fa-search text-gray-400"></i>
+      </div>
+      <%= form.text_field :query, 
+            value: params[:query], 
+            placeholder: "Buscar aluno...",
+            class: "w-full pl-10 pr-4 py-3 bg-[#1C1C1C] text-white border border-[#2E2E2E] rounded-lg placeholder-gray-500" %>
+    <% end %>
   </div>
 
-  <div class="flex-1 w-full">
-    <div id="turmas-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
-      <% @alunos.each do |aluno| %>
-        <div class="col-span-full bg-[#1C1C1C] rounded-2xl shadow p-8 text-center text-gray-400 border border-[#2E2E2E] m-4">
-          <%= link_to aluno.alu_nome, aluno_path(aluno), class: "font-medium text-lg hover:underline" %>
-          <p class="text-sm text-gray-600">Turma: <%= aluno.turma&.tur_nome || 'Sem turma' %></p>
-          <p class="text-sm text-gray-600">Responsável: <%= aluno.responsavel_nome || 'Não informado' %></p>
+  <!-- Botão Adicionar Novo Aluno -->
+  <div class="mt-4">
+    <!-- Usando suas cores personalizadas (preto e dourado) com a estrutura de layout do app -->
+    <%= link_to new_aluno_path, class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-[#1A1A1A] hover:text-[#D4AF37] transition-all transform hover:scale-105" do %>
+      <i class="fas fa-plus"></i>
+      <span>Adicionar Novo Aluno</span>
+    <% end %>
+  </div>
+
+  <!-- Título da Lista -->
+  <h2 class="text-xl font-semibold text-gray-200 mt-8 mb-4">
+    Alunos Matriculados
+  </h2>
+
+  <!-- Lista de Alunos -->
+  <div id="alunos-list" class="space-y-3">
+    <% if @alunos.empty? %>
+      <p class="text-gray-500 text-center">Nenhum aluno cadastrado ainda.</p>
+    <% end %>
+
+    <% @alunos.each do |aluno| %>
+      <!-- Card do Aluno (List Item) -->
+      <!-- Usando as cores exatas do seu tema escuro -->
+      <%= link_to aluno_path(aluno), class: "flex items-center p-4 bg-[#1C1C1C] rounded-xl shadow border border-[#2E2E2E] hover:bg-gray-800" do %>
+        
+        <!-- Foto do Aluno -->
+        <% if aluno.foto.attached? %>
+          <%= image_tag aluno.foto.variant(resize_to_fill: [48, 48]), class: "w-12 h-12 rounded-full object-cover" %>
+        <% else %>
+          <!-- Placeholder se não houver foto -->
+          <div class="w-12 h-12 rounded-full bg-gray-700 flex items-center justify-center">
+            <i class="fas fa-user text-gray-400"></i>
+          </div>
+        <% end %>
+
+        <!-- Nome e Turma -->
+        <div class="flex-1 ml-4">
+          <div class="font-medium text-lg text-gray-200"><%= aluno.alu_nome %></div>
+          <div class="text-sm text-gray-500">Turma: <%= aluno.turma&.tur_nome || 'Sem turma' %></div>
+        </div>
+
+        <!-- Seta (chevron) -->
+        <div>
+          <i class="fas fa-chevron-right text-gray-600"></i>
         </div>
       <% end %>
-      <% if @alunos.empty? %>
-        <p class="text-gray-500">Nenhum aluno cadastrado ainda.</p>
-      <% end %>
-    </div>
+    <% end %>
   </div>
 </div>
+
