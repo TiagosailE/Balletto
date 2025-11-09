@@ -8,6 +8,21 @@
     <%= csp_meta_tag %>
 
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {}
+        }
+      }
+    </script>
+    <script>
+      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+        document.documentElement.classList.add('dark')
+      } else {
+        document.documentElement.classList.remove('dark')
+      }
+    </script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
 
     <style>
@@ -61,7 +76,6 @@
 
   <body class="bg-[#0A0A0A] text-[#E5E5E5] antialiased">
 
-    <!-- 🔥 FLASH GLOBAL (FUNCIONA EM QUALQUER VIEW, INCLUINDO DEPOIS DO LOGIN) -->
     <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
       <% flash.each do |type, message| %>
         <% next if message.blank? %>
@@ -79,9 +93,6 @@
         </div>
       <% end %>
     </div>
-    <!-- 🔥 FIM DO FLASH -->
-
-
     <div id="balletto-app" class="h-screen flex flex-col">
 
       <%= render 'shared/header' %>

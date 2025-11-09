@@ -1,0 +1,17 @@
+<% if alunos.any? %>
+  <% alunos.each do |aluno| %>
+    <div class="flex items-center gap-3 p-3 bg-gray-50 dark:bg-[#2A2A2A] rounded-lg border border-gray-200 dark:border-gray-700">
+      <i class="fas fa-user text-[#C5A300]"></i>
+      <div>
+        <p class="font-semibold"><%= aluno.alu_nome %></p>
+        <% if aluno.responsavel_nome.present? %>
+          <p class="text-sm text-gray-500 dark:text-gray-400">Responsável: <%= aluno.responsavel_nome %></p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+<% else %>
+  <p class="text-gray-500 dark:text-gray-400 text-sm col-span-full text-center">
+    Nenhum aluno cadastrado nesta turma.
+  </p>
+<% end %>

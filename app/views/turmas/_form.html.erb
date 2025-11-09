@@ -1,4 +1,5 @@
-<%= form_with(model: turma, local: true) do |f| %>
+<div style="color-scheme: light dark;">
+  <%= form_with(model: turma, local: true) do |f| %>
   <% if turma.errors.any? %>
     <div class="mb-4">
       <div class="text-red-600 font-medium">Erros:</div>
@@ -14,17 +15,19 @@
     <div>
       <%= f.label :user_id, 'Professor Responsável', class: 'block text-sm font-medium text-gray-700' %>
       
-      <%= f.collection_select :user_id, 
-            @professores, 
-            :id, 
-            :nome, 
-            { include_blank: 'Nenhum (opcional)' },
-            class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
+  <%= f.collection_select :user_id, 
+    @professores, 
+    :id, 
+    :nome, 
+    { include_blank: 'Nenhum (opcional)' },
+    class: 'mt-1 block w-full border rounded-md px-3 py-2 text-gray-900',
+    "data-color-scheme": 'light dark',
+    style: 'color: rgb(17 24 39);' %>
     </div>
       
     <div>
       <%= f.label :tur_nome, 'Nome da Turma', class: 'block text-sm font-medium text-gray-700' %>
-      <%= f.text_field :tur_nome, class: 'mt-1 block w-full border rounded-md px-3 py_2', maxlength: 50 %>
+  <%= f.text_field :tur_nome, class: 'mt-1 block w-full border rounded-md px-3 py_2 text-gray-900', maxlength: 50, "data-color-scheme": 'light dark', style: 'color: rgb(17 24 39);' %>
     </div>
 
     <div>
@@ -32,19 +35,21 @@
       <%= f.select :tur_dia_da_semana, 
         ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
         { include_blank: 'Selecione' },
-        class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
+        class: 'mt-1 block w-full border rounded-md px-3 py-2 text-gray-900 appearance-none',
+        "data-color-scheme": 'light dark', style: 'color: rgb(17 24 39);' %>
     </div>
 
     <div>
       <%= f.label :tur_horario, 'Horário', class: 'block text-sm font-medium text-gray-700' %>
-      <%= f.time_field :tur_horario, 
-          value: (turma.tur_horario&.strftime('%H:%M')), 
-          class: 'mt-1 block w-full border rounded-md px-3 py-2' %>
+    <%= f.time_field :tur_horario, 
+      value: (turma.tur_horario&.strftime('%H:%M')), 
+      class: 'mt-1 block w-full border rounded-md px-3 py-2 text-gray-900',
+      "data-color-scheme": 'light dark', style: 'color: rgb(17 24 39);' %>
     </div>
 
     <div>
       <%= f.label :tur_capacidade, 'Capacidade', class: 'block text-sm font-medium text-gray-700' %>
-      <%= f.number_field :tur_capacidade, class: 'mt-1 block w-36 border rounded-md px-3 py-2', min: 1, max: 255 %>
+  <%= f.number_field :tur_capacidade, class: 'mt-1 block w-36 border rounded-md px-3 py-2 text-gray-900', min: 1, max: 255, "data-color-scheme": 'light dark', style: 'color: rgb(17 24 39);' %>
     </div>
 
     <div class="pt-2">
@@ -52,4 +57,5 @@
       <%= link_to 'Cancelar', turmas_path, class: 'ml-2 text-gray-600' %>
     </div>
   </div>
-<% end %>
+  <% end %>
+</div>

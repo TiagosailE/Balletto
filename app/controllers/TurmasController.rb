@@ -1,5 +1,5 @@
 class TurmasController < ApplicationController
-  before_action :set_turma, only: %i[ show edit update destroy ]
+  before_action :set_turma, only: %i[ show edit update destroy alunos ]
   before_action :set_professores, only: %i[ new edit create update show ]
 
   def index
@@ -40,6 +40,15 @@ class TurmasController < ApplicationController
   def destroy
     @turma.destroy
     redirect_to turmas_url, notice: "Turma excluída com sucesso."
+  end
+  def alunos
+    @turma = Turma.find(params[:id])
+    @alunos = @turma.alunos
+
+    respond_to do |format|
+      format.html { render partial: "turmas/alunos_list", locals: { alunos: @alunos } }
+      format.json { render json: @alunos }
+    end
   end
 
   private
