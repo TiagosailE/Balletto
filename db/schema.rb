@@ -48,11 +48,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_231841) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "alu_data_nascimento"
+    t.string "responsavel_nome"
     t.string "alu_status", default: "matriculado"
     t.date "alu_data_cadastro"
     t.text "alu_endereco"
     t.bigint "user_id"
-    t.string "responsavel_nome"
     t.string "responsavel_telefone"
     t.string "responsavel_email"
     t.text "condicoes_medicas"

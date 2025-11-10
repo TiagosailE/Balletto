@@ -1,4 +1,5 @@
 class TurmasController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_turma, only: %i[ show edit update destroy alunos ]
   before_action :set_professores, only: %i[ new edit create update show ]
 
