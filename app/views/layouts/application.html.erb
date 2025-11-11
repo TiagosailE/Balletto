@@ -17,6 +17,7 @@
       }
     </script>
     <script>
+      // Este script está correto! Ele adiciona/remove a classe 'dark' da tag <html>
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
       } else {
@@ -34,36 +35,50 @@
         padding: 0;
         font-family: 'Inter', sans-serif;
       }
+      /* Estilos padrão (modo claro) */
       label {
         display: block;
         font-size: 0.875rem;
         font-weight: 500;
-        color: #A1A1AA;
+        color: #6B7280; /* cinza escuro para modo claro */
         margin-bottom: 0.25rem;
       }
       ::placeholder {
-        color: #6B7280;
+        color: #9CA3AF; /* cinza mais claro */
         opacity: 1;
       }
+      
+      /* Estilos de input para modo claro */
       input[type="time"]::-webkit-calendar-picker-indicator,
       input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(0.8);
+        filter: none; /* remove o filtro 'invert' no modo claro */
       }
       select option {
-        background-color: #111111;
-        color: #E5E5E5;
-      }
-      @keyframes fade-in-down {
-        0% {
-          opacity: 0;
-          transform: translateY(-10px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
+        background-color: #ffffff; /* fundo branco */
+        color: #111827; /* texto escuro */
       }
 
+      /* Estilos de input para modo escuro */
+      .dark input[type="time"]::-webkit-calendar-picker-indicator,
+      .dark input[type="date"]::-webkit-calendar-picker-indicator {
+        filter: invert(0.8); /* inverte o ícone no modo escuro */
+      }
+      .dark select option {
+        background-color: #111111; /* fundo escuro */
+        color: #E5E5E5; /* texto claro */
+      }
+      .dark label {
+        color: #A1A1AA; /* cinza claro para modo escuro */
+      }
+      .dark ::placeholder {
+        color: #6B7280;
+      }
+
+
+      @keyframes fade-in-down {
+        0% { opacity: 0; transform: translateY(-10px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
       .animate-fade-in-down {
         animation: fade-in-down 0.4s ease-out;
       }
@@ -74,12 +89,18 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-[#0A0A0A] text-[#E5E5E5] antialiased">
+  <!-- 
+    A MUDANÇA ESTÁ AQUI!
+    Padrão: bg-white text-gray-900 (modo claro)
+    Quando a classe 'dark' é aplicada no <html>, ele muda para: dark:bg-[#0A0A0A] dark:text-[#E5E5E5]
+  -->
+  <body class="bg-[#F0E9DF] text-gray-900 dark:bg-[#0A0A0A] dark:text-[#E5E5E5] antialiased">
 
     <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
       <% flash.each do |type, message| %>
         <% next if message.blank? %>
 
+        <%# CÓDIGO CORRIGIDO ABAIXO - removido o espaço extra %>
         <% color =
           case type.to_sym
           when :notice then "bg-green-600/90 border-green-400"
@@ -93,6 +114,7 @@
         </div>
       <% end %>
     </div>
+    
     <div id="balletto-app" class="h-screen flex flex-col">
 
       <%= render 'shared/header' %>
