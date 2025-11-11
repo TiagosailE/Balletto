@@ -1,0 +1,93 @@
+<%= form_with(model: evento,
+      class: "bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-[#2E2E2E]",
+      local: true,
+      style: "color-scheme: light dark;") do |form| %>
+
+  <% if form.object.errors.any? %>
+    <div class="bg-red-100 dark:bg-red-900 bg-opacity-50 text-red-700 dark:text-red-300 p-4 border-b border-red-200 dark:border-red-800">
+      <h3 class="font-bold mb-2"><%= pluralize(form.object.errors.count, "erro") %> impediu este evento de ser salvo:</h3>
+      <ul class="list-disc list-inside text-sm">
+        <% form.object.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="p-6">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
+
+      <div class="md:col-span-2">
+        <%= form.label :EVE_NOME, "Nome do Evento", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+        <% border_class = form.object.errors[:EVE_NOME].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border #{border_class}">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-calendar-star text-gray-500"></i>
+          </div>
+          <%= form.text_field :EVE_NOME, placeholder: "Ex: Apresentação de Fim de Ano",
+                class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
+        </div>
+      </div>
+      <div>
+        <%= form.label :EVE_DATA, "Data e Hora", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+        <% border_class = form.object.errors[:EVE_DATA].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border #{border_class}">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-clock text-gray-500"></i>
+          </div>
+          <%= form.datetime_local_field :EVE_DATA,
+                class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
+        </div>
+      </div>
+      <div>
+        <%= form.label :EVE_LOCAL, "Local do Evento", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+        <% border_class = form.object.errors[:EVE_LOCAL].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border #{border_class}">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-map-marker-alt text-gray-500"></i>
+          </div>
+          <%= form.text_field :EVE_LOCAL, placeholder: "Ex: Teatro Municipal",
+                class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
+        </div>
+      </div>
+
+      <!-- Turmas associadas -->
+      <div class="md:col-span-2">
+        <%= form.label :turma_ids, "Turmas Participantes", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+        <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-200 dark:border-[#2E2E2E] p-3 space-y-2 max-h-48 overflow-y-auto">
+          <% Turma.order(:tur_nome).each do |turma| %>
+            <label class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
+              <%= check_box_tag "evento[turma_ids][]", turma.id, evento.turma_ids.include?(turma.id), class: "rounded text-[#B88B00] focus:ring-[#C5A300]" %>
+              <%= turma.tur_nome %>
+            </label>
+          <% end %>
+        </div>
+      </div>
+      <div class="md:col-span-2">
+        <%= form.label :EVE_DESC, "Descrição", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
+        <% border_class = form.object.errors[:EVE_DESC].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
+        <div class="flex items-start bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border #{border_class}">
+          <div class="pl-3.5 pt-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-align-left text-gray-500"></i>
+          </div>
+          <%= form.text_area :EVE_DESC, rows: 4, placeholder: "Descreva os detalhes do evento, figurino, etc.",
+                class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="bg-gray-50 dark:bg-[#111111] px-6 py-3 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+    
+    <%= link_to eventos_path,
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-red-600 text-white font-bold rounded-lg shadow-md border border-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-red-500 transition-all transform hover:scale-105 cursor-pointer' do %>
+      <span>Cancelar</span>
+    <% end %>
+    
+    <%= form.submit (evento.new_record? ? "Criar Evento" : "Salvar Alterações"),
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer'
+    %>
+  </div>
+
+<% end %>

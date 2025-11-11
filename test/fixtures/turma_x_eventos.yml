@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  TUR_CODIGO: 1
+  EVE_CODIGO: 1
+
+two:
+  TUR_CODIGO: 1
+  EVE_CODIGO: 1
