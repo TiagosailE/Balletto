@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gem "rails", "= 8.0.3"
 gem 'devise'
 gem "image_processing", "~> 1.2"
+gem "ruby-vips"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
