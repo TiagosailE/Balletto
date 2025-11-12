@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
   before_action :authenticate_admin!
 
-  before_action :set_user, only: [:edit, :update, :destroy]
+  before_action :set_user, only: [:edit, :update, :destroy, :show]
 
   def index
     # Lista apenas os usuários com o papel de professor, ordenados por nome
