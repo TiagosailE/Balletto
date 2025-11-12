@@ -1,0 +1,85 @@
+<div id="modal-turmas-evento" 
+     class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]">
+  <div id="modal-content"
+       class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl w-full max-w-3xl mx-4 border border-gray-200 dark:border-[#2E2E2E] overflow-hidden transform transition-all scale-95 opacity-0">
+    
+    <div class="flex justify-between items-center border-b border-gray-200 dark:border-[#2E2E2E] px-6 py-4">
+      <h3 class="text-xl font-semibold text-[#B88B00]">Turmas do Evento</h3>
+      <button onclick="fecharModalTurmas()" class="text-gray-500 hover:text-red-500 transition-colors text-lg">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+
+    <div id="turmas-list" class="p-6 space-y-4 max-h-[60vh] overflow-y-auto text-center">
+      <p class="text-gray-500 dark:text-gray-400">Carregando turmas...</p>
+    </div>
+
+    <div class="border-t border-gray-200 dark:border-[#2E2E2E] px-6 py-4 flex justify-end">
+      <button onclick="fecharModalTurmas()" 
+              class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-[#111111] text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#222] transition-colors">
+        Fechar
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+async function abrirModalTurmas(eventoId) {
+  const modal = document.getElementById("modal-turmas-evento");
+  const modalContent = document.getElementById("modal-content");
+  const turmasList = document.getElementById("turmas-list");
+
+  modal.classList.remove("hidden");
+  setTimeout(() => {
+    modalContent.classList.remove("scale-95", "opacity-0");
+    modalContent.classList.add("scale-100", "opacity-100");
+  }, 50);
+
+  turmasList.innerHTML = `<div class="text-center text-gray-400 py-6">
+    <i class="fas fa-spinner fa-spin mr-2"></i> Carregando turmas...
+  </div>`;
+
+  const response = await fetch(`/eventos/${eventoId}/turmas`);
+  const data = await response.json();
+
+  if (data.length === 0) {
+    turmasList.innerHTML = `<p class="text-gray-500 dark:text-gray-400">Nenhuma turma vinculada a este evento.</p>`;
+    return;
+  }
+
+  turmasList.innerHTML = data.map(turma => `
+    <div class="bg-gray-50 dark:bg-[#111111] rounded-lg p-4 border border-gray-200 dark:border-[#2E2E2E] cursor-pointer hover:border-[#C5A300]"
+         onclick="abrirModalAlunos(${eventoId}, ${turma.tur_codigo}, '${turma.tur_nome}')">
+      <h4 class="font-semibold text-[#B88B00] mb-2">${turma.tur_nome}</h4>
+      <p class="text-sm text-gray-600 dark:text-gray-400">${turma.tur_dia_da_semana || ''} ${turma.tur_horario || ''}</p>
+    </div>
+  `).join('');
+}
+
+function fecharModalTurmas() {
+  const modal = document.getElementById("modal-turmas-evento");
+  const modalContent = document.getElementById("modal-content");
+  modalContent.classList.add("scale-95", "opacity-0");
+  setTimeout(() => modal.classList.add("hidden"), 200);
+}
+
+async function abrirModalAlunos(eventoId, turmaId, turmaNome) {
+  const alunosResponse = await fetch(`/eventos/${eventoId}/turmas/${turmaId}/alunos`);
+  const alunos = await alunosResponse.json();
+
+  Swal.fire({
+    title: `Alunos - ${turmaNome}`,
+    html: alunos.map(aluno => `
+      <div class="flex items-center justify-between py-2 border-b border-gray-200 dark:border-[#2E2E2E]">
+        <span class="text-gray-800 dark:text-gray-200">${aluno.alu_nome}</span>
+        <input type="checkbox" ${aluno.confirmado ? 'checked' : ''} class="form-checkbox h-5 w-5 text-[#C5A300]">
+      </div>
+    `).join(''),
+    width: 600,
+    background: '#1C1C1C',
+    color: '#E5E5E5',
+    confirmButtonText: 'Fechar',
+    confirmButtonColor: '#C5A300'
+  });
+}
+</script>

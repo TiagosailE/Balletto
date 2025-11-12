@@ -1,0 +1,35 @@
+<div class="max-w-4xl mx-auto space-y-6">
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-[#2E2E2E]">
+    <h2 class="text-3xl font-bold text-[#B88B00] mb-4"><%= @evento.eve_nome %></h2>
+
+    <div class="space-y-3 text-sm text-[#6B747A] dark:text-gray-400">
+      <p><i class="fas fa-calendar-alt mr-2 text-[#B88B00]"></i> <%= @evento.eve_data.strftime("%d/%m/%Y") if @evento.eve_data.present? %></p>
+      <p><i class="fas fa-map-marker-alt mr-2 text-[#B88B00]"></i> <%= @evento.eve_local %></p>
+      <p><i class="fas fa-align-left mr-2 text-[#B88B00]"></i> <%= @evento.eve_desc %></p>
+    </div>
+  </div>
+
+  <div class="flex justify-between items-center mt-8">
+    <h3 class="text-2xl font-semibold text-[#E5E5E5]">Turmas neste Evento</h3>
+    <%= link_to "Adicionar Turma", new_turma_x_evento_path(eve_codigo: @evento.eve_codigo),
+        class: "inline-flex items-center gap-2 px-4 py-2 bg-[#C5A300] text-white rounded-lg hover:bg-[#D4AF37] transition-colors" do %>
+      <i class="fas fa-plus"></i> Adicionar Turma
+    <% end %>
+  </div>
+
+  <% if @evento.turmas.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <% @evento.turmas.each do |turma| %>
+        <div class="bg-white dark:bg-[#1C1C1C] rounded-xl p-5 border border-gray-200 dark:border-[#2E2E2E]">
+          <h4 class="text-lg font-semibold text-[#B88B00] mb-2"><%= turma.tur_nome %></h4>
+          <p class="text-sm text-[#6B747A] dark:text-gray-400 mb-3">
+            <%= turma.professor&.nome || "Professor não definido" %>
+          </p>
+          <%= link_to "Ver alunos", turma_path(turma), class: "text-[#C5A300] hover:text-[#D4AF37] font-semibold text-sm" %>
+        </div>
+      <% end %>
+    </div>
+  <% else %>
+    <p class="text-center text-gray-400 mt-4">Nenhuma turma associada a este evento.</p>
+  <% end %>
+</div>

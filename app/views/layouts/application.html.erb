@@ -17,7 +17,6 @@
       }
     </script>
     <script>
-      // Este script está correto! Ele adiciona/remove a classe 'dark' da tag <html>
       if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.classList.add('dark')
       } else {
@@ -35,40 +34,37 @@
         padding: 0;
         font-family: 'Inter', sans-serif;
       }
-      /* Estilos padrão (modo claro) */
       label {
         display: block;
         font-size: 0.875rem;
         font-weight: 500;
-        color: #6B7280; /* cinza escuro para modo claro */
+        color: #6B7280; 
         margin-bottom: 0.25rem;
       }
       ::placeholder {
-        color: #9CA3AF; /* cinza mais claro */
+        color: #9CA3AF; 
         opacity: 1;
       }
-      
-      /* Estilos de input para modo claro */
+
       input[type="time"]::-webkit-calendar-picker-indicator,
       input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: none; /* remove o filtro 'invert' no modo claro */
+        filter: none; 
       }
       select option {
-        background-color: #ffffff; /* fundo branco */
-        color: #111827; /* texto escuro */
+        background-color: #ffffff;
+        color: #111827;
       }
 
-      /* Estilos de input para modo escuro */
       .dark input[type="time"]::-webkit-calendar-picker-indicator,
       .dark input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(0.8); /* inverte o ícone no modo escuro */
+        filter: invert(0.8);
       }
       .dark select option {
-        background-color: #111111; /* fundo escuro */
-        color: #E5E5E5; /* texto claro */
+        background-color: #111111; 
+        color: #E5E5E5;
       }
       .dark label {
-        color: #A1A1AA; /* cinza claro para modo escuro */
+        color: #A1A1AA; 
       }
       .dark ::placeholder {
         color: #6B7280;
@@ -88,19 +84,11 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <!-- 
-    A MUDANÇA ESTÁ AQUI!
-    Padrão: bg-white text-gray-900 (modo claro)
-    Quando a classe 'dark' é aplicada no <html>, ele muda para: dark:bg-[#0A0A0A] dark:text-[#E5E5E5]
-  -->
   <body class="bg-[#F0E9DF] text-gray-900 dark:bg-[#0A0A0A] dark:text-[#E5E5E5] antialiased">
 
     <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
       <% flash.each do |type, message| %>
         <% next if message.blank? %>
-
-        <%# CÓDIGO CORRIGIDO ABAIXO - removido o espaço extra %>
         <% color =
           case type.to_sym
           when :notice then "bg-green-600/90 border-green-400"
@@ -139,10 +127,8 @@
                 flash.style.transition = "opacity 0.6s ease, transform 0.6s ease";
                 flash.style.opacity = "0";
                 flash.style.transform = "translateY(-10px)";
-
-                // Remove do DOM depois da animação
                 setTimeout(() => flash.remove(), 600);
-              }, 2500); // tempo antes de começar a desaparecer
+              }, 2500); 
             });
           });
         </script>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  EVE_NOME: MyString
+  EVE_DATA: 2025-11-11 19:20:36
+  EVE_LOCAL: MyString
+  EVE_DESC: MyString
+
+two:
+  EVE_NOME: MyString
+  EVE_DATA: 2025-11-11 19:20:36
+  EVE_LOCAL: MyString
+  EVE_DESC: MyString

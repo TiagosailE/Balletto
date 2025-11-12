@@ -9,6 +9,13 @@ Rails.application.routes.draw do
       get :alunos 
     end
   end
+  
+  resources :eventos do
+  member do
+    get :turmas
+    get :alunos
+  end
+end
 
   root 'pages#home'
 end
