@@ -6,6 +6,8 @@ class Turma < ApplicationRecord
   validates :tur_capacidade, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to:255 }, allow_nil: true
 
   has_many :alunos, foreign_key: 'alu_tur_codigo', primary_key: 'tur_codigo', dependent: :nullify
+  has_many :turma_x_eventos, foreign_key: 'TUR_CODIGO', primary_key: 'tur_codigo', dependent: :destroy
+  has_many :eventos, through: :turma_x_eventos, source: :evento
 
   belongs_to :professor, class_name: 'User', foreign_key: 'user_id', optional: true
 

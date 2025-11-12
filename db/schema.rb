@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_04_231841) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_12_014950) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -42,6 +42,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_231841) do
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
   end
 
+  create_table "aluno_x_eventos", force: :cascade do |t|
+    t.integer "ALU_CODIGO"
+    t.integer "EVE_CODIGO"
+    t.boolean "PRESENCA"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "alunos", primary_key: "alu_codigo", force: :cascade do |t|
     t.string "alu_nome", limit: 100, null: false
     t.integer "alu_tur_codigo"
@@ -57,6 +65,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_231841) do
     t.string "responsavel_email"
     t.text "condicoes_medicas"
     t.index ["user_id"], name: "index_alunos_on_user_id"
+  end
+
+  create_table "eventos", primary_key: "EVE_CODIGO", force: :cascade do |t|
+    t.string "EVE_NOME", limit: 100
+    t.datetime "EVE_DATA"
+    t.string "EVE_LOCAL", limit: 150
+    t.text "EVE_DESC"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "possiveis_alunos", primary_key: "pos_codigo", force: :cascade do |t|
@@ -81,6 +98,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_04_231841) do
     t.datetime "pro_data_cont"
     t.string "pro_status"
     t.string "pro_especialidade"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "turma_x_eventos", force: :cascade do |t|
+    t.integer "TUR_CODIGO"
+    t.integer "EVE_CODIGO"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

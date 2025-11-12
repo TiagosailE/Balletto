@@ -15,8 +15,12 @@ class EventosController < ApplicationController
   def edit; end
 
   def create
-    @evento = Evento.new(evento_params)
+
+    @evento = Evento.new(evento_params.except(:turma_ids))
+
     if @evento.save
+
+      atualizar_turmas_associadas(@evento)
       redirect_to eventos_path, notice: "Evento criado com sucesso!"
     else
       flash.now[:alert] = "Erro ao criar evento. Verifique os campos."
@@ -25,7 +29,10 @@ class EventosController < ApplicationController
   end
 
   def update
-    if @evento.update(evento_params)
+
+    if @evento.update(evento_params.except(:turma_ids))
+
+      atualizar_turmas_associadas(@evento)
       redirect_to eventos_path, notice: "Evento atualizado com sucesso!"
     else
       flash.now[:alert] = "Erro ao atualizar evento."
@@ -57,5 +64,18 @@ class EventosController < ApplicationController
 
   def evento_params
     params.require(:evento).permit(:EVE_NOME, :EVE_LOCAL, :EVE_DATA, :EVE_DESC, turma_ids: [])
+  end
+
+  def atualizar_turmas_associadas(evento)
+    turma_ids = Array(params.dig(:evento, :turma_ids)).reject(&:blank?)
+
+    evento.turma_x_eventos.destroy_all
+
+    turma_ids.each do |turma_id|
+      TurmaXEvento.create!(
+        EVE_CODIGO: evento.EVE_CODIGO,
+        TUR_CODIGO: turma_id
+      )
+    end
   end
 end
