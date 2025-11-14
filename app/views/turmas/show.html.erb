@@ -19,7 +19,7 @@
         <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Horário</h3>
         <p class="text-lg font-semibold text-gray-900 dark:text-[#E5E5E5]">
           <% if @turma.tur_dia_da_semana.present? && @turma.tur_horario.present? %>
-            <%= @turma.tur_dia_da_semana %>, <%= @turma.tur_horario.strftime('%H:%M') %>
+            <%= Array(@turma.tur_dia_da_semana).reject(&:blank?).join(', ') %>, <%= @turma.tur_horario.strftime('%H:%M') %>
           <% elsif @turma.tur_horario.present? %>
             <%= @turma.tur_horario.strftime('%H:%M') %>
           <% else %>

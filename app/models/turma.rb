@@ -11,6 +11,8 @@ class Turma < ApplicationRecord
 
   belongs_to :professor, class_name: 'User', foreign_key: 'user_id', optional: true
 
+serialize :tur_dia_da_semana, coder: JSON
+
   def vagas_ocupadas
     alunos.count
   rescue

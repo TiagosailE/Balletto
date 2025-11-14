@@ -1,85 +1,145 @@
+<!-- Modal de Turmas -->
 <div id="modal-turmas-evento" 
-     class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-[9999]">
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[9999]">
+
   <div id="modal-content"
-       class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl w-full max-w-3xl mx-4 border border-gray-200 dark:border-[#2E2E2E] overflow-hidden transform transition-all scale-95 opacity-0">
-    
-    <div class="flex justify-between items-center border-b border-gray-200 dark:border-[#2E2E2E] px-6 py-4">
-      <h3 class="text-xl font-semibold text-[#B88B00]">Turmas do Evento</h3>
-      <button onclick="fecharModalTurmas()" class="text-gray-500 hover:text-red-500 transition-colors text-lg">
+       class="bg-white dark:bg-[#1C1C1C] rounded-xl w-full max-w-4xl mx-4 
+              border border-gray-200 dark:border-[#2E2E2E]
+              overflow-hidden transform transition-transform duration-200 scale-95 opacity-0">
+
+    <!-- Header -->
+    <div class="flex justify-between items-center px-6 py-4 bg-[#C5A300]">
+      <h3 class="text-2xl font-bold text-black flex items-center gap-2">
+        <i class="fas fa-users"></i> Turmas do Evento
+      </h3>
+      <button onclick="window.fecharModalTurmas()" 
+              class="text-black hover:text-red-600 transition-colors text-xl">
         <i class="fas fa-times"></i>
       </button>
     </div>
 
-    <div id="turmas-list" class="p-6 space-y-4 max-h-[60vh] overflow-y-auto text-center">
-      <p class="text-gray-500 dark:text-gray-400">Carregando turmas...</p>
+    <!-- Conteúdo -->
+    <div id="turmas-list" class="p-6 max-h-[70vh] overflow-y-auto">
+      <div class="text-center text-gray-400 py-8">
+        <i class="fas fa-spinner fa-spin text-2xl"></i>
+        <p class="mt-2">Carregando turmas...</p>
+      </div>
     </div>
 
-    <div class="border-t border-gray-200 dark:border-[#2E2E2E] px-6 py-4 flex justify-end">
-      <button onclick="fecharModalTurmas()" 
-              class="px-4 py-2 rounded-lg bg-gray-200 dark:bg-[#111111] text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#222] transition-colors">
+    <!-- Footer -->
+    <div class="border-t border-gray-200 dark:border-[#2E2E2E] px-6 py-4 
+                bg-gray-50 dark:bg-[#111111] flex justify-end">
+
+      <button onclick="window.fecharModalTurmas()" 
+              class="px-6 py-2 rounded-lg bg-gray-200 dark:bg-[#222] 
+                     text-gray-700 dark:text-gray-300 
+                     hover:bg-gray-300 dark:hover:bg-[#333]
+                     transition-colors font-medium">
         Fechar
       </button>
     </div>
   </div>
 </div>
 
-<script>
-async function abrirModalTurmas(eventoId) {
-  const modal = document.getElementById("modal-turmas-evento");
-  const modalContent = document.getElementById("modal-content");
-  const turmasList = document.getElementById("turmas-list");
+<!-- Modal de Alunos -->
+<div id="modal-alunos-evento" 
+     class="hidden fixed inset-0 bg-black/50 flex items-center justify-center z-[99999]">
 
-  modal.classList.remove("hidden");
-  setTimeout(() => {
-    modalContent.classList.remove("scale-95", "opacity-0");
-    modalContent.classList.add("scale-100", "opacity-100");
-  }, 50);
+  <div id="modal-alunos-content"
+       class="bg-white dark:bg-[#1C1C1C] rounded-xl w-full max-w-2xl mx-4
+              border border-gray-200 dark:border-[#2E2E2E]
+              overflow-hidden transform transition-transform duration-200 scale-95 opacity-0">
 
-  turmasList.innerHTML = `<div class="text-center text-gray-400 py-6">
-    <i class="fas fa-spinner fa-spin mr-2"></i> Carregando turmas...
-  </div>`;
+    <!-- Header -->
+    <div class="px-6 py-4 bg-[#C5A300]">
+      <div class="flex justify-between items-start">
+        <div>
+          <h3 class="text-2xl font-bold text-black flex items-center gap-2">
+            <i class="fas fa-user-friends"></i>
+            Alunos Participantes
+          </h3>
+          <p id="turma-nome-header" class="text-sm text-black/80 mt-1 font-medium"></p>
+        </div>
+        <button onclick="window.fecharModalAlunosEvento()" 
+                class="text-black hover:text-red-600 transition-colors text-xl">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
 
-  const response = await fetch(`/eventos/${eventoId}/turmas`);
-  const data = await response.json();
+    <!-- Lista de alunos -->
+    <div id="alunos-list" class="p-6 space-y-3 max-h-[60vh] overflow-y-auto">
+      <div class="text-center text-gray-400 py-8">
+        <i class="fas fa-spinner fa-spin text-2xl"></i>
+      </div>
+    </div>
 
-  if (data.length === 0) {
-    turmasList.innerHTML = `<p class="text-gray-500 dark:text-gray-400">Nenhuma turma vinculada a este evento.</p>`;
-    return;
+    <!-- Footer -->
+    <div class="border-t border-gray-200 dark:border-[#2E2E2E] px-6 py-4 
+                bg-gray-50 dark:bg-[#111111] flex justify-between items-center">
+
+      <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-400">
+        <i class="fas fa-check-circle text-[#C5A300]"></i>
+        <span id="alunos-confirmados-count" class="font-medium">0 alunos confirmados</span>
+      </div>
+
+      <button onclick="window.fecharModalAlunosEvento()" 
+              class="px-6 py-2 rounded-lg bg-[#C5A300] hover:bg-[#D4AA00]
+                     text-black font-bold transition-transform duration-150 hover:scale-[1.03]">
+        Concluir
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Checkbox muito mais leve */
+  .custom-checkbox {
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border: 2px solid #C5A300;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    transition: border-color .2s, background-color .2s;
+  }
+  .custom-checkbox:hover {
+    border-color: #D4AA00;
+  }
+  .custom-checkbox:checked {
+    background-color: #C5A300;
+  }
+  .custom-checkbox:checked::after {
+    content: '✔';
+    position: absolute;
+    inset: 0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    color:white;
+    font-size: 14px;
   }
 
-  turmasList.innerHTML = data.map(turma => `
-    <div class="bg-gray-50 dark:bg-[#111111] rounded-lg p-4 border border-gray-200 dark:border-[#2E2E2E] cursor-pointer hover:border-[#C5A300]"
-         onclick="abrirModalAlunos(${eventoId}, ${turma.tur_codigo}, '${turma.tur_nome}')">
-      <h4 class="font-semibold text-[#B88B00] mb-2">${turma.tur_nome}</h4>
-      <p class="text-sm text-gray-600 dark:text-gray-400">${turma.tur_dia_da_semana || ''} ${turma.tur_horario || ''}</p>
-    </div>
-  `).join('');
-}
+  /* Cards muito mais leves */
+  .turma-card {
+    border: 1px solid #dcdcdc;
+    border-radius: 10px;
+    padding: 16px;
+    background-color: #fafafa;
+    cursor: pointer;
 
-function fecharModalTurmas() {
-  const modal = document.getElementById("modal-turmas-evento");
-  const modalContent = document.getElementById("modal-content");
-  modalContent.classList.add("scale-95", "opacity-0");
-  setTimeout(() => modal.classList.add("hidden"), 200);
-}
+    /* transição optimizada (nada de transition-all) */
+    transition: transform .15s ease, border-color .15s ease;
+  }
 
-async function abrirModalAlunos(eventoId, turmaId, turmaNome) {
-  const alunosResponse = await fetch(`/eventos/${eventoId}/turmas/${turmaId}/alunos`);
-  const alunos = await alunosResponse.json();
+  .dark .turma-card {
+    background-color: #111111;
+    border-color: #2E2E2E;
+  }
 
-  Swal.fire({
-    title: `Alunos - ${turmaNome}`,
-    html: alunos.map(aluno => `
-      <div class="flex items-center justify-between py-2 border-b border-gray-200 dark:border-[#2E2E2E]">
-        <span class="text-gray-800 dark:text-gray-200">${aluno.alu_nome}</span>
-        <input type="checkbox" ${aluno.confirmado ? 'checked' : ''} class="form-checkbox h-5 w-5 text-[#C5A300]">
-      </div>
-    `).join(''),
-    width: 600,
-    background: '#1C1C1C',
-    color: '#E5E5E5',
-    confirmButtonText: 'Fechar',
-    confirmButtonColor: '#C5A300'
-  });
-}
-</script>
+  .turma-card:hover {
+    transform: translateY(-3px);
+    border-color: #C5A300;
+  }
+</style>
