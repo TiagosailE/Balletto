@@ -1,6 +1,8 @@
 class EventosController < ApplicationController
+  include Rails.application.routes.url_helpers
+  
   before_action :authenticate_user!
-  before_action :set_evento, only: %i[show edit update destroy turmas alunos]
+  before_action :set_evento, only: %i[show edit update destroy turmas alunos_turma toggle_aluno]
 
   def index
     @eventos = Evento.all.order(EVE_DATA: :asc)
@@ -15,11 +17,9 @@ class EventosController < ApplicationController
   def edit; end
 
   def create
-
     @evento = Evento.new(evento_params.except(:turma_ids))
 
     if @evento.save
-
       atualizar_turmas_associadas(@evento)
       redirect_to eventos_path, notice: "Evento criado com sucesso!"
     else
@@ -29,9 +29,7 @@ class EventosController < ApplicationController
   end
 
   def update
-
     if @evento.update(evento_params.except(:turma_ids))
-
       atualizar_turmas_associadas(@evento)
       redirect_to eventos_path, notice: "Evento atualizado com sucesso!"
     else
@@ -50,10 +48,48 @@ class EventosController < ApplicationController
     render json: turmas
   end
 
-  def alunos
+  def alunos_turma
     turma = Turma.find(params[:turma_id])
-    alunos = turma.alunos.select(:alu_codigo, :alu_nome)
-    render json: alunos.map { |a| { alu_codigo: a.alu_codigo, alu_nome: a.alu_nome, confirmado: false } }
+    
+    alunos = turma.alunos.with_attached_foto.map do |aluno|
+      confirmado = EventoAlunoTurma.exists?(
+        evento_id: @evento.EVE_CODIGO,
+        turma_id: turma.tur_codigo,
+        aluno_id: aluno.alu_codigo
+      )
+      
+      {
+        id: aluno.alu_codigo,
+        nome: aluno.alu_nome,
+        confirmado: confirmado,
+        foto_url: aluno.foto.attached? ? url_for(aluno.foto.variant(resize_to_fill: [48, 48])) : nil
+      }
+    end
+    
+    render json: alunos
+  end
+
+  def toggle_aluno
+    turma = Turma.find(params[:turma_id])
+    aluno = Aluno.find(params[:aluno_id])
+    
+    registro = EventoAlunoTurma.find_by(
+      evento_id: @evento.EVE_CODIGO,
+      turma_id: turma.tur_codigo,
+      aluno_id: aluno.alu_codigo
+    )
+    
+    if registro
+      registro.destroy
+      render json: { confirmado: false }
+    else
+      EventoAlunoTurma.create!(
+        evento_id: @evento.EVE_CODIGO,
+        turma_id: turma.tur_codigo,
+        aluno_id: aluno.alu_codigo
+      )
+      render json: { confirmado: true }
+    end
   end
 
   private

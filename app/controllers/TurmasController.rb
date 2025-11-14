@@ -1,7 +1,9 @@
 class TurmasController < ApplicationController
+  include Rails.application.routes.url_helpers
   before_action :authenticate_user!
   before_action :set_turma, only: %i[ show edit update destroy alunos ]
   before_action :set_professores, only: %i[ new edit create update show ]
+  
 
   def index
     @turmas = Turma.includes(:professor).order(:tur_nome)
@@ -61,7 +63,7 @@ class TurmasController < ApplicationController
   end
   
   def turma_params
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :tur_dia_da_semana, :user_id)
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :user_id, tur_dia_da_semana: [])
   end
 
   def set_professores

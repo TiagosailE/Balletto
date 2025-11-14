@@ -11,11 +11,12 @@ Rails.application.routes.draw do
   end
   
   resources :eventos do
-  member do
-    get :turmas
-    get :alunos
+    member do
+      get :turmas
+      get 'turmas/:turma_id/alunos', to: 'eventos#alunos_turma'
+      post 'turmas/:turma_id/alunos/:aluno_id/toggle', to: 'eventos#toggle_aluno'
+    end
   end
-end
 
   root 'pages#home'
 end

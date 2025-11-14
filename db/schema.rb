@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_12_014950) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,15 +56,24 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_12_014950) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "alu_data_nascimento"
+    t.string "responsavel_nome"
     t.string "alu_status", default: "matriculado"
     t.date "alu_data_cadastro"
     t.text "alu_endereco"
     t.bigint "user_id"
-    t.string "responsavel_nome"
     t.string "responsavel_telefone"
     t.string "responsavel_email"
     t.text "condicoes_medicas"
     t.index ["user_id"], name: "index_alunos_on_user_id"
+  end
+
+  create_table "evento_aluno_turmas", force: :cascade do |t|
+    t.integer "evento_id", null: false
+    t.integer "turma_id", null: false
+    t.integer "aluno_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["evento_id", "turma_id", "aluno_id"], name: "index_evento_turma_aluno", unique: true
   end
 
   create_table "eventos", primary_key: "EVE_CODIGO", force: :cascade do |t|
