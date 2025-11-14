@@ -4,12 +4,46 @@ Este projeto utiliza Ruby on Rails para desenvolvimento web. Abaixo estão as in
 
 ---
 
+
+
 ## 🚀 Versões
 
 - **Ruby**: 3.4.7  
 - **Rails**: 8.0.3  
 
----
+
+## 🗄️ Configuração do Banco de Dados
+
+Antes de iniciar o projeto, é necessário configurar o arquivo de banco de dados.
+
+1. No diretório `config/`, existe o arquivo:
+
+```
+database.yml.example
+```
+
+2. Renomeie-o para:
+
+```
+database.yml
+```
+
+3. Abra o arquivo e substitua os campos marcados com `*****` pelo **usuário** e **senha** do seu banco PostgreSQL:
+
+```yml
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  username: *****      # coloque aqui o nome do usuário do banco
+  password: *****      # coloque aqui a senha do usuário
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+```
+
+⚠️ **Importante:**
+
+* As credenciais precisam corresponder ao usuário configurado no seu PostgreSQL.
+* Se estiver usando o PostgreSQL local, normalmente o usuário padrão é `postgres`.
+
 
 ## ⚙️ Inicialização do Projeto
 
