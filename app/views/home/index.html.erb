@@ -1,0 +1,186 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-[#0A0A0A] dark:to-[#1A1A1A]">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="flex justify-between items-center mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+          Olá, <%= current_user.nome %>
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Bem-vindo ao seu painel</p>
+      </div>
+      <%= link_to "Sair", destroy_user_session_path,
+          data: { "turbo-method": :delete },
+          class: "px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1C1C1C] hover:text-[#D4AF37] transition-all duration-200" %>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+          <div class="text-center sm:text-left">
+            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Total de Alunos</p>
+            <p class="text-2xl sm:text-4xl font-bold text-[#C5A300] mt-1 sm:mt-2"><%= @total_alunos %></p>
+          </div>
+          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-xl sm:rounded-2xl flex items-center justify-center">
+            <i class="fas fa-users text-white text-lg sm:text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+          <div class="text-center sm:text-left">
+            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Turmas Ativas</p>
+            <p class="text-2xl sm:text-4xl font-bold text-teal-600 dark:text-teal-400 mt-1 sm:mt-2"><%= @turmas_ativas %></p>
+          </div>
+          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center">
+            <i class="fas fa-chalkboard-teacher text-white text-lg sm:text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+          <div class="text-center sm:text-left">
+            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Eventos Futuros</p>
+            <p class="text-2xl sm:text-4xl font-bold text-purple-600 dark:text-purple-400 mt-1 sm:mt-2"><%= @eventos_futuros_count %></p>
+          </div>
+          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center">
+            <i class="fas fa-calendar-check text-white text-lg sm:text-2xl"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <i class="fas fa-birthday-cake text-pink-500"></i>
+            Aniversariantes do Mês
+          </h2>
+          <span class="px-3 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-semibold rounded-full"><%= @aniversariantes.count %></span>
+        </div>
+        <div class="space-y-3">
+          <% if @aniversariantes.any? %>
+            <% @aniversariantes.each do |aluno| %>
+              <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
+                <% if aluno.foto.attached? %>
+                  <%= image_tag aluno.foto.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 rounded-full object-cover" %>
+                <% else %>
+                  <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+                  </div>
+                <% end %>
+                <div class="flex-1">
+                  <p class="font-semibold text-gray-900 dark:text-white"><%= aluno.alu_nome %></p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= aluno.alu_data_nascimento.strftime("%d de %B") %></p>
+                </div>
+                <i class="fas fa-gift text-pink-500"></i>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <i class="fas fa-birthday-cake text-3xl mb-2 opacity-50"></i>
+              <p class="text-sm">Nenhum aniversariante este mês</p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6">
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+            <i class="fas fa-exclamation-circle text-red-500"></i>
+            Pagamentos Atrasados
+          </h2>
+          <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-semibold rounded-full">5</span>
+        </div>
+        <div class="space-y-3">
+          <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
+              JO
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900 dark:text-white">João Oliveira</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Vencido há 5 dias</p>
+            </div>
+            <span class="text-red-600 dark:text-red-400 font-bold text-sm">R$ 150,00</span>
+          </div>
+          <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
+              CA
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900 dark:text-white">Carla Almeida</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Vencido há 12 dias</p>
+            </div>
+            <span class="text-red-600 dark:text-red-400 font-bold text-sm">R$ 150,00</span>
+          </div>
+          <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
+            <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
+              RF
+            </div>
+            <div class="flex-1">
+              <p class="font-semibold text-gray-900 dark:text-white">Roberto Ferreira</p>
+              <p class="text-sm text-gray-500 dark:text-gray-400">Vencido há 3 dias</p>
+            </div>
+            <span class="text-red-600 dark:text-red-400 font-bold text-sm">R$ 150,00</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 mb-8">
+      <div class="flex items-center justify-between mb-6">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fas fa-calendar-alt text-purple-500"></i>
+          Próximos Eventos
+        </h2>
+        <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-semibold rounded-full"><%= @proximos_eventos.count %></span>
+      </div>
+      <% if @proximos_eventos.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <% 
+            cores = ['purple', 'blue', 'green', 'orange', 'pink', 'teal', 'indigo', 'red']
+            meses_pt = {
+              1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN',
+              7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'
+            }
+          %>
+          <% @proximos_eventos.each_with_index do |evento, index| %>
+            <% 
+              cor = cores[index % cores.length]
+              dias_ate = (evento.EVE_DATA.to_date - Date.today).to_i
+              mes_abrev = meses_pt[evento.EVE_DATA.month]
+            %>
+            <div class="p-4 bg-gradient-to-br from-<%= cor %>-50 to-<%= cor %>-100 dark:from-<%= cor %>-900/20 dark:to-<%= cor %>-800/20 rounded-xl border border-<%= cor %>-200 dark:border-<%= cor %>-800/50 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 bg-<%= cor %>-500 rounded-lg flex items-center justify-center text-white font-bold">
+                  <div class="text-center">
+                    <div class="text-xs"><%= mes_abrev %></div>
+                    <div class="text-lg leading-none"><%= evento.EVE_DATA.day %></div>
+                  </div>
+                </div>
+                <div class="flex-1">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-sm"><%= evento.EVE_NOME %></h3>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">
+                    <%= dias_ate == 0 ? 'Hoje' : dias_ate == 1 ? 'Amanhã' : "Em #{dias_ate} dias" %>
+                  </p>
+                </div>
+              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400">
+                <%= evento.EVE_LOCAL %> - <%= evento.EVE_DATA.strftime('%H:%M') %>h
+              </p>
+            </div>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-calendar-times text-3xl mb-2 opacity-50"></i>
+          <p class="text-sm">Nenhum evento agendado</p>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
+</div>

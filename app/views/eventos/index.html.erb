@@ -89,8 +89,6 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-
-                  <!-- BOTÃO EDITAR COM ESTILO IGUAL AO DA TELA PRINCIPAL -->
                   <%= link_to edit_evento_path(evento),
                         class: "inline-flex items-center gap-2 px-4 py-2 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105 text-xs",
                         data: { turbo: false },
@@ -98,8 +96,6 @@
                     <i class="fas fa-edit"></i>
                     Editar
                   <% end %>
-
-                  <!-- BOTÃO EXCLUIR -->
                   <button 
                     type="button"
                     class="text-[#6B747A] hover:text-[#CC4444] transition-colors"
