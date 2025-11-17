@@ -8,44 +8,42 @@
         </h1>
         <p class="text-gray-500 dark:text-gray-400 mt-1">Bem-vindo ao seu painel</p>
       </div>
-      <%= link_to "Sair", destroy_user_session_path,
-          data: { "turbo-method": :delete },
-          class: "px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1C1C1C] hover:text-[#D4AF37] transition-all duration-200" %>
+      <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1C1C1C] hover:text-[#D4AF37] transition-all duration-200" %>
     </div>
 
-    <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
-      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-          <div class="text-center sm:text-left">
-            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Total de Alunos</p>
-            <p class="text-2xl sm:text-4xl font-bold text-[#C5A300] mt-1 sm:mt-2"><%= @total_alunos %></p>
+    <div class="grid grid-cols-3 gap-2 sm:gap-4 lg:gap-6 mb-6 sm:mb-8">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-xl sm:rounded-2xl shadow-lg p-2 sm:p-4 lg:p-6 border border-gray-200 dark:border-[#2E2E2E] hover:border-[#C5A300] hover:shadow-[#C5A300]/20 hover:shadow-xl transition-all duration-300">
+        <div class="flex flex-col lg:flex-row items-center lg:justify-between gap-1 sm:gap-2">
+          <div class="text-center lg:text-left order-2 lg:order-1">
+            <p class="text-[10px] sm:text-xs lg:text-sm text-gray-500 dark:text-gray-400 font-medium">Total de Alunos</p>
+            <p class="text-xl sm:text-3xl lg:text-4xl font-bold text-[#C5A300] mt-0 lg:mt-2"><%= @total_alunos %></p>
           </div>
-          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-xl sm:rounded-2xl flex items-center justify-center">
-            <i class="fas fa-users text-white text-lg sm:text-2xl"></i>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-          <div class="text-center sm:text-left">
-            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Turmas Ativas</p>
-            <p class="text-2xl sm:text-4xl font-bold text-teal-600 dark:text-teal-400 mt-1 sm:mt-2"><%= @turmas_ativas %></p>
-          </div>
-          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-xl sm:rounded-2xl flex items-center justify-center">
-            <i class="fas fa-chalkboard-teacher text-white text-lg sm:text-2xl"></i>
+          <div class="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-lg sm:rounded-xl lg:rounded-2xl flex items-center justify-center order-1 lg:order-2">
+            <i class="fas fa-users text-white text-sm sm:text-lg lg:text-2xl"></i>
           </div>
         </div>
       </div>
 
-      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-        <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-          <div class="text-center sm:text-left">
-            <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">Eventos Futuros</p>
-            <p class="text-2xl sm:text-4xl font-bold text-purple-600 dark:text-purple-400 mt-1 sm:mt-2"><%= @eventos_futuros_count %></p>
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-xl sm:rounded-2xl shadow-lg p-2 sm:p-4 lg:p-6 border border-gray-200 dark:border-[#2E2E2E] hover:border-teal-500 hover:shadow-teal-500/20 hover:shadow-xl transition-all duration-300">
+        <div class="flex flex-col lg:flex-row items-center lg:justify-between gap-1 sm:gap-2">
+          <div class="text-center lg:text-left order-2 lg:order-1">
+            <p class="text-[10px] sm:text-xs lg:text-sm text-gray-500 dark:text-gray-400 font-medium">Turmas Ativas</p>
+            <p class="text-xl sm:text-3xl lg:text-4xl font-bold text-teal-600 dark:text-teal-400 mt-0 lg:mt-2"><%= @turmas_ativas %></p>
           </div>
-          <div class="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl sm:rounded-2xl flex items-center justify-center">
-            <i class="fas fa-calendar-check text-white text-lg sm:text-2xl"></i>
+          <div class="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-teal-500 to-teal-600 rounded-lg sm:rounded-xl lg:rounded-2xl flex items-center justify-center order-1 lg:order-2">
+            <i class="fas fa-chalkboard-teacher text-white text-sm sm:text-lg lg:text-2xl"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-xl sm:rounded-2xl shadow-lg p-2 sm:p-4 lg:p-6 border border-gray-200 dark:border-[#2E2E2E] hover:border-purple-500 hover:shadow-purple-500/20 hover:shadow-xl transition-all duration-300">
+        <div class="flex flex-col lg:flex-row items-center lg:justify-between gap-1 sm:gap-2">
+          <div class="text-center lg:text-left order-2 lg:order-1">
+            <p class="text-[10px] sm:text-xs lg:text-sm text-gray-500 dark:text-gray-400 font-medium">Eventos Futuros</p>
+            <p class="text-xl sm:text-3xl lg:text-4xl font-bold text-purple-600 dark:text-purple-400 mt-0 lg:mt-2"><%= @eventos_futuros_count %></p>
+          </div>
+          <div class="w-8 h-8 sm:w-12 sm:h-12 lg:w-16 lg:h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg sm:rounded-xl lg:rounded-2xl flex items-center justify-center order-1 lg:order-2">
+            <i class="fas fa-calendar-check text-white text-sm sm:text-lg lg:text-2xl"></i>
           </div>
         </div>
       </div>
