@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-8">
       <div>
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-          Olá, <%= current_user.nome %>
+          Olá, <%= current_user.usu_nome %>
         </h1>
         <p class="text-gray-500 dark:text-gray-400 mt-1">Bem-vindo ao seu painel</p>
       </div>
@@ -179,6 +179,9 @@
         </div>
       <% end %>
     </div>
+    <%= link_to "Gerenciar Usuários", users_path,
+  class: "px-6 py-2.5 bg-[#C5A300] text-white font-semibold rounded-lg shadow-md hover:bg-[#B89400] transition-all duration-200" %>
+
 
   </div>
 </div>

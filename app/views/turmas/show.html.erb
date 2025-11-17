@@ -6,7 +6,11 @@
       <%= @turma.tur_nome %>
     </h1>
     <p class="mt-3 max-w-xl mx-auto text-lg text-gray-500 dark:text-gray-400">
-      Professor: <%= @turma.professor&.nome.presence || 'Não atribuído' %>
+      <%# 
+        CORREÇÃO AQUI: 
+        Trocado .nome por .usu_nome 
+      %>
+      Professor: <%= @turma.professor&.usu_nome.presence || 'Não atribuído' %>
     </p>
   </div>
 

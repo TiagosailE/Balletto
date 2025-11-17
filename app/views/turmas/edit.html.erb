@@ -128,7 +128,7 @@
               <i class="fas fa-user-tie w-5 text-center text-gray-500"></i>
             </div>
             <%= form.collection_select :user_id,
-                @professores, :id, :nome,
+                @professores, :id, :usu_nome,
                 { prompt: 'Selecione um(a) professor(a)' },
                 { class: "block w-full appearance-none bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0",
                   style: "color: rgb(75 85 99);" }

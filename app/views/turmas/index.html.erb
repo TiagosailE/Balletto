@@ -57,7 +57,7 @@
                   </div>
                   <div class="flex items-center">
                     <i class="fas fa-user-tie w-5 text-center text-[#8A939E] dark:text-gray-500 mr-3"></i>
-                    <span><%= turma.professor.present? ? turma.professor.nome : 'Professor(a) a definir' %></span>
+                    <span><%= turma.professor&.usu_nome || 'Professor(a) a definir' %></span>
                   </div>
                 </div>
               </div>

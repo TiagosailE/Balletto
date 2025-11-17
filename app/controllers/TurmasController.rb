@@ -1,5 +1,4 @@
 class TurmasController < ApplicationController
-  include Rails.application.routes.url_helpers
   before_action :authenticate_user!
   before_action :set_turma, only: %i[ show edit update destroy alunos ]
   before_action :set_professores, only: %i[ new edit create update show ]
@@ -26,7 +25,6 @@ class TurmasController < ApplicationController
     if @turma.save
       redirect_to @turma, notice: "Turma criada com sucesso."
     else
-      flash.now[:alert] = "Erro ao criar turma."
       render :new, status: :unprocessable_entity
     end
   end
@@ -35,7 +33,6 @@ class TurmasController < ApplicationController
     if @turma.update(turma_params)
       redirect_to @turma, notice: "Turma atualizada com sucesso."
     else
-      flash.now[:alert] = "Erro ao atualizar turma."
       render :edit, status: :unprocessable_entity
     end
   end
@@ -44,6 +41,7 @@ class TurmasController < ApplicationController
     @turma.destroy
     redirect_to turmas_url, notice: "Turma excluída com sucesso."
   end
+  
   def alunos
     @turma = Turma.find(params[:id])
     @alunos = @turma.alunos
@@ -63,10 +61,16 @@ class TurmasController < ApplicationController
   end
   
   def turma_params
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :user_id, tur_dia_da_semana: [])
+    # CORREÇÃO AQUI: 'tur_dia_da_semana' não é um array
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :user_id, :tur_dia_da_semana)
   end
 
   def set_professores
-    @professores = User.order(:nome)
+    # MUDANÇA PRINCIPAL AQUI:
+    # 1. Filtra para encontrar usuários que TENHAM o cargo de 'professor'
+    # 2. Ordena pela nova coluna 'usu_nome'
+    @professores = User.joins(:cargos)
+                       .where(cargos: { car_nome: 'professor' })
+                       .order(:usu_nome)
   end
 end
