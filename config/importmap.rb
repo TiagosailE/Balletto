@@ -7,3 +7,5 @@ pin "turmas", preload: true
 pin "confirm_modal"
 pin "custom/theme_toggle"
 pin "alunos_modal"
+pin "configuracoes", to: "configuracoes.js"
+pin "gerenciar_usuarios", to: "gerenciar_usuarios.js"

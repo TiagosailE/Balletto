@@ -1,0 +1,226 @@
+<div class="pb-20">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <div class="flex items-center justify-between mb-8">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+          <i class="fas fa-cog text-[#C5A300]"></i>
+          Configurações
+        </h1>
+        <p class="text-gray-500 dark:text-gray-400 mt-1">Gerencie seu perfil e configurações do sistema</p>
+      </div>
+      <%= link_to root_path, class: "px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] transition-colors" do %>
+        <i class="fas fa-arrow-left mr-2"></i>Voltar
+      <% end %>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-[#2E2E2E]">
+          <div class="flex flex-col items-center">
+            <div class="relative">
+              <% if @user.foto.attached? && @user.foto.representable? %>
+                <%= image_tag @user.foto.variant(resize_to_fill: [120, 120]), class: "w-30 h-30 rounded-full object-cover border-4 border-[#C5A300] shadow-lg", id: "preview-foto" %>
+              <% else %>
+                <div class="w-30 h-30 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-full flex items-center justify-center text-white text-4xl font-bold shadow-lg border-4 border-[#C5A300]" id: "preview-foto">
+                  <%= @user.nome.split.map(&:first).join.upcase[0..1] %>
+                </div>
+              <% end %>
+            </div>
+            
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white text-center mt-4"><%= @user.nome %></h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">@<%= @user.usuario %></p>
+            
+            <% 
+              role_text = @user.role.capitalize
+              role_config = {
+                'admin' => { color: 'purple', icon: 'user-shield' },
+                'financeiro' => { color: 'green', icon: 'dollar-sign' },
+                'atendente' => { color: 'blue', icon: 'headset' },
+                'professor' => { color: 'teal', icon: 'chalkboard-teacher' }
+              }
+              config = role_config[@user.role] || role_config['professor']
+              role_color = config[:color]
+              role_icon = config[:icon]
+            %>
+            
+            <div class="mt-4 px-4 py-2 bg-<%= role_color %>-100 dark:bg-<%= role_color %>-900/30 text-<%= role_color %>-600 dark:text-<%= role_color %>-400 text-sm font-semibold rounded-full flex items-center gap-2">
+              <i class="fas fa-<%= role_icon %>"></i>
+              <%= role_text %>
+            </div>
+          </div>
+
+          <% if @user.admin? %>
+            <div class="mt-6 pt-6 border-t border-gray-200 dark:border-[#2E2E2E] space-y-3">
+              <%= link_to novo_usuario_path, class: "w-full inline-flex justify-center items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#C5A300] to-[#B88B00] text-white font-bold rounded-lg shadow-md hover:from-[#D4AF37] hover:to-[#C5A300] transition-all transform hover:scale-105" do %>
+                <i class="fas fa-user-plus"></i>
+                <span>Novo Usuário</span>
+              <% end %>
+              
+              <button type="button" onclick="abrirModalUsuarios()" 
+                      class="w-full inline-flex justify-center items-center gap-2 
+                             px-4 py-3 
+                             bg-gray-800 dark:bg-gray-700 
+                             text-gray-100 dark:text-gray-200 
+                             font-bold rounded-lg shadow-md 
+                             border border-gray-700 dark:border-gray-900
+                             hover:bg-gray-900 dark:hover:bg-gray-800
+                             transition-all transform hover:scale-105 cursor-pointer">
+                <i class="fas fa-users"></i>
+                <span>Gerenciar Usuários</span>
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="lg:col-span-3">
+        <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] overflow-hidden">
+          
+          <div class="bg-gradient-to-r from-[#C5A300] to-[#B88B00] px-6 py-4">
+            <h2 class="text-xl font-bold text-white">Informações Pessoais</h2>
+          </div>
+
+          <%= form_with model: @user, url: configuracoes_path, method: :patch, local: true, class: "p-6 space-y-6" do |f| %>
+            
+            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-xl p-6 border border-gray-200 dark:border-[#2E2E2E]">
+              <label class="flex items-center gap-2 text-sm font-bold text-gray-900 dark:text-white mb-4">
+                <i class="fas fa-image text-[#C5A300]"></i>
+                Foto de Perfil
+              </label>
+              
+              <div class="flex items-center gap-4">
+                <label for="user_foto" class="cursor-pointer inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border-2 border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] hover:border-[#D4AF37] transition-all transform hover:scale-105">
+                  <i class="fas fa-upload"></i>
+                  <span>Escolher Arquivo</span>
+                </label>
+                <%= f.file_field :foto, accept: "image/png,image/jpeg,image/jpg,image/gif", class: "hidden", id: "user_foto" %>
+                
+                <div id="filename-display" class="text-sm text-gray-600 dark:text-gray-400 italic">
+                  Nenhum arquivo selecionado
+                </div>
+              </div>
+              
+              <p class="mt-3 text-xs text-gray-500 dark:text-gray-400 flex items-center gap-2">
+                <i class="fas fa-info-circle"></i>
+                Formatos aceitos: PNG, JPEG ou GIF (máx. 5MB)
+              </p>
+              
+              <% if @user.errors[:foto].any? %>
+                <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-2">
+                  <i class="fas fa-exclamation-circle"></i>
+                  <%= @user.errors[:foto].first %>
+                </p>
+              <% end %>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <%= f.label :nome, class: "flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+                  <i class="fas fa-user text-[#C5A300]"></i>
+                  Nome Completo
+                <% end %>
+                <%= f.text_field :nome, class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "Seu nome completo" %>
+                <% if @user.errors[:nome].any? %>
+                  <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:nome].first %></p>
+                <% end %>
+              </div>
+
+              <div>
+                <%= f.label :usuario, class: "flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+                  <i class="fas fa-at text-[#C5A300]"></i>
+                  Nome de Usuário
+                <% end %>
+                <%= f.text_field :usuario, class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "usuario" %>
+                <% if @user.errors[:usuario].any? %>
+                  <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:usuario].first %></p>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <%= f.label :email, class: "flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+                  <i class="fas fa-envelope text-[#C5A300]"></i>
+                  E-mail
+                <% end %>
+                <%= f.email_field :email, class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "seu@email.com" %>
+                <% if @user.errors[:email].any? %>
+                  <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:email].first %></p>
+                <% end %>
+              </div>
+
+              <div>
+                <%= f.label :telefone, class: "flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" do %>
+                  <i class="fas fa-phone text-[#C5A300]"></i>
+                  Telefone
+                <% end %>
+                <%= f.text_field :telefone, class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "(00) 00000-0000" %>
+                <% if @user.errors[:telefone].any? %>
+                  <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:telefone].first %></p>
+                <% end %>
+              </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-xl p-6 border border-gray-200 dark:border-[#2E2E2E]">
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                <i class="fas fa-lock text-[#C5A300]"></i>
+                Alterar Senha
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">Deixe em branco se não deseja alterar a senha</p>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <%= f.label :password, "Nova Senha", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+                  <%= f.password_field :password, autocomplete: "new-password", class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "••••••••" %>
+                  <% if @user.errors[:password].any? %>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:password].first %></p>
+                  <% end %>
+                </div>
+
+                <div>
+                  <%= f.label :password_confirmation, "Confirmar Senha", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
+                  <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "w-full px-4 py-3 bg-white dark:bg-[#0F0F0F] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-[#C5A300] transition-all", placeholder: "••••••••" %>
+                  <% if @user.errors[:password_confirmation].any? %>
+                    <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:password_confirmation].first %></p>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+
+            <div class="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-6 border-t border-gray-200 dark:border-[#2E2E2E]">
+              <%= link_to "Cancelar", root_path, class: "w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-[#2E2E2E] text-gray-700 dark:text-gray-300 font-semibold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-[#3E3E3E] transition-all transform hover:scale-105" %>
+              
+              <input type="submit" name="commit" value="Salvar Alterações" class="w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer" data-disable-with="Salvar Alterações">
+            </div>
+
+          <% end %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div id="modal-usuarios" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pb-24">
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-2xl max-w-2xl w-full max-h-[70vh] overflow-hidden">
+    <div class="bg-gradient-to-r from-[#C5A300] to-[#B88B00] px-5 py-3 flex justify-between items-center">
+      <h3 class="text-lg font-bold text-white flex items-center gap-2">
+        <i class="fas fa-users-cog"></i>
+        Gerenciar Usuários
+      </h3>
+      <button onclick="fecharModalUsuarios()" class="text-white hover:text-gray-200 transition-colors">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+    
+    <div class="p-4 overflow-y-auto max-h-[calc(70vh-60px)]">
+      <div id="lista-usuarios" class="space-y-3">
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'shared/confirm_modal' %>
