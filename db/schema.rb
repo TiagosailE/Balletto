@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_16_195254) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_16_195254) do
     t.index ["user_id"], name: "index_alunos_on_user_id"
   end
 
+  create_table "caixas", primary_key: "cai_codigo", force: :cascade do |t|
+    t.string "cai_nome", limit: 100, null: false
+    t.string "cai_tipo", limit: 50
+    t.decimal "cai_saldo_inicial", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "cargos", primary_key: "car_codigo", force: :cascade do |t|
     t.string "car_nome", limit: 50, null: false
     t.datetime "created_at", null: false
@@ -98,6 +106,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_16_195254) do
     t.text "EVE_DESC"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pagamentos", primary_key: "pag_codigo", force: :cascade do |t|
+    t.bigint "caixa_id", null: false
+    t.bigint "aluno_id"
+    t.bigint "evento_id"
+    t.datetime "pag_data", null: false
+    t.decimal "pag_valor", precision: 10, scale: 2, null: false
+    t.string "pag_descricao", limit: 255
+    t.string "pag_metodo", limit: 50
+    t.string "pag_tipo", limit: 10, null: false
+    t.string "pag_status", limit: 20, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aluno_id"], name: "index_pagamentos_on_aluno_id"
+    t.index ["caixa_id"], name: "index_pagamentos_on_caixa_id"
+    t.index ["evento_id"], name: "index_pagamentos_on_evento_id"
   end
 
   create_table "possiveis_alunos", primary_key: "pos_codigo", force: :cascade do |t|
@@ -172,5 +197,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_16_195254) do
   add_foreign_key "alunos", "users"
   add_foreign_key "cargos_usuarios", "cargos", primary_key: "car_codigo"
   add_foreign_key "cargos_usuarios", "users"
+  add_foreign_key "pagamentos", "alunos", primary_key: "alu_codigo"
+  add_foreign_key "pagamentos", "caixas", primary_key: "cai_codigo"
+  add_foreign_key "pagamentos", "eventos", primary_key: "EVE_CODIGO"
   add_foreign_key "turmas", "users", on_delete: :nullify
 end

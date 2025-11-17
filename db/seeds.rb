@@ -61,4 +61,22 @@ Turma.create!(
 )
 
 puts "Turmas de exemplo criadas!"
+
+# 4. Criar Caixas Iniciais (COM NOMES CORRIGIDOS)
+puts "\nLimpando caixas antigos..."
+Caixa.destroy_all
+
+puts "Criando caixas iniciais..."
+Caixa.create!(
+  cai_nome: "Caixa da Recepção",
+  cai_tipo: "Caixa Físico",
+  cai_saldo_inicial: 0.0
+)
+Caixa.create!(
+  cai_nome: "Conta Bancária",
+  cai_tipo: "Conta Corrente",
+  cai_saldo_inicial: 0.0
+)
+puts "Caixas criados com sucesso!"
+
 puts "\nSeed concluído!"

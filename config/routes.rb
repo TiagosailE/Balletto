@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  get "pagamentos/index"
+  get "pagamentos/new"
+  get "pagamentos/create"
+  get "pagamentos/edit"
+  get "pagamentos/update"
+  get "pagamentos/destroy"
   devise_for :users, skip: [:registrations]
 
   resources :users
@@ -17,6 +23,8 @@ Rails.application.routes.draw do
       post 'turmas/:turma_id/alunos/:aluno_id/toggle', to: 'eventos#toggle_aluno'
     end
   end
+
+  resources :pagamentos
 
   root 'home#index'
 
