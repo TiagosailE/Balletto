@@ -11,14 +11,12 @@ function initPreviewFoto() {
     fotoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
       console.log('📁 Arquivo selecionado:', file);
-      
-      // Atualizar nome do arquivo
+
       if (filenameDisplay) {
         const fileName = file?.name || 'Nenhum arquivo selecionado';
         filenameDisplay.textContent = fileName;
       }
       
-      // Atualizar preview da imagem
       if (file && file.type.startsWith('image/')) {
         console.log('✅ É uma imagem válida');
         const reader = new FileReader();
@@ -49,5 +47,3 @@ function initPreviewFoto() {
 
 document.addEventListener('turbo:load', initPreviewFoto);
 document.addEventListener('DOMContentLoaded', initPreviewFoto);
-
-console.log('✅ configuracoes.js carregado');
