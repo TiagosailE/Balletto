@@ -18,5 +18,9 @@ test:
   database: balletto_core_test
 
 production:
-  # CRUCIAL: Usa a URL completa injetada pelo Render
-  url: <%= ENV['DATABASE_URL'] %>
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
+
+  cable:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
