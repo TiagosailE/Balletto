@@ -12,7 +12,9 @@ Rails.application.routes.draw do
 
   resources :turmas do
     member do
-      get :alunos 
+      get :alunos
+      get 'listar_alunos'
+      delete 'remover_aluno/:aluno_id', action: :remover_aluno, as: :remover_aluno
     end
   end
   
@@ -29,9 +31,9 @@ Rails.application.routes.draw do
   root 'home#index'
 
   get 'configuracoes', to: 'configuracoes#index', as: 'configuracoes'
-patch 'configuracoes', to: 'configuracoes#update'
-get 'configuracoes/novo_usuario', to: 'configuracoes#novo_usuario', as: 'novo_usuario'
-post 'configuracoes/criar_usuario', to: 'configuracoes#criar_usuario'
-get 'configuracoes/listar_usuarios', to: 'configuracoes#listar_usuarios'
-delete 'configuracoes/excluir_usuario/:id', to: 'configuracoes#excluir_usuario'
+  patch 'configuracoes', to: 'configuracoes#update'
+  get 'configuracoes/novo_usuario', to: 'configuracoes#novo_usuario', as: 'novo_usuario'
+  post 'configuracoes/criar_usuario', to: 'configuracoes#criar_usuario'
+  get 'configuracoes/listar_usuarios', to: 'configuracoes#listar_usuarios'
+  delete 'configuracoes/excluir_usuario/:id', to: 'configuracoes#excluir_usuario'
 end

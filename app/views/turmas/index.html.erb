@@ -23,11 +23,11 @@
       <% else %>
         <div id="turmas-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 items-stretch">
           <% @turmas.each do |turma| %>
-            <% 
-              alunos_count = turma.alunos.count
-              capacidade = turma.tur_capacidade || 0
-              status_text = 'Vagas Abertas'
-              status_color = 'yellow'
+  <% 
+    alunos_count = turma.alunos.count
+    capacidade = turma.tur_capacidade || 0
+    status_text = 'Vagas Abertas'
+    status_color = 'yellow'
 
               if alunos_count >= capacidade && capacidade > 0
                 status_text = 'Lotada'
