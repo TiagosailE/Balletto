@@ -11,7 +11,7 @@
   </div>
 
   <%# Card principal do formulário com modo claro/escuro %>
-  <%= form_with(model: user, local: true, class: "bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-[#2E2E2E]") do |form| %>
+<%= form_with(model: user, local: true, data: { turbo: false }, class: "space-y-6") do |form| %>
     
     <%# Bloco de erros com modo claro/escuro %>
     <% if user.errors.any? %>

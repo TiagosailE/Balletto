@@ -30,9 +30,10 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
    
     if @user.save
-      redirect_to root_path, notice: 'Usuário cadastrado com sucesso.' # <--- Mudamos para root_path conforme você pediu
+      # CORREÇÃO: status: :see_other força o redirecionamento limpo
+      redirect_to root_path, notice: 'Usuário cadastrado com sucesso.', status: :see_other
     else
-      puts "ERROS DE VALIDAÇÃO: #{@user.errors.full_messages}" # <--- Adicione isso para ver no terminal
+      puts "ERROS DE VALIDAÇÃO: #{@user.errors.full_messages}" 
       load_form_data
       render :new, status: :unprocessable_entity
     end
@@ -49,13 +50,12 @@ class UsersController < ApplicationController
     # Lógica para não obrigar a mudança de senha a cada edição
     if params_to_update[:password].blank?
       params_to_update.delete(:password)
-      params_to_update.delete(:password_confirmation) # Garante que a confirmação também seja removida
+      params_to_update.delete(:password_confirmation)
     end
 
     if @user.update(params_to_update)
-      redirect_to users_path, notice: 'Usuário atualizado com sucesso.'
+      redirect_to users_path, notice: 'Usuário atualizado com sucesso.', status: :see_other
     else
-      # Precisamos recarregar os dados do formulário em caso de falha
       load_form_data
       render :edit, status: :unprocessable_entity
     end
@@ -63,14 +63,13 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to users_path, notice: 'Usuário excluído com sucesso.'
+    redirect_to users_path, notice: 'Usuário excluído com sucesso.', status: :see_other
   end
 
   private
 
   # Método de segurança personalizado
   def authenticate_admin!
-    # Esta verificação continua funcionando, pois atualizamos o User.admin? no modelo
     redirect_to root_path, alert: 'Acesso negado. Você não é um administrador.' unless current_user&.admin?
   end
 
@@ -96,6 +95,7 @@ class UsersController < ApplicationController
       :usu_data_contratacao, # :data_cont
       :usu_status,           # :status
       :usu_especialidades,   # :especialidades
+      :foto,                 # <--- CORREÇÃO CRUCIAL: Adicionado :foto aqui!
       cargo_ids: []          # NOVO: permite um array de IDs de cargos
     )
   end
