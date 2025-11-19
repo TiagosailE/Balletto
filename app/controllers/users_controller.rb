@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_admin!
-  before_action :set_user, only: [:edit, :update, :destroy, :show]
+  before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
     # 1. Começa com a consulta base (todos os professores)
@@ -30,9 +30,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
    
     if @user.save
-      redirect_to users_path, notice: 'Usuário cadastrado com sucesso.'
+      redirect_to root_path, notice: 'Usuário cadastrado com sucesso.' # <--- Mudamos para root_path conforme você pediu
     else
-      # Precisamos recarregar os dados do formulário em caso de falha
+      puts "ERROS DE VALIDAÇÃO: #{@user.errors.full_messages}" # <--- Adicione isso para ver no terminal
       load_form_data
       render :new, status: :unprocessable_entity
     end
