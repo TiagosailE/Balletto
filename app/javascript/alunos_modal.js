@@ -1,9 +1,6 @@
 document.addEventListener('turbo:load', () => {
   console.log("⚡ alunos_modal.js (versão fotos) carregado");
 
-  // -----------------------------
-  // 1. CACHE DE ELEMENTOS
-  // -----------------------------
   const $ = (sel) => document.querySelector(sel);
 
   const modalAlunos     = $("#alunos-modal");
@@ -15,18 +12,10 @@ document.addEventListener('turbo:load', () => {
   const alunosList      = $("#alunos-list");
   const turmaNomeHeader   = $("#turma-nome-header");
   const alunosConfirmadosCount = $('#alunos-confirmados-count');
-
-  // -----------------------------
-  // 2. ESTADO GLOBAL
-  // -----------------------------
   const state = {
     eventoId: null,
     turmaId: null
   };
-
-  // -----------------------------
-  // 3. FUNÇÕES AUXILIARES
-  // -----------------------------
 
   const formatarHorario = (h) => {
     if (!h) return "";
@@ -43,11 +32,6 @@ document.addEventListener('turbo:load', () => {
       alunosConfirmadosCount.textContent = `${n} aluno${n === 1 ? "" : "s"} confirmado${n === 1 ? "" : "s"}`;
     }
   };
-
-  // -----------------------------
-  // 4. MODAL TURMAS
-  // -----------------------------
-
   window.abrirModalTurmas = async (eventoId) => {
     state.eventoId = eventoId;
     modalTurmas.classList.remove("hidden");
@@ -109,11 +93,6 @@ document.addEventListener('turbo:load', () => {
     modalTurmasContent.classList.add("scale-95", "opacity-0");
     setTimeout(() => modalTurmas.classList.add("hidden"), 180);
   };
-
-  // -----------------------------
-  // 5. MODAL ALUNOS (COM FOTOS ✨)
-  // -----------------------------
-
   window.abrirModalAlunosEvento = async (turmaId, turmaNome) => {
     state.turmaId = turmaId;
 
@@ -137,7 +116,6 @@ document.addEventListener('turbo:load', () => {
         return;
       }
 
-      // --- ✨ ESTA É A LÓGICA DAS FOTOS ---
       const html = alunos.map(a => `
         <div class="flex items-center justify-between p-4 border-2 rounded-xl 
              border-gray-200 dark:border-[#2E2E2E] 
@@ -146,10 +124,8 @@ document.addEventListener('turbo:load', () => {
           <div class="flex items-center gap-3">
             
             ${a.foto_url
-              // Se tiver foto_url, usa <img>
               ? `<img src="${a.foto_url}" class="w-11 h-11 rounded-full object-cover">`
-              
-              // Se não, usa a inicial (com texto preto na cor dourada)
+
               : `<div class="w-11 h-11 rounded-full bg-[#C5A300] text-black flex items-center justify-center font-bold text-lg">
                    ${a.nome[0].toUpperCase()}
                  </div>`
@@ -177,9 +153,6 @@ document.addEventListener('turbo:load', () => {
     setTimeout(() => modalAlunosEvento.classList.add("hidden"), 180);
   };
 
-  // -----------------------------
-  // 6. TOGGLE ALUNO
-  // -----------------------------
   window.toggleAlunoEvento = async (id, checkbox) => {
     const token = document.querySelector('[name="csrf-token"]')?.content;
     if (!token) return;
@@ -199,11 +172,6 @@ document.addEventListener('turbo:load', () => {
       alert("Erro ao atualizar aluno.");
     }
   };
-
-  // -----------------------------
-  // 7. DELEGAÇÃO DE EVENTOS
-  // -----------------------------
-
   turmasList?.addEventListener("click", (e) => {
     const card = e.target.closest(".turma-card");
     if (!card) return;
@@ -215,9 +183,6 @@ document.addEventListener('turbo:load', () => {
     toggleAlunoEvento(e.target.dataset.alunoId, e.target);
   });
 
-  // -----------------------------
-  // 8. FECHAR MODAIS VIA BACKDROP
-  // -----------------------------
   modalTurmas?.addEventListener("click", (e) => e.target === modalTurmas && fecharModalTurmas());
   modalAlunosEvento?.addEventListener("click", (e) => e.target === modalAlunosEvento && fecharModalAlunosEvento());
 });
