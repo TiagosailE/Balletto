@@ -1,0 +1,22 @@
+# Arquivo: config/database.yml
+
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  # Estas variaveis serão lidas do seu arquivo .env local
+  username: <%= ENV.fetch("DB_USERNAME") { 'seu_fallback_user' } %> 
+  password: <%= ENV.fetch("DB_PASSWORD") { 'sua_fallback_senha' } %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+
+
+development:
+  <<: *default
+  database: balletto_core_development
+
+test:
+  <<: *default
+  database: balletto_core_test
+
+production:
+  # CRUCIAL: Usa a URL completa injetada pelo Render
+  url: <%= ENV['DATABASE_URL'] %>
