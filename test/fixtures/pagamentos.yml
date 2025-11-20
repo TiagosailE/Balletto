@@ -1,0 +1,23 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  pag_data: 2025-11-16 21:56:13
+  pag_valor: 9.99
+  pag_tipo: MyString
+  pag_metodo: MyString
+  pag_descricao: MyString
+  pag_status: MyString
+  aluno: one
+  evento: one
+  caixa: one
+
+two:
+  pag_data: 2025-11-16 21:56:13
+  pag_valor: 9.99
+  pag_tipo: MyString
+  pag_metodo: MyString
+  pag_descricao: MyString
+  pag_status: MyString
+  aluno: two
+  evento: two
+  caixa: two

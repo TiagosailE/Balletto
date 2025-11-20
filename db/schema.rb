@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -56,15 +56,38 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "alu_data_nascimento"
-    t.string "responsavel_nome"
     t.string "alu_status", default: "matriculado"
     t.date "alu_data_cadastro"
     t.text "alu_endereco"
     t.bigint "user_id"
+    t.string "responsavel_nome"
     t.string "responsavel_telefone"
     t.string "responsavel_email"
     t.text "condicoes_medicas"
     t.index ["user_id"], name: "index_alunos_on_user_id"
+  end
+
+  create_table "caixas", primary_key: "cai_codigo", force: :cascade do |t|
+    t.string "cai_nome", limit: 100, null: false
+    t.string "cai_tipo", limit: 50
+    t.decimal "cai_saldo_inicial", precision: 10, scale: 2, default: "0.0"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "cargos", primary_key: "car_codigo", force: :cascade do |t|
+    t.string "car_nome", limit: 50, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["car_nome"], name: "index_cargos_on_car_nome", unique: true
+  end
+
+  create_table "cargos_usuarios", id: false, force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.bigint "cargo_id", null: false
+    t.index ["cargo_id"], name: "index_cargos_usuarios_on_cargo_id"
+    t.index ["user_id", "cargo_id"], name: "index_cargos_usuarios_on_user_id_and_cargo_id", unique: true
+    t.index ["user_id"], name: "index_cargos_usuarios_on_user_id"
   end
 
   create_table "evento_aluno_turmas", force: :cascade do |t|
@@ -83,6 +106,23 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
     t.text "EVE_DESC"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "pagamentos", primary_key: "pag_codigo", force: :cascade do |t|
+    t.bigint "caixa_id", null: false
+    t.bigint "aluno_id"
+    t.bigint "evento_id"
+    t.datetime "pag_data", null: false
+    t.decimal "pag_valor", precision: 10, scale: 2, null: false
+    t.string "pag_descricao", limit: 255
+    t.string "pag_metodo", limit: 50
+    t.string "pag_tipo", limit: 10, null: false
+    t.string "pag_status", limit: 20, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["aluno_id"], name: "index_pagamentos_on_aluno_id"
+    t.index ["caixa_id"], name: "index_pagamentos_on_caixa_id"
+    t.index ["evento_id"], name: "index_pagamentos_on_evento_id"
   end
 
   create_table "possiveis_alunos", primary_key: "pos_codigo", force: :cascade do |t|
@@ -133,13 +173,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "nome", default: "", null: false
-    t.string "usuario", default: "", null: false
-    t.integer "role", default: 0
-    t.string "telefone"
-    t.date "data_cont"
-    t.string "status", default: "ativo"
-    t.text "especialidades"
+    t.string "usu_nome", default: "", null: false
+    t.string "usu_login", default: "", null: false
+    t.string "usu_telefone"
+    t.date "usu_data_contratacao"
+    t.string "usu_status", default: "ativo"
+    t.text "usu_especialidades"
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
@@ -149,12 +188,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_14_013704) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["usuario"], name: "index_users_on_usuario", unique: true
+    t.index ["usu_login"], name: "index_users_on_usu_login", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "alunos", "turmas", column: "alu_tur_codigo", primary_key: "tur_codigo"
   add_foreign_key "alunos", "users"
+  add_foreign_key "cargos_usuarios", "cargos", primary_key: "car_codigo"
+  add_foreign_key "cargos_usuarios", "users"
+  add_foreign_key "pagamentos", "alunos", primary_key: "alu_codigo"
+  add_foreign_key "pagamentos", "caixas", primary_key: "cai_codigo"
+  add_foreign_key "pagamentos", "eventos", primary_key: "EVE_CODIGO"
   add_foreign_key "turmas", "users", on_delete: :nullify
 end

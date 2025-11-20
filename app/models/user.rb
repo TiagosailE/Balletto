@@ -1,30 +1,26 @@
 class User < ApplicationRecord
-  devise :database_authenticatable, :registerable,
+  devise :database_authenticatable,
          :recoverable, :rememberable, :validatable
+  # Pulamos :registerable, pois o admin que cadastra
 
-  enum :role, { 
-    professor: 0, 
-    admin: 1,
-    financeiro: 2,
-    atendente: 3
-  }
-
+  # --- Relação de Cargos (substitui o 'enum') ---
+  # AVISO AQUI: Diga ao Rails o nome exato da nossa tabela de ligação
+  has_and_belongs_to_many :cargos, join_table: 'cargos_usuarios'
   has_one_attached :foto
 
-  validates :nome, presence: true
-  validates :usuario, presence: true, uniqueness: true
-  validate :foto_formato_valido
+  validates :usu_nome, presence: true
+  validates :usu_login, presence: true, uniqueness: true
+  
+  # --- Métodos de Permissão ---
+  def has_cargo?(nome_cargo)
+    self.cargos.exists?(car_nome: nome_cargo)
+  end
 
-  has_many :turmas, foreign_key: 'user_id', dependent: :nullify
-
-  private
-
-  def foto_formato_valido
-    return unless foto.attached?
-
-    unless foto.content_type.in?(%w[image/jpeg image/jpg image/png image/gif])
-      errors.add(:foto, 'deve ser uma imagem JPEG, PNG ou GIF')
-      foto.purge
-    end
+  def admin?
+    has_cargo?('admin')
+  end
+  
+  def professor?
+    has_cargo?('professor')
   end
 end

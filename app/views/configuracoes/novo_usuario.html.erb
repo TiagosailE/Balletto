@@ -6,14 +6,16 @@
         <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Criar Novo Usuário</h1>
         <p class="text-gray-500 dark:text-gray-400 mt-1">Adicione um novo membro à equipe</p>
       </div>
-      <%= link_to configuracoes_path, class: "px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] transition-colors" do %>
+      <%# ALTERADO: Link de voltar para users_path ou root_path %>
+      <%= link_to users_path, class: "px-4 py-2 text-gray-600 dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] transition-colors" do %>
         <i class="fas fa-arrow-left mr-2"></i>Voltar
       <% end %>
     </div>
 
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-8 border border-gray-200 dark:border-[#2E2E2E]">
       
-      <%= form_with model: @user, url: configuracoes_criar_usuario_path, method: :post, local: true, class: "space-y-6" do |f| %>
+      <%# ALTERADO: Removida URL explícita. O Rails usa users_path (POST) automaticamente %>
+      <%= form_with model: @user, local: true, class: "space-y-6" do |f| %>
         
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
@@ -45,8 +47,8 @@
           <div>
             <%= f.label :telefone, "Telefone", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2" %>
             <%= f.text_field :telefone, class: "w-full px-4 py-2 bg-white dark:bg-[#0F0F0F] border border-gray-300 dark:border-[#2E2E2E] rounded-lg text-gray-900 dark:text-white focus:ring-2 focus:ring-[#C5A300] focus:border-transparent transition-all", placeholder: "(00) 00000-0000" %>
-            <% if @user.errors[:telefone].any? %>
-              <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:telefone].first %></p>
+            <% if @user.errors[:usu_telefone].any? %>
+              <p class="mt-1 text-sm text-red-600 dark:text-red-400"><%= @user.errors[:usu_telefone].first %></p>
             <% end %>
           </div>
         </div>
@@ -138,7 +140,9 @@
         </div>
 
         <div class="flex gap-4 justify-end pt-6">
-          <%= link_to "Cancelar", configuracoes_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-[#2E2E2E] text-gray-700 dark:text-gray-300 font-semibold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-[#3E3E3E] transition-all transform hover:scale-105" %>
+          <%# ALTERADO: Rota de cancelar para users_path %>
+          <%= link_to "Cancelar", users_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-gray-200 dark:bg-[#2E2E2E] text-gray-700 dark:text-gray-300 font-semibold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-300 dark:hover:bg-[#3E3E3E] transition-all transform hover:scale-105" %>
+          
           <%= f.submit "Criar Usuário", class: "inline-flex items-center gap-2 px-6 py-3 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer" %>
         </div>
 

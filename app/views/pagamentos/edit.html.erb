@@ -1,0 +1,13 @@
+<div class="w-full max-w-3xl mx-auto px-4 py-6">
+  <div class="text-center mb-6">
+    <h1 class="text-4xl font-extrabold text-[#C5A300] sm:text-5xl">
+      Editar Lançamento
+    </h1>
+    <p class="mt-3 max-w-xl mx-auto text-lg text-gray-500 dark:text-gray-400">
+      Corrija os dados do lançamento financeiro.
+    </p>
+  </div>
+
+  <%# Renderiza o mesmo formulário, mas com o @pagamento existente %>
+  <%= render 'form', pagamento: @pagamento %>
+</div>
