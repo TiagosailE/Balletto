@@ -1,5 +1,4 @@
 document.addEventListener('turbo:load', () => {
-  console.log("⚡ alunos_modal.js (versão fotos) carregado");
 
   const $ = (sel) => document.querySelector(sel);
 

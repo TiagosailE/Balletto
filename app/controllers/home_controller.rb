@@ -18,5 +18,10 @@ class HomeController < ApplicationController
       .where('"EVE_DATA" >= ?', Date.today)
       .order('"EVE_DATA" ASC')
       .limit(8)
+    
+    @pagamentos_atrasados = Pagamento.includes(:aluno, :evento)
+                                      .where(pag_status: 'Atrasado')
+                                      .order(:pag_data)
+                                      .limit(10)
   end
 end

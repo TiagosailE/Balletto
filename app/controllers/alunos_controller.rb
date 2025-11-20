@@ -1,22 +1,26 @@
 class AlunosController < ApplicationController
   before_action :authenticate_user!
-  before_action :load_turmas, only: [:new, :edit, :create, :update]
+  before_action :load_turmas, only: [:new, :edit, :create, :update, :index]
   before_action :set_aluno, only: [:show, :edit, :update, :destroy]
 
   def index
-    # Começa com a consulta base otimizada
-    # Adicionamos .with_attached_foto para otimizar a lista
     @alunos = Aluno.includes(:turma).with_attached_foto.order(:alu_nome)
-    
-    # Filtra por nome se um parâmetro de busca for enviado
+    @total_alunos = Aluno.count
+
     if params[:query].present?
-      # Usamos ILIKE para busca case-insensitive (funciona bem no PostgreSQL)
       @alunos = @alunos.where("alu_nome ILIKE ?", "%#{params[:query]}%")
+    end
+
+    if params[:status].present? && params[:status] != ""
+      @alunos = @alunos.where(alu_status: params[:status])
+    end
+
+    if params[:turma].present? && params[:turma] != ""
+      @alunos = @alunos.where(alu_tur_codigo: params[:turma])
     end
   end
 
   def show
-    # @aluno é carregado pelo set_aluno
   end
 
   def new
@@ -35,7 +39,6 @@ class AlunosController < ApplicationController
   end
 
   def edit
-    # @aluno é carregado
   end
 
   def update
@@ -54,7 +57,6 @@ class AlunosController < ApplicationController
   private
 
   def set_aluno
-    # Garante que a foto seja carregada junto
     @aluno = Aluno.with_attached_foto.find(params[:id])
   end
 

@@ -1,5 +1,4 @@
 document.addEventListener('turbo:load', () => {
-  console.log("✅ gerenciar_alunos_turma.js carregado");
   window.abrirModalAlunos = function(element) {
     const turmaId = element.dataset.turmaId;
     const turmaNome = element.dataset.turmaNome;
