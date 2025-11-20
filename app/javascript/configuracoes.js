@@ -3,10 +3,8 @@ function initPreviewFoto() {
   const previewFoto = document.getElementById('preview-foto');
   const filenameDisplay = document.getElementById('filename-display');
   
-  console.log('🔍 Procurando elementos...', { fotoInput, previewFoto, filenameDisplay });
   
   if (fotoInput && previewFoto) {
-    console.log('✅ Elementos encontrados, adicionando listener');
     
     fotoInput.addEventListener('change', function(e) {
       const file = e.target.files[0];
@@ -18,11 +16,9 @@ function initPreviewFoto() {
       }
       
       if (file && file.type.startsWith('image/')) {
-        console.log('✅ É uma imagem válida');
         const reader = new FileReader();
         
         reader.onload = function(e) {
-          console.log('✅ Imagem carregada, atualizando preview');
           
           if (previewFoto.tagName === 'IMG') {
             previewFoto.src = e.target.result;
@@ -37,11 +33,11 @@ function initPreviewFoto() {
         
         reader.readAsDataURL(file);
       } else {
-        console.log('❌ Não é uma imagem válida');
+
       }
     });
   } else {
-    console.log('❌ Elementos não encontrados');
+
   }
 }
 

@@ -1,74 +1,221 @@
-<div class="w-full max-w-lg px-6 py-10 font-sans text-gray-800 dark:text-gray-300 rounded-lg mx-auto flex flex-col h-full">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-  <div class="shrink-0">
-    <!-- Abas de Navegação -->
-    <div class="p-1 bg-white dark:bg-[#1C1C1C] border border-gray-300 dark:border-[#2E2E2E] rounded-lg flex items-center justify-around">
-      <!-- Aba Ativa (Estilo "marca" - pode ser o mesmo em ambos os modos) -->
-      <a href="<%= alunos_path %>" class="flex-1 text-center px-5 py-2 font-bold bg-[#C5A300] text-black rounded-lg shadow-md">
-        Alunos Matriculados
-      </a>
-      <!-- Aba Inativa -->
-      <a href="#" class="flex-1 text-center px-5 py-2 font-medium text-gray-500 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-700 dark:hover:text-white rounded-lg">
-        Possíveis Alunos
-      </a>
-    </div>
-
-    <!-- Barra de Busca -->
-    <div class="mt-6">
-      <%= form_with(url: alunos_path, method: :get, class: "relative") do |form| %>
-        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-          <i class="fas fa-search text-gray-500 dark:text-gray-400"></i>
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-xl flex items-center justify-center">
+          <i class="fas fa-user-graduate text-white text-xl"></i>
         </div>
-        <%= form.text_field :query, 
-                value: params[:query], 
-                placeholder: "Buscar aluno...",
-                class: "w-full pl-10 pr-4 py-3 bg-white dark:bg-[#1C1C1C] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-lg placeholder-gray-400 dark:placeholder-gray-500 focus:border-[#C5A300] focus:ring-1 focus:ring-[#C5A300] outline-none" %>
-      <% end %>
+        Gerenciar Alunos
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 ml-15">
+        <%= @alunos.count %> <%= @alunos.count == 1 ? 'aluno encontrado' : 'alunos encontrados' %>
+      </p>
     </div>
 
-    <!-- Botão Adicionar Novo Aluno (Estilo "marca") -->
-    <div class="mt-4">
-      <%= link_to new_aluno_path, class: "flex items-center justify-center gap-2 w-full px-4 py-3 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#C5A300] transition-all transform hover:scale-105" do %>
-        <i class="fas fa-plus"></i>
-        <span>Adicionar Novo Aluno</span>
-      <% end %>
-    </div>
+    <%= link_to new_aluno_path, class: "group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#C5A300] to-[#D4AF37] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200" do %>
+      <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-200"></i>
+      <span class="hidden sm:inline">Adicionar Novo Aluno</span>
+      <span class="sm:hidden">Novo Aluno</span>
+    <% end %>
   </div>
 
-  <!-- Lista de Alunos -->
-  <div class="flex-1 overflow-y-auto mt-8">
-    <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200 mb-4">
-      Alunos Matriculados
-    </h2>
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
 
-    <div id="alunos-list" class="space-y-3 pr-2">
-      <% if @alunos.empty? %>
-        <p class="text-gray-500 text-center">Nenhum aluno cadastrado ainda.</p>
-      <% end %>
+    <div class="lg:col-span-1">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 sticky top-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <i class="fas fa-filter text-[#C5A300]"></i>
+          Filtros
+        </h3>
 
-      <% @alunos.each do |aluno| %>
-        <!-- Card do Aluno -->
-        <a href="<%= aluno_path(aluno) %>" class="flex items-center p-4 bg-white dark:bg-[#1C1C1C] rounded-xl shadow border border-gray-200 dark:border-[#2E2E2E] hover:bg-gray-100 dark:hover:bg-gray-800">
-          
-          <% if aluno.foto.attached? %>
-            <%= image_tag aluno.foto.variant(resize_to_fill: [48, 48]), class: "w-12 h-12 rounded-full object-cover" %>
-          <% else %>
-            <!-- Placeholder da Foto -->
-            <div class="w-12 h-12 rounded-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
-              <i class="fas fa-user text-gray-500 dark:text-gray-400"></i>
+        <%= form_with(url: alunos_path, method: :get, class: "space-y-3") do |form| %>
+
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
             </div>
-          <% end %>
-
-          <div class="flex-1 ml-4">
-            <div class="font-medium text-lg text-gray-900 dark:text-gray-200"><%= aluno.alu_nome %></div>
-            <div class="text-sm text-gray-600 dark:text-gray-500">Turma: <%= aluno.turma&.tur_nome || 'Sem turma' %></div>
+            <%= form.text_field :query,
+                value: params[:query],
+                placeholder: "Buscar aluno...",
+                class: "w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-[#0F0F0F] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-lg text-sm" %>
           </div>
 
           <div>
-            <i class="fas fa-chevron-right text-gray-400 dark:text-gray-600"></i>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase">Status</label>
+            <%= form.select :status,
+                [["Todos", ""], ["Ativo", "Ativo"], ["Inativo", "Inativo"], ["Pendente", "Pendente"]],
+                { selected: params[:status] },
+                class: "w-full px-3 py-2.5 bg-gray-50 dark:bg-[#0F0F0F] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-lg text-sm" %>
           </div>
-        </a>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-600 dark:text-gray-400 mb-2 uppercase">Turma</label>
+            <%= form.select :turma,
+                @turmas.map { |t| [t.tur_nome, t.tur_codigo] }.prepend(["Todas", ""]),
+                { selected: params[:turma] },
+                class: "w-full px-3 py-2.5 bg-gray-50 dark:bg-[#0F0F0F] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-lg text-sm" %>
+          </div>
+
+          <button type="submit" class="w-full px-4 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300]">
+            Aplicar Filtros
+          </button>
+        <% end %>
+
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-[#2E2E2E]">
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Total</span>
+              <span class="text-lg font-bold text-gray-900 dark:text-white"><%= @alunos.count %></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Ativos</span>
+              <span class="text-sm font-semibold text-green-600 dark:text-green-400"><%= @alunos.where(alu_status: 'Ativo').count %></span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Inativos</span>
+              <span class="text-sm font-semibold text-gray-600 dark:text-gray-400"><%= @alunos.where(alu_status: 'Inativo').count %></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="lg:col-span-3">
+
+      <% if @alunos.empty? %>
+
+        <% if @total_alunos == 0 %>
+
+          <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-12 text-center">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
+              <i class="fas fa-user-graduate text-4xl text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              Nenhum aluno encontrado
+            </h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+              Comece adicionando seu primeiro aluno ao sistema.
+            </p>
+            <%= link_to new_aluno_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#C5A300] to-[#D4AF37] text-white font-semibold rounded-xl shadow-lg" do %>
+              <i class="fas fa-plus"></i>
+              <span>Adicionar Primeiro Aluno</span>
+            <% end %>
+          </div>
+
+        <% else %>
+
+          <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-12 text-center">
+            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
+              <i class="fas fa-filter text-4xl text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+              Nenhum aluno encontrado para os filtros selecionados
+            </h3>
+            <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
+              Ajuste os filtros e tente novamente.
+            </p>
+          </div>
+
+        <% end %>
+
+      <% else %>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+          <% @alunos.each do |aluno| %>
+
+            <%= link_to aluno_path(aluno), class: "group bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] hover:shadow-xl hover:scale-105 transition-all duration-200 overflow-hidden" do %>
+
+  <div class="relative h-36 bg-gradient-to-br from-[#C5A300] to-[#D4AF37] overflow-visible">
+    <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+
+    <% status_config = {
+        "Ativo" => { color: "bg-green-600", icon: "fa-check-circle" },
+        "Inativo" => { color: "bg-gray-600", icon: "fa-times-circle" },
+        "Pendente" => { color: "bg-yellow-500", icon: "fa-clock" }
+      }
+      sc = status_config[aluno.alu_status] || status_config["Pendente"]
+    %>
+
+    <div class="absolute top-3 right-3">
+      <span class="inline-flex items-center gap-1.5 px-3 py-1 text-white text-xs font-bold rounded-full <%= sc[:color] %> shadow-lg">
+        <i class="fas <%= sc[:icon] %>"></i>
+        <%= aluno.alu_status %>
+      </span>
+    </div>
+
+    <div class="absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2">
+      <div class="w-24 h-24 rounded-full border-4 border-white dark:border-[#1C1C1C] shadow-xl bg-white flex items-center justify-center overflow-hidden">
+        <% if aluno.foto.attached? %>
+          <%= image_tag aluno.foto.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
+        <% else %>
+          <span class="text-3xl font-bold text-[#C5A300]">
+            <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+          </span>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <div class="pt-16 pb-6 px-6 text-center">
+    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
+      <%= aluno.alu_nome %>
+    </h3>
+
+    <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
+      <i class="fas fa-chalkboard-teacher text-xs"></i>
+      <span><%= aluno.turma&.tur_nome || 'Sem turma' %></span>
+    </div>
+
+    <div class="grid grid-cols-2 gap-3 pt-4">
+      <div class="text-center">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Idade</p>
+        <p class="text-sm font-bold text-gray-900 dark:text-white">
+          <% if aluno.alu_data_nascimento %>
+            <%= ((Date.current - aluno.alu_data_nascimento.to_date) / 365.25).to_i %> anos
+          <% else %>
+            -
+          <% end %>
+        </p>
+      </div>
+
+      <div class="text-center">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Matrícula</p>
+        <p class="text-sm font-bold text-gray-900 dark:text-white">
+          <% if aluno.alu_data_cadastro %>
+            <%= aluno.alu_data_cadastro.year %>
+          <% else %>
+            -
+          <% end %>
+        </p>
+      </div>
+    </div>
+
+    <% if aluno.responsavel_nome %>
+      <div class="mt-4 pt-4">
+        <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
+          <i class="fas fa-user-shield text-[#C5A300]"></i>
+          <span><%= aluno.responsavel_nome %></span>
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="pb-6 flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 group-hover:text-[#C5A300]">
+    <i class="fas fa-eye"></i>
+    <span>Visualizar</span>
+  </div>
+
+<% end %>
+
+
+          <% end %>
+
+        </div>
+
       <% end %>
+
     </div>
   </div>
 
