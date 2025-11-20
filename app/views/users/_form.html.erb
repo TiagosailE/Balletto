@@ -1,191 +1,159 @@
-<%# Wrapper principal e cabeçalho %>
-<div class="w-full max-w-3xl mx-auto px-4 py-6">
-  <div class="text-center mb-6">
-    <h1 class="text-4xl font-extrabold text-[#C5A300] sm:text-5xl">
-      <%# Altera o título dinamicamente se for novo/edição %>
-      <%= user.persisted? ? "Editar Usuário" : "Novo Usuário" %>
-    </h1>
-    <p class="mt-3 max-w-xl mx-auto text-lg text-gray-500 dark:text-gray-400">
-      Preencha os detalhes abaixo para <%= user.persisted? ? "atualizar o" : "cadastrar um novo" %> usuário.
-    </p>
+<%# AQUI ADICIONAMOS data: { turbo: false } PARA FORÇAR O REDIRECIONAMENTO %>
+<%= form_with(model: user, local: true, data: { turbo: false }, class: "space-y-6") do |form| %>
+  
+  <%# Bloco de erros %>
+  <% if user.errors.any? %>
+    <div class="bg-red-50 dark:bg-red-900 dark:bg-opacity-50 text-red-700 dark:text-red-300 p-4 border-b border-red-200 dark:border-red-800">
+      <h3 class="font-bold mb-2 text-red-800 dark:text-red-200">Oops! <%= pluralize(user.errors.count, "erro") %> impediu o salvamento:</h3>
+      <ul class="list-disc list-inside text-sm">
+        <% user.errors.full_messages.each do |message| %>
+          <li><%= message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="p-6"> <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
+
+      <%# --- DADOS DE ACESSO --- %>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
+        Dados de Acesso
+      </h3>
+
+      <%# FOTO DE PERFIL %>
+      <div class="md:col-span-2">
+         <%= form.label :foto, "Foto de Perfil", class: "block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+         <%= form.file_field :foto, class: "block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A300] file:text-white hover:file:bg-[#B88B00]" %>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :usu_nome, "Nome Completo", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-user-tie w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.text_field :usu_nome, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "Nome completo" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :usu_login, "Login", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-at w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.text_field :usu_login, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "usuario.sistema" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :email, "Email", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-envelope w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.email_field :email, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "email@exemplo.com" %>
+        </div>
+      </div>
+      
+      <div class="md:col-span-2">
+        <%= form.label :password, "Senha", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-lock w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.password_field :password, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "••••••••" %>
+        </div>
+        <% if user.persisted? %>
+            <p class="text-gray-500 dark:text-gray-400 text-xs mt-1.5">Deixe em branco se não quiser alterar a senha.</p>
+        <% end %>
+      </div>
+
+      <%# --- DADOS PESSOAIS --- %>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 mt-4 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
+        Dados Pessoais
+      </h3>
+
+      <div>
+        <%= form.label :usu_telefone, "Telefone", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-phone w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.text_field :usu_telefone, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "(XX) 9XXXX-XXXX" %>
+        </div>
+      </div>
+
+      <div>
+        <%= form.label :usu_data_contratacao, "Data de Contratação", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-calendar-check w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.date_field :usu_data_contratacao, value: (user.usu_data_contratacao || Date.today), class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0 [color-scheme:light] dark:[color-scheme:dark]" %>
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :usu_status, "Status", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-center relative bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-toggle-on w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.select :usu_status, 
+                options_for_select(['ativo', 'inativo'], (user.usu_status || 'ativo')), 
+                { }, 
+                { class: "block w-full appearance-none bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0" } 
+          %>
+          <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="md:col-span-2">
+        <%= form.label :usu_especialidades, "Especialidades / Notas", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="flex items-start bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]">
+          <div class="pl-3.5 pt-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-star w-5 text-center text-gray-400 dark:text-gray-500"></i>
+          </div>
+          <%= form.text_area :usu_especialidades, rows: 3, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0", placeholder: "Ex: Especialista em Baby Class..." %>
+        </div>
+      </div>
+
+      <%# --- CARGOS --- %>
+      <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 mt-4 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
+        Cargos e Permissões
+      </h3>
+
+      <div class="md:col-span-2">
+        <%= form.label :cargo_ids, "Cargos", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] p-4">
+          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+            <%= form.collection_check_boxes :cargo_ids, (@cargos || Cargo.all), :car_codigo, :car_nome do |b| %>
+              <div class="flex items-center gap-2 p-1 rounded-md">
+                <%= b.check_box class: "h-4 w-4 rounded accent-[#C5A300] focus:ring-[#C5A300] border-gray-400 dark:border-gray-600" %>
+                <%= b.label class: "text-gray-900 dark:text-[#E5E5E5] font-medium cursor-pointer" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 
-  <%# Card principal do formulário com modo claro/escuro %>
-<%= form_with(model: user, local: true, data: { turbo: false }, class: "space-y-6") do |form| %>
+  <%# Botões de ação %>
+  <div class="bg-gray-50 dark:bg-[#111111] px-6 py-4 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
     
-    <%# Bloco de erros com modo claro/escuro %>
-    <% if user.errors.any? %>
-      <div class="bg-red-50 dark:bg-red-900 dark:bg-opacity-50 text-red-700 dark:text-red-300 p-4 border-b border-red-200 dark:border-red-800">
-        <h3 class="font-bold mb-2 text-red-800 dark:text-red-200">Oops! <%= pluralize(user.errors.count, "erro") %> impediu o salvamento:</h3>
-        <ul class="list-disc list-inside text-sm">
-          <% user.errors.full_messages.each do |message| %>
-            <li><%= message %></li>
-          <% end %>
-        </ul>
-      </div>
+    <%= link_to users_path, 
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-transparent text-gray-600 dark:text-gray-300 font-bold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-[#2E2E2E] transition-all transform hover:scale-105' do %>
+      <span>Cancelar</span>
     <% end %>
+    
+    <%= form.submit (user.persisted? ? 'Atualizar Usuário' : 'Salvar Usuário'), 
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] transition-all transform hover:scale-105 cursor-pointer' 
+    %>
+  </div>
 
-    <%# Padding interno e layout em grid %>
-    <div class="p-6">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-5 gap-y-4">
-
-        <%# --- DADOS DE ACESSO --- %>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 mt-4 first:mt-0 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
-          Dados de Acesso
-        </h3>
-
-        <div class="md:col-span-2">
-          <%= form.label :usu_nome, "Nome Completo", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_nome].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-user-tie w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.text_field :usu_nome, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "Nome completo do usuário" %>
-          </div>
-          <% if user.errors[:usu_nome].any? %>
-            <p class="text-red-500 dark:text-red-400 text-xs mt-1"><%= user.errors.full_messages_for(:usu_nome).first %></p>
-          <% end %>
-        </div>
-
-        <div>
-          <%= form.label :usu_login, "Login (Nome de Usuário)", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_login].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-at w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.text_field :usu_login, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "ex: joao.silva" %>
-          </div>
-        </div>
-
-        <div>
-          <%= form.label :email, "Email", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:email].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-envelope w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.email_field :email, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "email@exemplo.com" %>
-          </div>
-        </div>
-        
-        <div class="md:col-span-2">
-          <%= form.label :password, "Senha", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:password].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-lock w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.password_field :password, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "••••••••" %>
-          </div>
-          
-          <% if user.persisted? %>
-             <p class="text-gray-500 dark:text-gray-400 text-xs mt-1.5">Deixe em branco se não quiser alterar a senha.</p>
-          <% end %>
-        </div>
-
-        <%# --- DADOS PESSOAIS --- %>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 mt-4 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
-          Dados Pessoais
-        </h3>
-
-        <div>
-          <%= form.label :usu_telefone, "Telefone", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_telefone].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-phone w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.text_field :usu_telefone, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "(XX) 9XXXX-XXXX" %>
-          </div>
-        </div>
-
-        <div>
-          <%= form.label :usu_data_contratacao, "Data de Contratação", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_data_contratacao].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-calendar-check w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.date_field :usu_data_contratacao, value: (user.usu_data_contratacao || Date.today), class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0 [color-scheme:light] dark:[color-scheme:dark]" %>
-          </div>
-        </div>
-
-        <div class="md:col-span-2">
-          <%= form.label :usu_status, "Status", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_status].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-center relative bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-toggle-on w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.select :usu_status, 
-                  options_for_select(['ativo', 'inativo'], (user.usu_status || 'ativo')), 
-                  { }, 
-                  { class: "block w-full appearance-none bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-10 py-3 border-none focus:outline-none focus:ring-0" } 
-            %>
-            <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-chevron-down text-gray-400 dark:text-gray-500 text-xs"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="md:col-span-2">
-          <%= form.label :usu_especialidades, "Especialidades / Notas", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:usu_especialidades].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
-          <div class="flex items-start bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border transition-colors duration-200 <%= border_class %>">
-            <div class="pl-3.5 pt-3.5 flex items-center pointer-events-none">
-              <i class="fas fa-star w-5 text-center text-gray-400 dark:text-gray-500"></i>
-            </div>
-            <%= form.text_area :usu_especialidades, rows: 3, class: "block w-full bg-transparent text-gray-900 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 placeholder-gray-400 dark:placeholder-gray-500 border-none focus:outline-none focus:ring-0", placeholder: "Ex: Especialista em Baby Class, Notas sobre contrato..." %>
-          </div>
-        </div>
-
-
-        <%# --- CARGOS E PERMISSÕES --- %>
-        <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-200 md:col-span-2 mt-4 border-b border-gray-200 dark:border-[#2E2E2E] pb-1">
-          Cargos e Permissões
-        </h3>
-
-        <div class="md:col-span-2">
-          <%= form.label :cargo_ids, "Cargos", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <% border_class = user.errors[:cargos].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-300 dark:border-[#2E2E2E]' %>
-          
-          <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border p-4 <%= border_class %>">
-            <div class="grid grid-cols-2 gap-x-4 gap-y-2">
-              
-              <%# @cargos é carregado no UsersController (ações new e edit) %>
-              <%# Aqui ajustei para :car_codigo como ID e :car_nome como texto %>
-              <%= form.collection_check_boxes :cargo_ids, (@cargos || Cargo.all), :car_codigo, :car_nome do |b| %>
-                <div class="flex items-center gap-2 p-1 rounded-md">
-                  <%= b.check_box class: "h-4 w-4 rounded accent-[#C5A300] focus:ring-[#C5A300] border-gray-400 dark:border-gray-600" %>
-                  <%= b.label class: "text-gray-900 dark:text-[#E5E5E5] font-medium cursor-pointer" %>
-                </div>
-              <% end %>
-            
-            </div>
-          </div>
-          <p class="text-gray-500 dark:text-gray-400 text-xs mt-1.5">Selecione os cargos que este usuário terá no sistema.</p>
-        </div>
-
-      </div>
-    </div>
-
-    <%# Botões de ação com modo claro/escuro %>
-    <div class="bg-gray-50 dark:bg-[#111111] px-6 py-4 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
-      
-      <%# Botão Cancelar (Estilo secundário) %>
-      <%# ALTERADO: Link para users_path %>
-      <%= link_to users_path, 
-            class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-transparent text-gray-600 dark:text-gray-300 font-bold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-[#2E2E2E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-gray-500 transition-all transform hover:scale-105 cursor-pointer' do %>
-        <span>Cancelar</span>
-      <% end %>
-      
-      <%# Botão Salvar (Estilo de marca) %>
-      <%= form.submit (user.persisted? ? 'Atualizar Usuário' : 'Salvar Usuário'), 
-            class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer' 
-      %>
-    </div>
-
-  <% end %>
-</div>
+<% end %>

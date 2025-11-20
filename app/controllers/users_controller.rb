@@ -3,21 +3,37 @@ class UsersController < ApplicationController
   before_action :set_user, only: [:edit, :update, :destroy]
 
   def index
-    # 1. Começa com a consulta base (todos os professores)
+    # 1. Query Base
     @users = User.joins(:cargos)
                  .where(cargos: { car_nome: 'professor' })
                  .order(:usu_nome)
     
-    # 2. ADICIONA O FILTRO DE BUSCA:
+    # 2. Filtro de busca
     if params[:query].present?
-      # Prepara a query (ILIKE ignora maiúsculas/minúsculas)
       query_term = "%#{params[:query]}%"
-      
-      # Busca pelo nome, login ou email DENTRO da lista de professores
       @users = @users.where(
         "usu_nome ILIKE ? OR usu_login ILIKE ? OR email ILIKE ?", 
         query_term, query_term, query_term
       )
+    end
+
+    # 3. RESPOSTA (HTML normal ou JSON para a modal)
+    respond_to do |format|
+      format.html # Renderiza index.html.erb normalmente
+      format.json do
+        # Monta o JSON manual para garantir que o JS receba o que precisa
+        render json: @users.map { |u|
+          {
+            id: u.id,
+            usu_nome: u.usu_nome,
+            usu_login: u.usu_login,
+            # Gera URL da foto se existir, senão manda null
+            foto_url: u.foto.attached? ? url_for(u.foto) : nil,
+            # Pega as duas primeiras letras do nome
+            iniciais: u.usu_nome.split.map(&:first).join.upcase[0..1]
+          }
+        }
+      end
     end
   end
 
@@ -40,8 +56,9 @@ class UsersController < ApplicationController
   end
 
   def edit
-    # Carrega os dados para os checkboxes de cargos
     load_form_data
+
+    render :new
   end
 
   def update
@@ -54,7 +71,7 @@ class UsersController < ApplicationController
     end
 
     if @user.update(params_to_update)
-      redirect_to users_path, notice: 'Usuário atualizado com sucesso.', status: :see_other
+      redirect_to configuracoes_path, notice: 'Usuário atualizado com sucesso.', status: :see_other
     else
       load_form_data
       render :edit, status: :unprocessable_entity
@@ -63,7 +80,7 @@ class UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to users_path, notice: 'Usuário excluído com sucesso.', status: :see_other
+    redirect_to configuracoes_path, notice: 'Usuário excluído com sucesso.', status: :see_other
   end
 
   private
