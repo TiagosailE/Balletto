@@ -5,3 +5,4 @@ bundle install
 bundle exec rails assets:precompile
 bundle exec rails assets:clean
 ruby bin/rails tailwindcss:build
+bundle exec rails db:seed
