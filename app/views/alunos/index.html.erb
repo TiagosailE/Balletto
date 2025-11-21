@@ -23,11 +23,16 @@
   <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
 
     <div class="lg:col-span-1">
-      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 sticky top-6">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 **sticky top-6 max-h-[calc(100vh-48px)] overflow-y-auto**">
         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
           <i class="fas fa-filter text-[#C5A300]"></i>
           Filtros
         </h3>
+
+        <div class="p-1 bg-gray-100 dark:bg-[#0F0F0F] rounded-lg mb-4 space-y-1">
+          <a href="<%= alunos_path %>" class="block w-full text-center px-4 py-2.5 font-semibold bg-[#C5A300] text-black rounded-lg">Matriculados</a>
+          <a href="#" class="block w-full text-center px-4 py-2.5 font-medium text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-[#1C1C1C] rounded-lg">Possíveis Alunos</a>
+        </div>
 
         <%= form_with(url: alunos_path, method: :get, class: "space-y-3") do |form| %>
 
@@ -88,8 +93,8 @@
         <% if @total_alunos == 0 %>
 
           <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-12 text-center">
-            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
-              <i class="fas fa-user-graduate text-4xl text-gray-400 dark:text-gray-600"></i>
+            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
+              <i class="fas fa-user-graduate text-3xl text-gray-400 dark:text-gray-600"></i>
             </div>
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
               Nenhum aluno encontrado
@@ -97,7 +102,7 @@
             <p class="text-gray-500 dark:text-gray-400 mb-8 max-w-md mx-auto">
               Comece adicionando seu primeiro aluno ao sistema.
             </p>
-            <%= link_to new_aluno_path, class: "inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#C5A300] to-[#D4AF37] text-white font-semibold rounded-xl shadow-lg" do %>
+            <%= link_to new_aluno_path, class: "inline-flex items-center gap-2 px-5 py-3 bg-gradient-to-r from-[#C5A300] to-[#D4AF37] text-white font-semibold rounded-xl shadow-lg" do %>
               <i class="fas fa-plus"></i>
               <span>Adicionar Primeiro Aluno</span>
             <% end %>
@@ -106,8 +111,8 @@
         <% else %>
 
           <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-12 text-center">
-            <div class="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
-              <i class="fas fa-filter text-4xl text-gray-400 dark:text-gray-600"></i>
+            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
+              <i class="fas fa-filter text-3xl text-gray-400 dark:text-gray-600"></i>
             </div>
             <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
               Nenhum aluno encontrado para os filtros selecionados
@@ -124,93 +129,109 @@
         <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
 
           <% @alunos.each do |aluno| %>
+  <div class="group bg-white dark:bg-[#1C1C1C] rounded-xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] hover:shadow-xl hover:scale-[1.03] transition-all duration-200 overflow-hidden relative">
 
-            <%= link_to aluno_path(aluno), class: "group bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] hover:shadow-xl hover:scale-105 transition-all duration-200 overflow-hidden" do %>
+    <%# 1. O LINK TERMINA AQUI, COBRINDO APENAS O CONTEÚDO VISUAL %>
+    <%= link_to aluno_path(aluno), class: "block h-full" do %>
+      <div class="relative h-28 bg-gradient-to-br from-[#C5A300] to-[#D4AF37] overflow-visible">
+        <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
 
-  <div class="relative h-36 bg-gradient-to-br from-[#C5A300] to-[#D4AF37] overflow-visible">
-    <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
+        <% status_config = {
+            "Ativo" => { color: "bg-green-600", icon: "fa-check-circle" },
+            "Inativo" => { color: "bg-gray-600", icon: "fa-times-circle" },
+            "Pendente" => { color: "bg-yellow-500", icon: "fa-clock" }
+          }
+          sc = status_config[aluno.alu_status] || status_config["Pendente"]
+        %>
 
-    <% status_config = {
-        "Ativo" => { color: "bg-green-600", icon: "fa-check-circle" },
-        "Inativo" => { color: "bg-gray-600", icon: "fa-times-circle" },
-        "Pendente" => { color: "bg-yellow-500", icon: "fa-clock" }
-      }
-      sc = status_config[aluno.alu_status] || status_config["Pendente"]
-    %>
-
-    <div class="absolute top-3 right-3">
-      <span class="inline-flex items-center gap-1.5 px-3 py-1 text-white text-xs font-bold rounded-full <%= sc[:color] %> shadow-lg">
-        <i class="fas <%= sc[:icon] %>"></i>
-        <%= aluno.alu_status %>
-      </span>
-    </div>
-
-    <div class="absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2">
-      <div class="w-24 h-24 rounded-full border-4 border-white dark:border-[#1C1C1C] shadow-xl bg-white flex items-center justify-center overflow-hidden">
-        <% if aluno.foto.attached? %>
-          <%= image_tag aluno.foto.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
-        <% else %>
-          <span class="text-3xl font-bold text-[#C5A300]">
-            <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+        <div class="absolute top-2 right-2">
+          <span class="inline-flex items-center gap-1 px-2 py-0.5 text-white text-xs font-bold rounded-full <%= sc[:color] %> shadow">
+            <i class="fas <%= sc[:icon] %>"></i>
+            <%= aluno.alu_status %>
           </span>
-        <% end %>
-      </div>
-    </div>
-  </div>
+        </div>
 
-  <div class="pt-16 pb-6 px-6 text-center">
-    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">
-      <%= aluno.alu_nome %>
-    </h3>
-
-    <div class="flex items-center justify-center gap-2 text-sm text-gray-500 dark:text-gray-400 mb-4">
-      <i class="fas fa-chalkboard-teacher text-xs"></i>
-      <span><%= aluno.turma&.tur_nome || 'Sem turma' %></span>
-    </div>
-
-    <div class="grid grid-cols-2 gap-3 pt-4">
-      <div class="text-center">
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Idade</p>
-        <p class="text-sm font-bold text-gray-900 dark:text-white">
-          <% if aluno.alu_data_nascimento %>
-            <%= ((Date.current - aluno.alu_data_nascimento.to_date) / 365.25).to_i %> anos
-          <% else %>
-            -
-          <% end %>
-        </p>
-      </div>
-
-      <div class="text-center">
-        <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Matrícula</p>
-        <p class="text-sm font-bold text-gray-900 dark:text-white">
-          <% if aluno.alu_data_cadastro %>
-            <%= aluno.alu_data_cadastro.year %>
-          <% else %>
-            -
-          <% end %>
-        </p>
-      </div>
-    </div>
-
-    <% if aluno.responsavel_nome %>
-      <div class="mt-4 pt-4">
-        <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
-          <i class="fas fa-user-shield text-[#C5A300]"></i>
-          <span><%= aluno.responsavel_nome %></span>
+        <div class="absolute left-1/2 bottom-0 translate-y-1/2 transform -translate-x-1/2">
+          <div class="w-20 h-20 rounded-full border-4 border-white dark:border-[#1C1C1C] shadow-xl bg-white flex items-center justify-center overflow-hidden">
+            <% if aluno.foto.attached? %>
+              <%= image_tag aluno.foto.variant(resize_to_fill: [400, 400]), class: "w-full h-full object-cover" %>
+            <% else %>
+              <span class="text-2xl font-bold text-[#C5A300]">
+                <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+              </span>
+            <% end %>
+          </div>
         </div>
       </div>
-    <% end %>
-  </div>
 
-  <div class="pb-6 flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 group-hover:text-[#C5A300]">
-    <i class="fas fa-eye"></i>
-    <span>Visualizar</span>
-  </div>
+      <div class="pt-14 pb-5 px-4 text-center">
+        <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1">
+          <%= aluno.alu_nome %>
+        </h3>
 
+        <div class="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
+          <i class="fas fa-chalkboard-teacher text-xs"></i>
+          <span><%= aluno.turma&.tur_nome || 'Sem turma' %></span>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 pt-3">
+          <div class="text-center">
+            <p class="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5">Idade</p>
+            <p class="text-sm font-bold text-gray-900 dark:text-white">
+              <% if aluno.alu_data_nascimento %>
+                <%= ((Date.current - aluno.alu_data_nascimento.to_date) / 365.25).to_i %> anos
+              <% else %>
+                -
+              <% end %>
+            </p>
+          </div>
+
+          <div class="text-center">
+            <p class="text-[10px] text-gray-500 dark:text-gray-400 mb-0.5">Matrícula</p>
+            <p class="text-sm font-bold text-gray-900 dark:text-white">
+              <% if aluno.alu_data_cadastro %>
+                <%= aluno.alu_data_cadastro.year %>
+              <% else %>
+                -
+              <% end %>
+            </p>
+          </div>
+        </div>
+
+        <% if aluno.responsavel_nome %>
+          <div class="mt-3 pt-3 border-t border-gray-100 dark:border-[#2E2E2E]">
+            <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 justify-center">
+              <i class="fas fa-user-shield text-[#C5A300]"></i>
+              <span class="truncate"><%= aluno.responsavel_nome %></span>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="pb-4 flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 group-hover:text-[#C5A300]">
+        <i class="fas fa-eye"></i>
+        <span>Visualizar</span>
+      </div>
+    <% end %> 
+    <%# AQUI O LINK FECHOU %>
+
+    <%# 2. O BOTÃO AGORA ESTÁ FORA DO LINK, MAS DENTRO DA DIV RELATIVE %>
+    <button 
+      type="button"
+      class="absolute bottom-2 right-2 p-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition-colors duration-200 z-50 cursor-pointer"
+      data-confirm-modal="true"
+      data-confirm-title="Excluir Aluno: <%= aluno.alu_nome %>"
+      data-confirm-body="Você tem certeza que deseja excluir permanentemente o aluno <%= aluno.alu_nome %>? Esta ação é irreversível."
+      data-confirm-path="<%= aluno_path(aluno) %>"
+      data-confirm-text="Excluir"
+      data-confirm-class="bg-red-600 hover:bg-red-500"
+      title="Excluir Aluno"
+    >
+      <i class="fas fa-trash-alt text-lg pointer-events-none"></i>
+    </button>
+
+  </div>
 <% end %>
-
-
-          <% end %>
 
         </div>
 
@@ -220,3 +241,5 @@
   </div>
 
 </div>
+
+<%= render 'shared/confirm_modal' %>
