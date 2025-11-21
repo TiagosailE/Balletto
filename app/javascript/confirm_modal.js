@@ -78,3 +78,5 @@ document.addEventListener("turbo:load", () => {
     });
   });
 });
+
+window.openConfirmModal = openConfirmModal;

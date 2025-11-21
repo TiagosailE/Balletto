@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get "pagamentos/edit"
   get "pagamentos/update"
   get "pagamentos/destroy"
+
   devise_for :users, skip: [:registrations]
 
   resources :users
@@ -32,8 +33,6 @@ Rails.application.routes.draw do
 
   get 'configuracoes', to: 'configuracoes#index', as: 'configuracoes'
   patch 'configuracoes', to: 'configuracoes#update'
-  get 'configuracoes/novo_usuario', to: 'configuracoes#novo_usuario', as: 'novo_usuario'
-  post 'configuracoes/criar_usuario', to: 'configuracoes#criar_usuario'
   get 'configuracoes/listar_usuarios', to: 'configuracoes#listar_usuarios'
   delete 'configuracoes/excluir_usuario/:id', to: 'configuracoes#excluir_usuario'
 end

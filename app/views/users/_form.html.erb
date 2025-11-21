@@ -127,14 +127,34 @@
       </h3>
 
       <div class="md:col-span-2">
-        <%= form.label :cargo_ids, "Cargos", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-        <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] p-4">
-          <div class="grid grid-cols-2 gap-x-4 gap-y-2">
+        <%= form.label :cargo_ids, "Cargos", class: "flex items-center gap-2 text-sm font-medium text-gray-700 dark:text-gray-300 mb-3" %>
+        <div class="bg-white dark:bg-[#0D0D0D] rounded-xl border border-gray-200 dark:border-[#2E2E2E] p-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <%= form.collection_check_boxes :cargo_ids, (@cargos || Cargo.all), :car_codigo, :car_nome do |b| %>
-              <div class="flex items-center gap-2 p-1 rounded-md">
-                <%= b.check_box class: "h-4 w-4 rounded accent-[#C5A300] focus:ring-[#C5A300] border-gray-400 dark:border-gray-600" %>
-                <%= b.label class: "text-gray-900 dark:text-[#E5E5E5] font-medium cursor-pointer" %>
-              </div>
+              <% 
+                cargo_config = case b.object.car_nome.to_s.downcase
+                when /professor/i
+                  { icon: 'fa-chalkboard-teacher', color: 'from-teal-500 to-teal-700', border: 'teal-500', bg: 'teal-500/5', text: 'teal-600' }
+                when /admin/i, /administrador/i
+                  { icon: 'fa-user-shield', color: 'from-purple-500 to-purple-700', border: 'purple-500', bg: 'purple-500/5', text: 'purple-600' }
+                when /financeiro/i
+                  { icon: 'fa-dollar-sign', color: 'from-green-500 to-green-700', border: 'green-500', bg: 'green-500/5', text: 'green-600' }
+                when /atendente/i
+                  { icon: 'fa-headset', color: 'from-blue-500 to-blue-700', border: 'blue-500', bg: 'blue-500/5', text: 'blue-600' }
+                else
+                  { icon: 'fa-user-tie', color: 'from-gray-500 to-gray-700', border: 'gray-500', bg: 'gray-500/5', text: 'gray-600' }
+                end
+              %>
+              <label class="relative flex items-center gap-3 p-4 bg-gray-50 dark:bg-[#0A0A0A] border-2 border-gray-300 dark:border-[#2E2E2E] rounded-lg cursor-pointer transition-all duration-200 hover:border-<%= cargo_config[:border] %> hover:shadow-md has-[:checked]:border-<%= cargo_config[:border] %> has-[:checked]:bg-<%= cargo_config[:bg] %> dark:has-[:checked]:bg-<%= cargo_config[:bg] %>">
+                <%= b.check_box class: "peer h-5 w-5 rounded accent-#{cargo_config[:text]} focus:ring-2 focus:ring-#{cargo_config[:text]} border-gray-400 dark:border-gray-600 cursor-pointer" %>
+                <div class="flex items-center gap-3 flex-1">
+                  <div class="w-9 h-9 bg-gradient-to-br <%= cargo_config[:color] %> rounded-lg flex items-center justify-center text-white shadow-sm">
+                    <i class="fas <%= cargo_config[:icon] %> text-sm"></i>
+                  </div>
+                  <%= b.label class: "text-gray-900 dark:text-[#E5E5E5] font-medium cursor-pointer peer-checked:text-#{cargo_config[:text]} dark:peer-checked:text-#{cargo_config[:text]}" %>
+                </div>
+                <i class="fas fa-check-circle text-<%= cargo_config[:text] %> opacity-0 peer-checked:opacity-100 transition-opacity text-lg"></i>
+              </label>
             <% end %>
           </div>
         </div>
@@ -146,7 +166,7 @@
   <%# Botões de ação %>
   <div class="bg-gray-50 dark:bg-[#111111] px-6 py-4 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
     
-    <%= link_to users_path, 
+    <%= link_to configuracoes_path, 
           class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-transparent text-gray-600 dark:text-gray-300 font-bold rounded-lg shadow-md border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-[#2E2E2E] transition-all transform hover:scale-105' do %>
       <span>Cancelar</span>
     <% end %>
