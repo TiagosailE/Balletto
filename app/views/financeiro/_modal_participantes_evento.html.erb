@@ -1,0 +1,30 @@
+<div 
+  data-financeiro-target="modalParticipantes"
+  class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pb-20 overflow-y-auto">
+  
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-2xl w-full max-w-2xl border border-gray-200 dark:border-[#2E2E2E] my-8">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-[#2E2E2E] flex items-center justify-between bg-gradient-to-r from-purple-600 to-purple-700 rounded-t-2xl">
+      <div>
+        <h3 class="text-xl font-bold text-white" data-financeiro-target="modalEventoNome">
+          Participantes do Evento
+        </h3>
+        <p class="text-sm text-purple-100 mt-1">
+          Valor: <span data-financeiro-target="modalEventoValor" class="font-semibold">R$ 0,00</span>
+        </p>
+      </div>
+      <button 
+        data-action="click->financeiro#fecharModalParticipantes"
+        class="text-white hover:text-purple-200 transition-colors">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="p-6 overflow-y-auto" style="max-height: calc(80vh - 120px);">
+      <div data-financeiro-target="listaParticipantes">
+        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-spinner fa-spin text-3xl mb-2"></i>
+          <p>Carregando participantes...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

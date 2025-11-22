@@ -39,10 +39,10 @@
         <%= tailwind_field form, :alu_endereco, "Endereço", "fa-map-marker-alt", field_type: :text_area, wrapper_class: "md:col-span-2", placeholder: "Rua, Número, Bairro...", options: { rows: 3 } %>
 
         <%# Campo de Foto (Manual pois tem preview específico) %>
-        <div class="md:col-span-2">
-          <%= form.label :foto, "Foto do Aluno", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5" %>
-          <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] p-3">
-             <%= form.file_field :foto, class: "block w-full text-gray-500 dark:text-gray-400 file:mr-4 file:py-2.5 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-white dark:file:bg-black file:text-[#C5A300] hover:file:bg-gray-100" %>
+        <div class="md:col-span-2 ">
+          <%= form.label :foto, "Foto do Aluno", class: "flex items-center text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 " %>
+          <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-300 dark:border-[#2E2E2E] p-3 ">
+             <%= form.file_field :foto, class: "block w-full text-gray-500 dark:text-gray-400 file:mr-4 file:py-2.5 file:px-6 file:rounded-lg file:border-0 file:text-sm file:font-bold file:bg-white dark:file:bg-black file:text-[#C5A300] hover:file:bg-gray-100 " %>
           </div>
           <% if aluno.foto.attached? %>
             <img src="<%= url_for(aluno.foto) %>" class="w-24 h-24 rounded-lg mt-2 object-cover border-2 border-[#C5A300]">

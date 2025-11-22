@@ -1,11 +1,5 @@
+# config/routes.rb
 Rails.application.routes.draw do
-  get "pagamentos/index"
-  get "pagamentos/new"
-  get "pagamentos/create"
-  get "pagamentos/edit"
-  get "pagamentos/update"
-  get "pagamentos/destroy"
-
   devise_for :users, skip: [:registrations]
 
   resources :users
@@ -27,6 +21,17 @@ Rails.application.routes.draw do
     end
   end
 
+  # Rota principal do financeiro
+  get 'financeiro', to: 'financeiro#index', as: 'financeiro'
+  
+  # Rotas para ações do financeiro
+  post 'financeiro/atualizar_valor_evento', to: 'financeiro#atualizar_valor_evento'
+  get 'financeiro/participantes_evento/:evento_id', to: 'financeiro#participantes_evento'
+  post 'financeiro/registrar_pagamento_evento', to: 'financeiro#registrar_pagamento_evento'
+  post 'financeiro/atualizar_valor_mensalidade', to: 'financeiro#atualizar_valor_mensalidade'
+  post 'financeiro/registrar_pagamento_mensalidade', to: 'financeiro#registrar_pagamento_mensalidade'
+  post 'financeiro/registrar_despesa', to: 'financeiro#registrar_despesa'
+  # Mantém as rotas de pagamentos para CRUD manual
   resources :pagamentos
 
   root 'home#index'

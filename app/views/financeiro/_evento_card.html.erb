@@ -1,0 +1,73 @@
+<div class="bg-white dark:bg-[#1C1C1C] rounded-xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] overflow-hidden hover:shadow-xl transition-shadow">
+  <div class="p-6">
+    <div class="flex items-start justify-between mb-4">
+      <div class="flex-1">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-[#E5E5E5] mb-1">
+          <%= evento.EVE_NOME %>
+        </h3>
+        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+          <i class="fas fa-calendar"></i>
+          <span><%= evento.EVE_DATA.strftime("%d/%m/%Y") %></span>
+        </div>
+        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400 mt-1">
+          <i class="fas fa-map-marker-alt"></i>
+          <span><%= evento.EVE_LOCAL %></span>
+        </div>
+      </div>
+      
+      <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
+        <i class="fas fa-calendar-check text-white text-xl"></i>
+      </div>
+    </div>
+    <div class="mb-4">
+      <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
+        Valor do Evento
+      </label>
+      <div class="flex gap-2">
+        <input 
+          type="number" 
+          step="0.01"
+          value="<%= evento.EVE_VALOR || 0 %>"
+          data-evento-id="<%= evento.EVE_CODIGO %>"
+          data-financeiro-target="valorEvento"
+          class="flex-1 px-3 py-2 text-sm border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+          placeholder="0.00">
+        <button 
+          data-action="click->financeiro#salvarValorEvento"
+          data-evento-id="<%= evento.EVE_CODIGO %>"
+          class="px-3 py-2 text-sm bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors">
+          <i class="fas fa-save"></i>
+        </button>
+      </div>
+    </div>
+    <div class="flex items-center justify-between mb-4 p-3 bg-gray-50 dark:bg-[#111111] rounded-lg">
+      <div class="text-center flex-1">
+        <div class="text-2xl font-bold text-purple-600 dark:text-purple-400">
+          <%= evento.participantes_confirmados.count %>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Confirmados</div>
+      </div>
+      <div class="w-px h-10 bg-gray-300 dark:bg-[#2E2E2E]"></div>
+      <div class="text-center flex-1">
+        <div class="text-2xl font-bold text-green-600 dark:text-green-400">
+          <%= evento.total_pagos %>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Pagos</div>
+      </div>
+      <div class="w-px h-10 bg-gray-300 dark:bg-[#2E2E2E]"></div>
+      <div class="text-center flex-1">
+        <div class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">
+          <%= evento.total_pendentes %>
+        </div>
+        <div class="text-xs text-gray-500 dark:text-gray-400">Pendentes</div>
+      </div>
+    </div>
+    <button 
+      data-action="click->financeiro#abrirModalParticipantes"
+      data-evento-id="<%= evento.EVE_CODIGO %>"
+      class="w-full px-4 py-2 bg-purple-600 text-white font-semibold rounded-lg hover:bg-purple-700 transition-colors flex items-center justify-center gap-2">
+      <i class="fas fa-users"></i>
+      <span>Ver Participantes</span>
+    </button>
+  </div>
+</div>

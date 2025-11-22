@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_22_004909) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -90,6 +90,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
     t.index ["user_id"], name: "index_cargos_usuarios_on_user_id"
   end
 
+  create_table "configuracoes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "chave", null: false
+    t.text "valor"
+    t.index ["chave"], name: "index_configuracoes_on_chave", unique: true
+  end
+
   create_table "evento_aluno_turmas", force: :cascade do |t|
     t.integer "evento_id", null: false
     t.integer "turma_id", null: false
@@ -106,6 +114,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
     t.text "EVE_DESC"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "EVE_VALOR", precision: 10, scale: 2, default: "0.0"
   end
 
   create_table "pagamentos", primary_key: "pag_codigo", force: :cascade do |t|
@@ -120,6 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_17_005613) do
     t.string "pag_status", limit: 20, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "pag_valor_pago", precision: 10, scale: 2, default: "0.0"
     t.index ["aluno_id"], name: "index_pagamentos_on_aluno_id"
     t.index ["caixa_id"], name: "index_pagamentos_on_caixa_id"
     t.index ["evento_id"], name: "index_pagamentos_on_evento_id"
