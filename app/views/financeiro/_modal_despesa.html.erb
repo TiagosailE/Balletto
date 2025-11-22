@@ -1,0 +1,85 @@
+<div 
+  data-financeiro-target="modalDespesa"
+  class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 pb-20 overflow-y-auto">
+  
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-2xl w-full max-w-md border border-gray-200 dark:border-[#2E2E2E] my-8">
+    <div class="px-6 py-4 border-b border-gray-200 dark:border-[#2E2E2E] flex items-center justify-between bg-gradient-to-r from-red-600 to-red-700 rounded-t-2xl">
+      <div>
+        <h3 class="text-xl font-bold text-white">
+          Registrar Despesa
+        </h3>
+        <p class="text-sm text-red-100 mt-1">
+          Saída de valores
+        </p>
+      </div>
+      <button 
+        data-action="click->financeiro#fecharModalDespesa"
+        class="text-white hover:text-red-200 transition-colors">
+        <i class="fas fa-times text-2xl"></i>
+      </button>
+    </div>
+    <div class="p-6 overflow-y-auto space-y-4" style="max-height: calc(80vh - 180px);">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Descrição da Despesa *
+        </label>
+        <input 
+          type="text" 
+          data-financeiro-target="descricaoDespesa"
+          placeholder="Ex: Aluguel do estúdio, Material de limpeza..."
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-red-500 focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Valor *
+        </label>
+        <input 
+          type="number" 
+          step="0.01"
+          data-financeiro-target="valorDespesa"
+          placeholder="0.00"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-red-500 focus:border-transparent">
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Caixa *
+        </label>
+        <select 
+          data-financeiro-target="caixaDespesa"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="">Selecione um caixa</option>
+          <% @caixas.each do |caixa| %>
+            <option value="<%= caixa.cai_codigo %>"><%= caixa.cai_nome %></option>
+          <% end %>
+        </select>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Método de Pagamento
+        </label>
+        <select 
+          data-financeiro-target="metodoDespesa"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-red-500 focus:border-transparent">
+          <option value="Dinheiro">Dinheiro</option>
+          <option value="Cartão de Crédito">Cartão de Crédito</option>
+          <option value="Cartão de Débito">Cartão de Débito</option>
+          <option value="PIX">PIX</option>
+          <option value="Transferência">Transferência</option>
+          <option value="Boleto">Boleto</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex gap-3 p-6 border-t border-gray-200 dark:border-[#2E2E2E]">
+      <button 
+        data-action="click->financeiro#fecharModalDespesa"
+        class="flex-1 px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-50 dark:hover:bg-[#1A1A1A] transition-colors">
+        Cancelar
+      </button>
+      <button 
+        data-action="click->financeiro#confirmarDespesa"
+        class="flex-1 px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors">
+        Registrar Despesa
+      </button>
+    </div>
+  </div>
+</div>

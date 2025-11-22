@@ -1,0 +1,301 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" data-controller="financeiro">
+  <div class="mb-8">
+    <h1 class="text-4xl font-extrabold text-[#B88B00] sm:text-5xl dark:text-[#C5A300]">
+      Financeiro
+    </h1>
+    <p class="mt-2 text-lg text-[#6B747A] dark:text-gray-400">
+      Gestão completa de eventos, mensalidades e lançamentos.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+        <div class="text-center sm:text-left">
+          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SALDO TOTAL</p>
+          <p class="text-xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1 sm:mt-2">
+            <%= number_to_currency(@saldo_total) %>
+          </p>
+        </div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-wallet text-white text-lg sm:text-xl"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+        <div class="text-center sm:text-left">
+          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">ENTRADAS</p>
+          <p class="text-xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-1 sm:mt-2">
+            <%= number_to_currency(@total_entradas) %>
+          </p>
+        </div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-arrow-up text-white text-lg sm:text-xl"></i>
+        </div>
+      </div>
+    </div>
+    
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+        <div class="text-center sm:text-left">
+          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SAÍDAS</p>
+          <p class="text-xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mt-1 sm:mt-2">
+            <%= number_to_currency(@total_saidas) %>
+          </p>
+        </div>
+        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+          <i class="fas fa-arrow-down text-white text-lg sm:text-xl"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-12">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-calendar-check text-white text-lg"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-[#E5E5E5]">Eventos</h2>
+    </div>
+    
+    <% if @eventos.empty? %>
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-12 text-center border border-gray-200 dark:border-[#2E2E2E]">
+        <i class="fas fa-calendar-times text-5xl text-gray-400 dark:text-gray-600 mb-4"></i>
+        <p class="text-gray-500 dark:text-gray-400 text-lg">Nenhum evento cadastrado ainda.</p>
+      </div>
+    <% else %>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <% @eventos.each do |evento| %>
+          <%= render 'evento_card', evento: evento %>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="mb-12">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-money-bill-wave text-white text-lg"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-[#E5E5E5]">Mensalidades</h2>
+    </div>
+    
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-[#2E2E2E]">
+      <div class="mb-6 pb-6 border-b border-gray-200 dark:border-[#2E2E2E]">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+          Valor Mensal Padrão
+        </label>
+        <div class="flex flex-col sm:flex-row gap-3">
+          <input 
+            type="number" 
+            step="0.01"
+            value="<%= @valor_mensalidade %>"
+            data-financeiro-target="valorMensalidade"
+            class="flex-1 px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-[#C5A300] focus:border-transparent"
+            placeholder="120.00">
+          <button 
+            data-action="click->financeiro#atualizarValorMensalidade"
+            class="w-full sm:w-auto px-6 py-2 bg-[#C5A300] text-white font-semibold rounded-lg hover:bg-[#D4AF37] transition-colors whitespace-nowrap">
+            Atualizar
+          </button>
+        </div>
+      </div>
+
+      <div>
+        <h3 class="text-lg font-semibold text-gray-900 dark:text-[#E5E5E5] mb-4">Alunos</h3>
+        <div class="space-y-2" style="max-height: 400px; overflow-y: auto;">
+          <% @alunos.each do |aluno| %>
+            <% 
+              mes_atual = Date.current.strftime('%m/%Y')
+              pagamento_mes = Pagamento.find_by(
+                aluno_id: aluno.alu_codigo,
+                pag_descricao: "Mensalidade - #{mes_atual}"
+              )
+              pago_mes = pagamento_mes&.quitado? || false
+              pendente_mes = pagamento_mes && !pagamento_mes.quitado? && pagamento_mes.pag_valor_pago && pagamento_mes.pag_valor_pago > 0
+            %>
+            <div 
+              data-action="click->financeiro#abrirModalMensalidade"
+              data-aluno-id="<%= aluno.alu_codigo %>"
+              data-aluno-nome="<%= aluno.alu_nome %>"
+              class="flex items-center justify-between p-4 rounded-lg <%= pago_mes ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : pendente_mes ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800' : 'bg-gray-50 dark:bg-[#111111] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] cursor-pointer' %> transition-colors">
+              <div class="flex items-center gap-3">
+                <% if aluno.foto.attached? %>
+                  <%= image_tag aluno.foto.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 rounded-full object-cover" %>
+                <% else %>
+                  <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[#C5A300] to-[#D4AF37] flex items-center justify-center text-white font-bold">
+                    <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+                  </div>
+                <% end %>
+                <div>
+                  <span class="font-medium text-gray-900 dark:text-[#E5E5E5]"><%= aluno.alu_nome %></span>
+                  <% if pago_mes %>
+                    <div class="text-sm text-green-600 dark:text-green-400 font-semibold">✓ Pago (<%= mes_atual %>)</div>
+                  <% elsif pendente_mes %>
+                    <div class="text-sm text-yellow-600 dark:text-yellow-400 font-semibold">⚠ Pendente - Falta <%= number_to_currency(pagamento_mes.valor_pendente) %></div>
+                  <% end %>
+                </div>
+              </div>
+              <% if pago_mes %>
+                <i class="fas fa-check-circle text-green-600 dark:text-green-400 text-xl"></i>
+              <% elsif pendente_mes %>
+                <i class="fas fa-exclamation-circle text-yellow-600 dark:text-yellow-400 text-xl"></i>
+              <% else %>
+                <i class="fas fa-chevron-right text-gray-400"></i>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-12">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 bg-gradient-to-br from-red-500 to-red-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-receipt text-white text-lg"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-[#E5E5E5]">Despesas</h2>
+    </div>
+    
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-[#2E2E2E]">
+      <button 
+        data-action="click->financeiro#abrirModalDespesa"
+        class="w-full px-6 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-red-700 transition-all transform hover:scale-[1.02] flex items-center justify-center gap-3 shadow-lg">
+        <i class="fas fa-plus-circle text-2xl"></i>
+        <span class="text-lg">Registrar Nova Despesa</span>
+      </button>
+
+      <div class="mt-6">
+        <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+          <i class="fas fa-history"></i>
+          Despesas Recentes
+        </h3>
+        <div class="space-y-2">
+          <% despesas_recentes = Pagamento.where(pag_tipo: 'Saída').order(pag_data: :desc).limit(5) %>
+          <% if despesas_recentes.any? %>
+            <% despesas_recentes.each do |despesa| %>
+              <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-[#111111] rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-receipt text-white"></i>
+                  </div>
+                  <div>
+                    <p class="font-medium text-gray-900 dark:text-[#E5E5E5] text-sm"><%= despesa.pag_descricao %></p>
+                    <p class="text-xs text-gray-500 dark:text-gray-400"><%= despesa.pag_data.strftime("%d/%m/%Y") %> - <%= despesa.caixa.cai_nome %></p>
+                  </div>
+                </div>
+                <span class="text-red-600 dark:text-red-400 font-bold"><%= number_to_currency(despesa.pag_valor) %></span>
+              </div>
+            <% end %>
+          <% else %>
+            <p class="text-center py-4 text-gray-500 dark:text-gray-400 text-sm">Nenhuma despesa registrada ainda</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
+        <i class="fas fa-file-invoice-dollar text-white text-lg"></i>
+      </div>
+      <h2 class="text-2xl font-bold text-gray-900 dark:text-[#E5E5E5]">Extrato Completo</h2>
+    </div>
+    
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl border border-gray-200 dark:border-[#2E2E2E] overflow-hidden">
+      <div style="max-height: 500px; overflow-y: auto; overflow-x: auto;">
+        <table class="min-w-full divide-y divide-gray-200 dark:divide-[#2E2E2E]">
+          <thead class="bg-gray-50 dark:bg-[#111111] sticky top-0 z-10">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Descrição</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Valor</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tipo</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Associado a</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-[#2E2E2E]">
+            <% if @pagamentos.empty? %>
+              <tr>
+                <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                  <i class="fas fa-file-invoice-dollar text-3xl mb-2"></i>
+                  <p>Nenhum lançamento financeiro encontrado.</p>
+                </td>
+              </tr>
+            <% end %>
+            
+            <% @pagamentos.each do |pagamento| %>
+              <tr class="hover:bg-gray-50 dark:hover:bg-[#252525] transition-colors">
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <div class="text-sm font-medium text-gray-900 dark:text-[#E5E5E5]"><%= pagamento.pag_descricao.presence || "Lançamento" %></div>
+                  <div class="text-sm text-gray-500 dark:text-gray-400"><%= pagamento.pag_data.strftime("%d/%m/%Y %H:%M") %></div>
+                </td>
+                
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% valor_cor = pagamento.entrada? ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400" %>
+                  <span class="text-sm font-bold <%= valor_cor %>">
+                    <%= pagamento.entrada? ? '+' : '-' %> <%= number_to_currency(pagamento.pag_valor) %>
+                  </span>
+                  <div class="text-sm text-gray-500 dark:text-gray-400"><%= pagamento.caixa.cai_nome %></div>
+                </td>
+                
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% status_cor = case pagamento.pag_status
+                                    when 'Pago' then 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+                                    when 'Pendente' then 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-800 dark:text-yellow-300'
+                                    else 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+                                    end %>
+                  <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full <%= status_cor %>">
+                    <%= pagamento.pag_status.capitalize %>
+                  </span>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap">
+                  <% if pagamento.evento.present? %>
+                    <span class="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300">
+                      <i class="fas fa-calendar-check"></i> <%= pagamento.evento.EVE_NOME %>
+                    </span>
+                  <% elsif pagamento.pag_descricao&.include?('Mensalidade') %>
+                    <span class="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300">
+                      <i class="fas fa-money-bill-wave"></i> Mensalidade
+                    </span>
+                  <% elsif pagamento.pag_tipo == 'Saída' %>
+                    <span class="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
+                      <i class="fas fa-arrow-down"></i> Despesa
+                    </span>
+                  <% else %>
+                    <span class="px-3 py-1 inline-flex items-center gap-1 text-xs leading-5 font-semibold rounded-full bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300">
+                      <i class="fas fa-file-invoice"></i> Entrada
+                    </span>
+                  <% end %>
+                </td>
+
+                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-400">
+                  <% if pagamento.aluno.present? %>
+                    <i class="fas fa-user-graduate w-4 text-center mr-1 text-[#C5A300]"></i>
+                    <%= pagamento.aluno.alu_nome %>
+                  <% elsif pagamento.evento.present? %>
+                    <i class="fas fa-calendar-check w-4 text-center mr-1 text-purple-500"></i>
+                    <%= pagamento.evento.EVE_NOME %>
+                  <% else %>
+                    Lançamento Interno
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<%= render 'modal_participantes_evento' %>
+<%= render 'modal_mensalidade' %>
+<%= render 'modal_despesa' %>
+
+</div>
