@@ -1,0 +1,153 @@
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+  <%# --- CABEÇALHO --- %>
+  <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+        <div class="w-12 h-12 bg-gradient-to-br from-[#C5A300] to-[#B88B00] rounded-xl flex items-center justify-center">
+          <i class="fas fa-user-graduate text-white text-xl"></i>
+        </div>
+        Possíveis Alunos
+      </h1>
+      <p class="text-gray-500 dark:text-gray-400 mt-2 ml-15">
+        <%= @possiveis_alunos.count %> <%= @possiveis_alunos.count == 1 ? 'interessado encontrado' : 'interessados encontrados' %>
+      </p>
+    </div>
+
+    <%= link_to new_possivel_aluno_path, class: "group inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-[#C5A300] to-[#D4AF37] text-white font-semibold rounded-xl shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-200" do %>
+      <i class="fas fa-plus group-hover:rotate-90 transition-transform duration-200"></i>
+      <span class="hidden sm:inline">Novo Interessado</span>
+      <span class="sm:hidden">Add</span>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
+
+    <%# --- SIDEBAR (Mantida fixa igual a de Alunos) --- %>
+    <div class="lg:col-span-1">
+      <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 sticky top-6">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+          <i class="fas fa-filter text-[#C5A300]"></i>
+          Navegação
+        </h3>
+
+        <%# Abas de Navegação %>
+        <div class="p-1 bg-gray-100 dark:bg-[#0F0F0F] rounded-lg mb-4 space-y-1">
+          <%# Link para Alunos (Estilo Normal) %>
+          <a href="<%= alunos_path %>" class="block w-full text-center px-4 py-2.5 font-medium text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-[#1C1C1C] rounded-lg transition-colors">
+            Matriculados
+          </a>
+          
+          <%# Link para Possíveis (Estilo Ativo/Amarelo) %>
+          <div class="block w-full text-center px-4 py-2.5 font-bold bg-[#C5A300] text-black rounded-lg shadow-sm">
+            Possíveis Alunos
+          </div>
+        </div>
+
+        <%= form_with(url: possiveis_alunos_path, method: :get, class: "space-y-3") do |form| %>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-search text-gray-400 dark:text-gray-500"></i>
+            </div>
+            <%= form.text_field :query,
+                value: params[:query],
+                placeholder: "Buscar nome ou telefone...",
+                class: "w-full pl-10 pr-4 py-2.5 bg-gray-50 dark:bg-[#0F0F0F] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-lg text-sm focus:border-[#C5A300] focus:ring-[#C5A300]" %>
+          </div>
+
+          <button type="submit" class="w-full px-4 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#111]">
+            Buscar
+          </button>
+        <% end %>
+
+        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-[#2E2E2E]">
+           <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-600 dark:text-gray-400">Total na lista</span>
+              <span class="text-lg font-bold text-gray-900 dark:text-white"><%= @possiveis_alunos.count %></span>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <%# --- GRID DE CARDS (Área Principal) --- %>
+    <div class="lg:col-span-3">
+
+      <% if @possiveis_alunos.empty? %>
+         <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-12 text-center">
+            <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-[#0F0F0F] dark:to-[#1A1A1A] rounded-full flex items-center justify-center">
+              <i class="fas fa-user-clock text-3xl text-gray-400 dark:text-gray-600"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Nenhum interessado encontrado</h3>
+            <p class="text-gray-500 dark:text-gray-400">Cadastre pessoas que entraram em contato para não perder o lead.</p>
+         </div>
+      <% else %>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          <% @possiveis_alunos.each do |lead| %>
+            <div class="group bg-white dark:bg-[#1C1C1C] rounded-xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] hover:shadow-xl hover:scale-[1.02] transition-all duration-200 flex flex-col h-full relative overflow-hidden">
+              
+              <%# Topo Decorativo (Sem foto, mas com ícone) %>
+              <div class="relative h-28 bg-gradient-to-br from-[#C5A300] to-[#D4AF37] overflow-visible">
+                 <div class="absolute -bottom-8 left-1/2 transform -translate-x-1/2">
+                    <div class="w-16 h-16 rounded-full border-4 border-white dark:border-[#1C1C1C] bg-white flex items-center justify-center shadow-lg">
+                       <span class="text-xl font-bold text-[#C5A300]">
+                         <%= lead.pos_nome.split.map(&:first).join.upcase[0..1] %>
+                       </span>
+                    </div>
+                 </div>
+              </div>
+
+              <%# Conteúdo do Card %>
+              <div class="pt-10 pb-4 px-4 flex-grow text-center">
+                <h3 class="text-base font-bold text-gray-900 dark:text-white mb-1 truncate">
+                  <%= lead.pos_nome %>
+                </h3>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mb-4">Interessado desde <%= lead.created_at.strftime("%d/%m") %></p>
+
+                <%# Contatos Rápidos %>
+                <div class="space-y-2 mb-4">
+                   <% if lead.pos_telefone.present? %>
+                      <a href="https://wa.me/55<%= lead.pos_telefone.gsub(/[^0-9]/, '') %>" target="_blank" class="flex items-center justify-center gap-2 text-sm text-gray-600 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-500 transition-colors p-1.5 rounded-lg hover:bg-green-50 dark:hover:bg-green-900/20 border border-transparent hover:border-green-200">
+                        <i class="fab fa-whatsapp text-lg"></i>
+                        <span class="font-medium"><%= lead.pos_telefone %></span>
+                      </a>
+                   <% end %>
+                   
+                   <% if lead.pos_email.present? %>
+                      <div class="flex items-center justify-center gap-2 text-xs text-gray-500 dark:text-gray-400 truncate">
+                        <i class="fas fa-envelope"></i>
+                        <span class="truncate max-w-[150px]"><%= lead.pos_email %></span>
+                      </div>
+                   <% end %>
+                </div>
+              </div>
+
+              <%# Rodapé de Ações %>
+              <div class="bg-gray-50 dark:bg-[#111111] px-4 py-3 border-t border-gray-200 dark:border-[#2E2E2E] grid grid-cols-2 gap-2">
+                 
+                 <%# Botão MATRICULAR (Converte o lead em aluno) %>
+                 <%= link_to new_aluno_path(nome: lead.pos_nome, telefone: lead.pos_telefone, email: lead.pos_email), 
+                     class: "col-span-2 flex items-center justify-center gap-2 w-full py-2 bg-[#C5A300] hover:bg-[#B88B00] text-black text-xs font-bold rounded-lg transition-colors shadow-sm",
+                     title: "Converter em Aluno" do %>
+                    <i class="fas fa-user-graduate"></i> Matricular
+                 <% end %>
+
+                 <%# Botão Editar %>
+                 <%= link_to edit_possivel_aluno_path(lead), class: "flex items-center justify-center gap-1 py-1.5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-[#2E2E2E] rounded text-xs transition-colors" do %>
+                    <i class="fas fa-pencil-alt"></i> Editar
+                 <% end %>
+
+                 <%# Botão Excluir %>
+                 <%= button_to possivel_aluno_path(lead), method: :delete, data: { confirm: 'Remover este interessado?' }, class: "w-full flex items-center justify-center gap-1 py-1.5 text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded text-xs transition-colors" do %>
+                    <i class="fas fa-trash-alt"></i> Excluir
+                 <% end %>
+              </div>
+
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
