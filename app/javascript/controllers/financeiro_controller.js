@@ -455,7 +455,7 @@ async confirmarDespesa() {
       this.mostrarMensagem("Despesa registrada com sucesso!", "success")
       setTimeout(() => {
         this.fecharModalDespesa()
-        window.location.reload()
+        
       }, 1000)
     } else {
       this.mostrarMensagem(data.errors?.join(', ') || "Erro ao registrar despesa.", "error")
