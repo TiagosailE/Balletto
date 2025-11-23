@@ -4,6 +4,7 @@ Rails.application.routes.draw do
 
   resources :users
   resources :alunos
+  resources :possiveis_alunos
 
   resources :turmas do
     member do

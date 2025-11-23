@@ -31,7 +31,9 @@
 
         <div class="p-1 bg-gray-100 dark:bg-[#0F0F0F] rounded-lg mb-4 space-y-1">
           <a href="<%= alunos_path %>" class="block w-full text-center px-4 py-2.5 font-semibold bg-[#C5A300] text-black rounded-lg">Matriculados</a>
-          <a href="#" class="block w-full text-center px-4 py-2.5 font-medium text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-[#1C1C1C] rounded-lg">Possíveis Alunos</a>
+          <a href="<%= possiveis_alunos_path %>" class="block w-full text-center px-4 py-2.5 font-medium text-gray-600 dark:text-gray-400 hover:bg-white dark:hover:bg-[#1C1C1C] rounded-lg transition-colors">
+        Possíveis Alunos
+      </a>
         </div>
 
         <%= form_with(url: alunos_path, method: :get, class: "space-y-3") do |form| %>

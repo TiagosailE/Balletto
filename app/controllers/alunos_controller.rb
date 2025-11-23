@@ -25,6 +25,12 @@ class AlunosController < ApplicationController
 
   def new
     @aluno = Aluno.new
+
+    if params[:nome].present?
+      @aluno.alu_nome = params[:nome]
+      @aluno.responsavel_telefone = params[:telefone]
+      @aluno.responsavel_email = params[:email]
+    end
   end
 
   def create
