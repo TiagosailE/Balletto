@@ -68,14 +68,7 @@ rails console
 Criação de um usuário administrador:
 
 ```ruby
-User.create!(
-  nome: 'Admin Host',
-  usuario: 'admin',
-  email: 'admin@exemplo.com',
-  password: '123456',
-  password_confirmation: '123456',
-  role: :admin
-)
+rails db:seed
 ```
 
 -----
