@@ -2,132 +2,20 @@
 <html>
   <head>
     <title><%= content_for(:title) || "Balletto Core" %></title>
-
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
-    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {}
-        }
-      }
-    </script>
-    <script>
-      if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.classList.add('dark')
-      } else {
-        document.documentElement.classList.remove('dark')
-      }
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
-      html, body {
-        height: 100%;
-        width: 100%;
-        margin: 0;
-        padding: 0;
-        font-family: 'Inter', sans-serif;
-      }
-      label {
-        display: block;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #6B7280; 
-        margin-bottom: 0.25rem;
-      }
-      ::placeholder {
-        color: #9CA3AF; 
-        opacity: 1;
-      }
-
-      input[type="time"]::-webkit-calendar-picker-indicator,
-      input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: none; 
-      }
-      select option {
-        background-color: #ffffff;
-        color: #111827;
-      }
-
-      .dark input[type="time"]::-webkit-calendar-picker-indicator,
-      .dark input[type="date"]::-webkit-calendar-picker-indicator {
-        filter: invert(0.8);
-      }
-      .dark select option {
-        background-color: #111111; 
-        color: #E5E5E5;
-      }
-      .dark label {
-        color: #A1A1AA; 
-      }
-      .dark ::placeholder {
-        color: #6B7280;
-      }
-
-
-      @keyframes fade-in-down {
-        0% { opacity: 0; transform: translateY(-10px); }
-        100% { opacity: 1; transform: translateY(0); }
-      }
-      .animate-fade-in-down {
-        animation: fade-in-down 0.4s ease-out;
-      }
-
-      input:-webkit-autofill,
-      input:-webkit-autofill:hover,
-      input:-webkit-autofill:focus,
-      input:-webkit-autofill:active,
-      textarea:-webkit-autofill,
-      textarea:-webkit-autofill:hover,
-      textarea:-webkit-autofill:focus,
-      textarea:-webkit-autofill:active,
-      select:-webkit-autofill,
-      select:-webkit-autofill:hover,
-      select:-webkit-autofill:focus,
-      select:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 50px rgb(249 250 251) inset !important;
-        box-shadow: 0 0 0 50px rgb(249 250 251) inset !important;
-        -webkit-text-fill-color: rgb(75 85 99) !important;
-        caret-color: rgb(75 85 99) !important;
-        background-color: rgb(249 250 251) !important;
-        border-radius: 0.5rem !important;
-        transition: background-color 5000s ease-in-out 0s !important;
-      }
-      .dark input:-webkit-autofill,
-      .dark input:-webkit-autofill:hover,
-      .dark input:-webkit-autofill:focus,
-      .dark input:-webkit-autofill:active,
-      .dark textarea:-webkit-autofill,
-      .dark textarea:-webkit-autofill:hover,
-      .dark textarea:-webkit-autofill:focus,
-      .dark textarea:-webkit-autofill:active,
-      .dark select:-webkit-autofill,
-      .dark select:-webkit-autofill:hover,
-      .dark select:-webkit-autofill:focus,
-      .dark select:-webkit-autofill:active {
-        -webkit-box-shadow: 0 0 0 50px rgb(10 10 10) inset !important;
-        box-shadow: 0 0 0 50px rgb(10 10 10) inset !important;
-        -webkit-text-fill-color: rgb(229 229 229) !important;
-        caret-color: rgb(229 229 229) !important;
-        background-color: rgb(10 10 10) !important;
-        border-radius: 0.5rem !important;
-        transition: background-color 5000s ease-in-out 0s !important;
-      }
-
-    </style>
-
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     
-    <!-- A linha do CDN foi REMOVIDA daqui. -->
-    
     <%= javascript_importmap_tags %>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+    <%= render 'layouts/head_config' %>
   </head>
+
   <body class="bg-[#F0E9DF] text-gray-900 dark:bg-[#0A0A0A] dark:text-[#E5E5E5] antialiased">
 
     <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
@@ -140,7 +28,6 @@
           else "bg-gray-700/90 border-gray-500"
           end
         %>
-
         <div class="<%= color %> text-white p-4 rounded-xl shadow-lg text-center border backdrop-blur-lg animate-fade-in-down">
           <p class="font-semibold"><%= message %></p>
         </div>
@@ -148,7 +35,6 @@
     </div>
     
     <div id="balletto-app" class="h-screen flex flex-col">
-
       <%= render 'shared/header' %>
 
       <main class="flex-1 w-full overflow-y-auto p-4 sm:p-6 lg:p-8"
@@ -162,20 +48,5 @@
     </div>
 
     <%= render 'shared/confirm_modal' %>
-        <script>
-          document.addEventListener("turbo:load", () => {
-            const flashes = document.querySelectorAll(".animate-fade-in-down");
-
-            flashes.forEach(flash => {
-              setTimeout(() => {
-                flash.style.transition = "opacity 0.6s ease, transform 0.6s ease";
-                flash.style.opacity = "0";
-                flash.style.transform = "translateY(-10px)";
-                setTimeout(() => flash.remove(), 600);
-              }, 2500); 
-            });
-          });
-        </script>
-
   </body>
 </html>
