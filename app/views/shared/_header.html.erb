@@ -1,11 +1,26 @@
 <header class="bg-white dark:bg-black text-[#2A2F33] dark:text-white shadow-md w-full fixed top-0 left-0 z-50 border-b border-[#F0E9DF] dark:border-[#2E2E2E]">
   <nav class="px-6 h-14 flex items-center justify-between">
-    <span class="text-2xl font-extrabold tracking-wider text-[#B88B00]">BALLETTO</span>
+
+    <%= link_to (user_signed_in? ? root_path : new_user_session_path), class: "flex items-center gap-3 group hover:opacity-80 transition-opacity duration-300" do %>
+      
+      <%= image_tag "balletto.png", class: "h-10 w-10 rounded-full object-cover border border-[#B88B00]/30 shadow-sm" %>
+      
+      <div class="flex flex-col">
+        <span class="text-xl font-serif font-bold tracking-[0.2em] uppercase text-[#B88B00] group-hover:text-[#D4AF37] transition-colors">
+          Balletto
+        </span>
+        </div>
+    <% end %>
+
     <div class="flex items-center gap-3">
-      <%= link_to configuracoes_path, class: "text-[#6B747A] dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] transition-colors" do %>
-        <i class="fas fa-cog text-xl"></i>
+      <% if user_signed_in? %>
+        <%= link_to configuracoes_path, class: "text-[#6B747A] dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] transition-colors" do %>
+          <i class="fas fa-cog text-xl"></i>
+        <% end %>
       <% end %>
+
       <%= render 'shared/theme_toggle' %>
     </div>
+
   </nav>
 </header>

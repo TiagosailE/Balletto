@@ -9,48 +9,48 @@
   </div>
 
   <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
-    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-        <div class="text-center sm:text-left">
-          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SALDO TOTAL</p>
-          <p class="text-xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1 sm:mt-2">
-            <%= number_to_currency(@saldo_total) %>
-          </p>
-        </div>
-        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-wallet text-white text-lg sm:text-xl"></i>
-        </div>
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+    <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+      <div class="text-center sm:text-left">
+        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SALDO TOTAL</p>
+        <p class="text-xl sm:text-3xl font-bold text-blue-600 dark:text-blue-400 mt-1 sm:mt-2" data-saldo-total>
+          <%= number_to_currency(@saldo_total) %>
+        </p>
       </div>
-    </div>
-    
-    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-        <div class="text-center sm:text-left">
-          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">ENTRADAS</p>
-          <p class="text-xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-1 sm:mt-2">
-            <%= number_to_currency(@total_entradas) %>
-          </p>
-        </div>
-        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-arrow-up text-white text-lg sm:text-xl"></i>
-        </div>
-      </div>
-    </div>
-    
-    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
-      <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
-        <div class="text-center sm:text-left">
-          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SAÍDAS</p>
-          <p class="text-xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mt-1 sm:mt-2">
-            <%= number_to_currency(@total_saidas) %>
-          </p>
-        </div>
-        <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
-          <i class="fas fa-arrow-down text-white text-lg sm:text-xl"></i>
-        </div>
+      <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-wallet text-white text-lg sm:text-xl"></i>
       </div>
     </div>
   </div>
+  
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+    <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+      <div class="text-center sm:text-left">
+        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">ENTRADAS</p>
+        <p class="text-xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-1 sm:mt-2" data-total-receitas>
+          <%= number_to_currency(@total_entradas) %>
+        </p>
+      </div>
+      <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-green-500 to-green-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-arrow-up text-white text-lg sm:text-xl"></i>
+      </div>
+    </div>
+  </div>
+  
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
+    <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
+      <div class="text-center sm:text-left">
+        <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400 font-medium">SAÍDAS</p>
+        <p class="text-xl sm:text-3xl font-bold text-red-600 dark:text-red-400 mt-1 sm:mt-2" data-total-despesas>
+          <%= number_to_currency(@total_saidas) %>
+        </p>
+      </div>
+      <div class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+        <i class="fas fa-arrow-down text-white text-lg sm:text-xl"></i>
+      </div>
+    </div>
+  </div>
+</div>
 
   <div class="mb-12">
     <div class="flex items-center gap-3 mb-6">
@@ -120,7 +120,7 @@
               data-action="click->financeiro#abrirModalMensalidade"
               data-aluno-id="<%= aluno.alu_codigo %>"
               data-aluno-nome="<%= aluno.alu_nome %>"
-              class="flex items-center justify-between p-4 rounded-lg <%= pago_mes ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : pendente_mes ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800' : 'bg-gray-50 dark:bg-[#111111] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] cursor-pointer' %> transition-colors">
+              class=" cursor-pointer flex items-center justify-between p-4 rounded-lg <%= pago_mes ? 'bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800' : pendente_mes ? 'bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800' : 'bg-gray-50 dark:bg-[#111111] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] cursor-pointer' %> transition-colors">
               <div class="flex items-center gap-3">
                 <% if aluno.foto.attached? %>
                   <%= image_tag aluno.foto.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 rounded-full object-cover" %>
@@ -218,7 +218,7 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Associado a</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-gray-200 dark:divide-[#2E2E2E]">
+          <tbody class="divide-y divide-gray-200 dark:divide-[#2E2E2E]" data-lista-transacoes>
             <% if @pagamentos.empty? %>
               <tr>
                 <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">

@@ -1,10 +1,111 @@
+/* 1. Importação das Fontes (Deve ficar no topo) */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* 2. Seus imports existentes */
 @import "theme_toggle";
 @import "theme_button";
 
+/* 3. Configurações Globais (Mergeadas) */
 html, body {
   height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
 }
 
+/* 4. Estilização de Formulários e Inputs (Vindo do antigo <style>) */
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6B7280; 
+  margin-bottom: 0.25rem;
+}
+
+::placeholder {
+  color: #9CA3AF; 
+  opacity: 1;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator,
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: none; 
+}
+
+select option {
+  background-color: #ffffff;
+  color: #111827;
+}
+
+/* Overrides do Dark Mode para Inputs */
+.dark input[type="time"]::-webkit-calendar-picker-indicator,
+.dark input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.8);
+}
+.dark select option {
+  background-color: #111111; 
+  color: #E5E5E5;
+}
+.dark label {
+  color: #A1A1AA; 
+}
+.dark ::placeholder {
+  color: #6B7280;
+}
+
+/* Correção do Autofill do Navegador (Fundo amarelo/azul indesejado) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+textarea:-webkit-autofill:active,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus,
+select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 50px rgb(249 250 251) inset !important;
+  box-shadow: 0 0 0 50px rgb(249 250 251) inset !important;
+  -webkit-text-fill-color: rgb(75 85 99) !important;
+  caret-color: rgb(75 85 99) !important;
+  background-color: rgb(249 250 251) !important;
+  border-radius: 0.5rem !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+}
+
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover,
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active,
+.dark textarea:-webkit-autofill,
+.dark textarea:-webkit-autofill:hover,
+.dark textarea:-webkit-autofill:focus,
+.dark textarea:-webkit-autofill:active,
+.dark select:-webkit-autofill,
+.dark select:-webkit-autofill:hover,
+.dark select:-webkit-autofill:focus,
+.dark select:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 50px rgb(10 10 10) inset !important;
+  box-shadow: 0 0 0 50px rgb(10 10 10) inset !important;
+  -webkit-text-fill-color: rgb(229 229 229) !important;
+  caret-color: rgb(229 229 229) !important;
+  background-color: rgb(10 10 10) !important;
+  border-radius: 0.5rem !important;
+}
+
+/* 5. Animações (Flash Messages) */
+@keyframes fade-in-down {
+  0% { opacity: 0; transform: translateY(-10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-down {
+  animation: fade-in-down 0.4s ease-out;
+}
+
+/* 6. Layout e Scrollbar (Seu código original preservado) */
 #balletto-app {
   height: 100vh;
   display: flex;
@@ -38,5 +139,3 @@ main::-webkit-scrollbar-thumb {
 main::-webkit-scrollbar-thumb:hover {
   background-color: rgba(255, 255, 255, 1);
 }
-
-

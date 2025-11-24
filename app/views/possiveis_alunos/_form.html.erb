@@ -1,0 +1,109 @@
+<div class="w-full max-w-2xl mx-auto px-4 py-6">
+  
+  <%# --- CABEÇALHO --- %>
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[#C5A300] to-[#B88B00] mb-4 shadow-lg shadow-yellow-500/20">
+      <i class="fas fa-user-clock text-white text-2xl"></i>
+    </div>
+    <h1 class="text-3xl font-extrabold text-gray-900 dark:text-white sm:text-4xl">
+      <%= possivel_aluno.persisted? ? "Editar Interessado" : "Novo Interessado" %>
+    </h1>
+    <p class="mt-2 text-gray-500 dark:text-gray-400">
+      Preencha os contatos para não perder este lead.
+    </p>
+  </div>
+
+  <%= form_with(model: possivel_aluno, class: "bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl overflow-hidden border border-gray-200 dark:border-[#2E2E2E]") do |form| %>
+    
+    <%# --- MENSAGENS DE ERRO --- %>
+    <% if possivel_aluno.errors.any? %>
+      <div class="bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-4 border-b border-red-200 dark:border-red-800 flex items-start gap-3">
+        <i class="fas fa-exclamation-circle mt-0.5"></i>
+        <div>
+          <h3 class="font-bold text-sm">Verifique os erros abaixo:</h3>
+          <ul class="list-disc list-inside text-sm mt-1">
+            <% possivel_aluno.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="p-8 space-y-6">
+
+      <%# --- CAMPO NOME --- %>
+      <div>
+        <%= form.label :pos_nome, "Nome do Interessado", class: "block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+            <i class="fas fa-user text-gray-400 dark:text-gray-500 group-focus-within:text-[#C5A300] transition-colors"></i>
+          </div>
+          <%= form.text_field :pos_nome, 
+              placeholder: "Ex: João da Silva",
+              class: "block w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#C5A300] focus:border-transparent transition-all outline-none" %>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        
+        <%# --- CAMPO TELEFONE --- %>
+        <div>
+          <%= form.label :pos_telefone, "WhatsApp / Telefone", class: "block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5" %>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <i class="fab fa-whatsapp text-gray-400 dark:text-gray-500 group-focus-within:text-green-500 transition-colors"></i>
+            </div>
+            <%= form.text_field :pos_telefone, 
+                placeholder: "(XX) 9XXXX-XXXX",
+                class: "block w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#C5A300] focus:border-transparent transition-all outline-none" %>
+          </div>
+        </div>
+
+        <%# --- CAMPO EMAIL --- %>
+        <div>
+          <%= form.label :pos_email, "Email (Opcional)", class: "block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5" %>
+          <div class="relative group">
+            <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+              <i class="fas fa-envelope text-gray-400 dark:text-gray-500 group-focus-within:text-[#C5A300] transition-colors"></i>
+            </div>
+            <%= form.email_field :pos_email, 
+                placeholder: "email@exemplo.com",
+                class: "block w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#C5A300] focus:border-transparent transition-all outline-none" %>
+          </div>
+        </div>
+      </div>
+
+      <%# --- CAMPO OBSERVAÇÕES --- %>
+      <div>
+        <%= form.label :pos_observacao, "Observações / Histórico", class: "block text-sm font-bold text-gray-700 dark:text-gray-300 mb-1.5" %>
+        <div class="relative group">
+          <div class="absolute top-3.5 left-3.5 pointer-events-none">
+            <i class="fas fa-sticky-note text-gray-400 dark:text-gray-500 group-focus-within:text-[#C5A300] transition-colors"></i>
+          </div>
+          <%= form.text_area :pos_observacao, 
+              rows: 3,
+              placeholder: "Ex: Mãe ligou perguntando sobre turmas da manhã...",
+              class: "block w-full pl-10 pr-4 py-3 bg-gray-50 dark:bg-[#0A0A0A] text-gray-900 dark:text-white border border-gray-300 dark:border-[#2E2E2E] rounded-xl focus:ring-2 focus:ring-[#C5A300] focus:border-transparent transition-all outline-none resize-none" %>
+        </div>
+      </div>
+
+    </div>
+
+    <%# --- BOTÕES DE AÇÃO --- %>
+    <div class="bg-gray-50 dark:bg-[#111111] px-8 py-5 border-t border-gray-200 dark:border-[#2E2E2E] flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3">
+      
+      <%= link_to possiveis_alunos_path, 
+          class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-transparent text-gray-600 dark:text-gray-300 font-bold rounded-xl border border-gray-300 dark:border-gray-600 hover:bg-gray-100 dark:hover:bg-[#2E2E2E] transition-all transform hover:scale-[1.02] cursor-pointer' do %>
+        <span>Cancelar</span>
+      <% end %>
+      
+      <%= form.button class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-[#C5A300] text-black font-bold rounded-xl shadow-lg shadow-yellow-500/20 hover:bg-[#B88B00] border border-transparent transition-all transform hover:scale-[1.02] cursor-pointer' do %>
+        <i class="fas fa-save"></i>
+        <span><%= possivel_aluno.persisted? ? 'Salvar Alterações' : 'Cadastrar Interessado' %></span>
+      <% end %>
+
+    </div>
+
+  <% end %>
+</div>
