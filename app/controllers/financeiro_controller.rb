@@ -1,29 +1,24 @@
-# app/controllers/financeiro_controller.rb
 class FinanceiroController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    # Dados gerais do financeiro (mantém o que já existia)
+
     @pagamentos = Pagamento.includes(:caixa, :aluno, :evento)
                            .order(pag_data: :desc)
                            
     @saldo_total = calcular_saldo_total
     @total_entradas = Pagamento.where(pag_tipo: 'Entrada').sum(:pag_valor)
     @total_saidas = Pagamento.where(pag_tipo: 'Saída').sum(:pag_valor)
-    
-    # Dados para a seção de Eventos
+
     @eventos = Evento.includes(:participantes_confirmados, :pagamentos)
                      .order(EVE_DATA: :desc)
-    
-    # Dados para a seção de Mensalidades
+
     @valor_mensalidade = Configuracao.valor_mensalidade
     @alunos = Aluno.order(:alu_nome)
-    
-    # Dados para os dropdowns de pagamento
+
     @caixas = Caixa.order(:cai_nome)
   end
-  
-  # Atualiza o valor do evento
+
   def atualizar_valor_evento
     evento = Evento.find(params[:evento_id])
     
@@ -33,8 +28,7 @@ class FinanceiroController < ApplicationController
       render json: { success: false, errors: evento.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
-  # Lista participantes confirmados de um evento
+
   def participantes_evento
     @caixas = Caixa.order(:cai_nome)
     
@@ -69,22 +63,17 @@ class FinanceiroController < ApplicationController
       error: "Erro ao carregar participantes: #{e.message}" 
     }, status: :internal_server_error
   end
-  
-  # Registra pagamento de participante do evento
+
   def registrar_pagamento_evento
     evento = Evento.find(params[:evento_id])
     aluno = Aluno.find(params[:aluno_id])
     valor_pago = BigDecimal(params[:valor_pago] || '0')
-    
-    # Verifica se já existe um pagamento para esse aluno nesse evento
     pagamento = evento.pagamentos.find_by(aluno_id: aluno.alu_codigo)
     
     if pagamento
-      # Atualiza o pagamento existente (adiciona ao valor já pago)
       pagamento.pag_valor_pago = (pagamento.pag_valor_pago || 0) + valor_pago
       pagamento.save
     else
-      # Cria novo pagamento
       pagamento = Pagamento.new(
         caixa_id: params[:caixa_id],
         aluno_id: aluno.alu_codigo,
@@ -114,8 +103,7 @@ class FinanceiroController < ApplicationController
       }, status: :unprocessable_entity
     end
   end
-  
-  # Atualiza o valor padrão da mensalidade
+
   def atualizar_valor_mensalidade
     if Configuracao.set_valor_mensalidade(params[:valor])
       render json: { 
@@ -126,26 +114,22 @@ class FinanceiroController < ApplicationController
       render json: { success: false }, status: :unprocessable_entity
     end
   end
-  
-  # Registra pagamento de mensalidade
+
   def registrar_pagamento_mensalidade
     aluno = Aluno.find(params[:aluno_id])
     valor_total = params[:valor_total] || Configuracao.valor_mensalidade
     valor_pago = BigDecimal(params[:valor_pago] || '0')
     mes_referencia = params[:mes_referencia] || Date.current.strftime('%m/%Y')
-    
-    # Verifica se já existe pagamento de mensalidade para esse mês
+
     pagamento = Pagamento.find_by(
       aluno_id: aluno.alu_codigo,
       pag_descricao: "Mensalidade - #{mes_referencia}"
     )
     
     if pagamento
-      # Atualiza o pagamento existente
       pagamento.pag_valor_pago = (pagamento.pag_valor_pago || 0) + valor_pago
       pagamento.save
     else
-      # Cria novo pagamento
       pagamento = Pagamento.new(
         caixa_id: params[:caixa_id],
         aluno_id: aluno.alu_codigo,
@@ -193,6 +177,98 @@ def registrar_despesa
       success: false, 
       errors: pagamento.errors.full_messages 
     }, status: :unprocessable_entity
+  end
+end
+
+def extrato
+  transacoes = Pagamento.includes(:caixa, :aluno, :evento)
+    .order(pag_data: :desc)
+    .limit(50)
+    .map do |t|
+      tipo_transacao = t.pag_tipo == 'Entrada' ? 'receita' : 'despesa'
+      
+      categoria_info = if t.evento.present?
+        { 
+          categoria: t.evento.EVE_NOME,
+          categoria_icone: 'fas fa-calendar-check',
+          categoria_classe: 'bg-purple-100 dark:bg-purple-900/30 text-purple-800 dark:text-purple-300'
+        }
+      elsif t.pag_descricao&.include?('Mensalidade')
+        { 
+          categoria: 'Mensalidade',
+          categoria_icone: 'fas fa-money-bill-wave',
+          categoria_classe: 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
+        }
+      elsif t.pag_tipo == 'Saída'
+        { 
+          categoria: 'Despesa',
+          categoria_icone: 'fas fa-arrow-down',
+          categoria_classe: 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
+        }
+      else
+        { 
+          categoria: 'Entrada',
+          categoria_icone: 'fas fa-file-invoice',
+          categoria_classe: 'bg-gray-100 dark:bg-gray-900/30 text-gray-800 dark:text-gray-300'
+        }
+      end
+      
+      {
+        tipo: tipo_transacao,
+        descricao: t.pag_descricao.presence || "Lançamento",
+        valor: t.pag_valor,
+        metodo: t.pag_metodo,
+        caixa: t.caixa.cai_nome,
+        data: t.pag_data.in_time_zone('America/Sao_Paulo').strftime('%d/%m/%Y %H:%M'),
+        status: t.pag_status,
+        associado: t.aluno.present? ? "<i class='fas fa-user-graduate w-4 text-center mr-1 text-[#C5A300]'></i>#{t.aluno.alu_nome}" : (t.evento.present? ? "<i class='fas fa-calendar-check w-4 text-center mr-1 text-purple-500'></i>#{t.evento.EVE_NOME}" : nil)
+      }.merge(categoria_info)
+    end
+
+  total_entradas = Pagamento.where(pag_tipo: 'Entrada').sum(:pag_valor)
+  total_saidas = Pagamento.where(pag_tipo: 'Saída').sum(:pag_valor)
+  saldo = Caixa.sum("cai_saldo_inicial") + total_entradas - total_saidas
+  
+  totais = {
+    total_receitas: total_entradas,
+    total_despesas: total_saidas,
+    saldo: saldo
+  }
+  
+  render json: { transacoes: transacoes, totais: totais }
+end
+
+def info_mensalidade_aluno
+  aluno = Aluno.find(params[:aluno_id])
+  mes_referencia = Date.current.strftime('%m/%Y')
+  
+  pagamento = Pagamento.find_by(
+    aluno_id: aluno.alu_codigo,
+    pag_descricao: "Mensalidade - #{mes_referencia}"
+  )
+  
+  if pagamento
+    if pagamento.quitado?
+      render json: {
+        quitado: true,
+        valor_pago: pagamento.pag_valor_pago || pagamento.pag_valor,
+        data_pagamento: pagamento.pag_data.strftime('%d/%m/%Y às %H:%M')
+      }
+    else
+      render json: {
+        quitado: false,
+        pagamento_existente: true,
+        valor_total: pagamento.pag_valor,
+        valor_ja_pago: pagamento.pag_valor_pago || 0,
+        valor_pendente: pagamento.valor_pendente
+      }
+    end
+  else
+    render json: {
+      quitado: false,
+      pagamento_existente: false,
+      valor_total: Configuracao.valor_mensalidade
+    }
   end
 end
   

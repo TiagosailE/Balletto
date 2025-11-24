@@ -1,4 +1,3 @@
-# config/routes.rb
 Rails.application.routes.draw do
   devise_for :users, skip: [:registrations]
 
@@ -21,18 +20,15 @@ Rails.application.routes.draw do
       post 'turmas/:turma_id/alunos/:aluno_id/toggle', to: 'eventos#toggle_aluno'
     end
   end
-
-  # Rota principal do financeiro
   get 'financeiro', to: 'financeiro#index', as: 'financeiro'
   
-  # Rotas para ações do financeiro
   post 'financeiro/atualizar_valor_evento', to: 'financeiro#atualizar_valor_evento'
   get 'financeiro/participantes_evento/:evento_id', to: 'financeiro#participantes_evento'
   post 'financeiro/registrar_pagamento_evento', to: 'financeiro#registrar_pagamento_evento'
   post 'financeiro/atualizar_valor_mensalidade', to: 'financeiro#atualizar_valor_mensalidade'
   post 'financeiro/registrar_pagamento_mensalidade', to: 'financeiro#registrar_pagamento_mensalidade'
   post 'financeiro/registrar_despesa', to: 'financeiro#registrar_despesa'
-  # Mantém as rotas de pagamentos para CRUD manual
+ get 'financeiro/info_mensalidade_aluno/:aluno_id', to: 'financeiro#info_mensalidade_aluno' 
   resources :pagamentos
 
   root 'home#index'
