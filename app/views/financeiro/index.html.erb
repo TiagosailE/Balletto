@@ -199,12 +199,28 @@
   </div>
 
   <div>
-    <div class="flex items-center gap-3 mb-6">
+  <div class="flex items-center justify-between mb-6">
+    <div class="flex items-center gap-3">
       <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center">
         <i class="fas fa-file-invoice-dollar text-white text-lg"></i>
       </div>
       <h2 class="text-2xl font-bold text-gray-900 dark:text-[#E5E5E5]">Extrato Completo</h2>
     </div>
+
+    <%= link_to financeiro_path(format: :pdf),
+        class: "px-6 py-3 bg-gradient-to-r from-blue-500 to-red-600 text-white font-bold rounded-lg hover:from-red-600 hover:to-blue-700 transition-all transform hover:scale-[1.02] flex items-center gap-3 shadow-lg",
+        data: { turbo: false } do %>
+      <i class="fas fa-file-pdf text-xl"></i>
+      <span>Baixar PDF</span>
+    <% end %>
+  </div>
+
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-lg p-4 mb-4 border border-gray-200 dark:border-[#2E2E2E]">
+    <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-2">
+      <i class="fas fa-info-circle text-blue-500"></i>
+      <span>Exibindo lançamentos dos últimos <strong>30 dias</strong> (desde <%= 1.month.ago.strftime('%d/%m/%Y') %>)</span>
+    </p>
+  </div>
     
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-xl border border-gray-200 dark:border-[#2E2E2E] overflow-hidden">
       <div style="max-height: 500px; overflow-y: auto; overflow-x: auto;">

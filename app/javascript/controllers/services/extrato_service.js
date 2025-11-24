@@ -38,7 +38,7 @@ export class ExtratoService {
         <tr>
           <td colspan="5" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
             <i class="fas fa-file-invoice-dollar text-3xl mb-2"></i>
-            <p>Nenhum lançamento financeiro encontrado.</p>
+            <p>Nenhum lançamento financeiro encontrado nos últimos 30 dias.</p>
           </td>
         </tr>
       `

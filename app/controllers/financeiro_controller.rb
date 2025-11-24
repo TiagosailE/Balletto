@@ -2,21 +2,27 @@ class FinanceiroController < ApplicationController
   before_action :authenticate_user!
 
   def index
-
+    # Filtra pagamentos dos últimos 30 dias
+    data_inicio = 1.month.ago.beginning_of_day
     @pagamentos = Pagamento.includes(:caixa, :aluno, :evento)
+                           .where('pag_data >= ?', data_inicio)
                            .order(pag_data: :desc)
                            
-    @saldo_total = calcular_saldo_total
-    @total_entradas = Pagamento.where(pag_tipo: 'Entrada').sum(:pag_valor)
-    @total_saidas = Pagamento.where(pag_tipo: 'Saída').sum(:pag_valor)
+    @total_entradas = @pagamentos.where(pag_tipo: 'Entrada').sum(:pag_valor)
+    @total_saidas = @pagamentos.where(pag_tipo: 'Saída').sum(:pag_valor)
+    @saldo_total = Caixa.sum("cai_saldo_inicial") + @total_entradas - @total_saidas
 
     @eventos = Evento.includes(:participantes_confirmados, :pagamentos)
                      .order(EVE_DATA: :desc)
 
     @valor_mensalidade = Configuracao.valor_mensalidade
     @alunos = Aluno.order(:alu_nome)
-
     @caixas = Caixa.order(:cai_nome)
+
+    respond_to do |format|
+      format.html
+      format.pdf { render_extrato_pdf }
+    end
   end
 
   def atualizar_valor_evento
@@ -156,35 +162,37 @@ class FinanceiroController < ApplicationController
     end
   end
   
-def registrar_despesa
-  pagamento = Pagamento.new(
-    caixa_id: params[:caixa_id],
-    pag_data: Time.current,
-    pag_valor: params[:valor],
-    pag_descricao: params[:descricao],
-    pag_tipo: 'Saída',
-    pag_status: 'Pago',
-    pag_metodo: params[:metodo] || 'Dinheiro'
-  )
-  
-  if pagamento.save
-    render json: { 
-      success: true, 
-      message: 'Despesa registrada com sucesso!' 
-    }
-  else
-    render json: { 
-      success: false, 
-      errors: pagamento.errors.full_messages 
-    }, status: :unprocessable_entity
+  def registrar_despesa
+    pagamento = Pagamento.new(
+      caixa_id: params[:caixa_id],
+      pag_data: Time.current,
+      pag_valor: params[:valor],
+      pag_descricao: params[:descricao],
+      pag_tipo: 'Saída',
+      pag_status: 'Pago',
+      pag_metodo: params[:metodo] || 'Dinheiro'
+    )
+    
+    if pagamento.save
+      render json: { 
+        success: true, 
+        message: 'Despesa registrada com sucesso!' 
+      }
+    else
+      render json: { 
+        success: false, 
+        errors: pagamento.errors.full_messages 
+      }, status: :unprocessable_entity
+    end
   end
-end
 
-def extrato
-  transacoes = Pagamento.includes(:caixa, :aluno, :evento)
-    .order(pag_data: :desc)
-    .limit(50)
-    .map do |t|
+  def extrato
+    data_inicio = 1.month.ago.beginning_of_day
+    pagamentos = Pagamento.includes(:caixa, :aluno, :evento)
+                          .where('pag_data >= ?', data_inicio)
+                          .order(pag_data: :desc)
+    
+    transacoes = pagamentos.map do |t|
       tipo_transacao = t.pag_tipo == 'Entrada' ? 'receita' : 'despesa'
       
       categoria_info = if t.evento.present?
@@ -225,59 +233,135 @@ def extrato
       }.merge(categoria_info)
     end
 
-  total_entradas = Pagamento.where(pag_tipo: 'Entrada').sum(:pag_valor)
-  total_saidas = Pagamento.where(pag_tipo: 'Saída').sum(:pag_valor)
-  saldo = Caixa.sum("cai_saldo_inicial") + total_entradas - total_saidas
-  
-  totais = {
-    total_receitas: total_entradas,
-    total_despesas: total_saidas,
-    saldo: saldo
-  }
-  
-  render json: { transacoes: transacoes, totais: totais }
-end
+    total_entradas = pagamentos.where(pag_tipo: 'Entrada').sum(:pag_valor)
+    total_saidas = pagamentos.where(pag_tipo: 'Saída').sum(:pag_valor)
+    saldo = Caixa.sum("cai_saldo_inicial") + total_entradas - total_saidas
+    
+    totais = {
+      total_receitas: total_entradas,
+      total_despesas: total_saidas,
+      saldo: saldo
+    }
+    
+    render json: { transacoes: transacoes, totais: totais }
+  end
 
-def info_mensalidade_aluno
-  aluno = Aluno.find(params[:aluno_id])
-  mes_referencia = Date.current.strftime('%m/%Y')
-  
-  pagamento = Pagamento.find_by(
-    aluno_id: aluno.alu_codigo,
-    pag_descricao: "Mensalidade - #{mes_referencia}"
-  )
-  
-  if pagamento
-    if pagamento.quitado?
-      render json: {
-        quitado: true,
-        valor_pago: pagamento.pag_valor_pago || pagamento.pag_valor,
-        data_pagamento: pagamento.pag_data.strftime('%d/%m/%Y às %H:%M')
-      }
+  def info_mensalidade_aluno
+    aluno = Aluno.find(params[:aluno_id])
+    mes_referencia = Date.current.strftime('%m/%Y')
+    
+    pagamento = Pagamento.find_by(
+      aluno_id: aluno.alu_codigo,
+      pag_descricao: "Mensalidade - #{mes_referencia}"
+    )
+    
+    if pagamento
+      if pagamento.quitado?
+        render json: {
+          quitado: true,
+          valor_pago: pagamento.pag_valor_pago || pagamento.pag_valor,
+          data_pagamento: pagamento.pag_data.strftime('%d/%m/%Y às %H:%M')
+        }
+      else
+        render json: {
+          quitado: false,
+          pagamento_existente: true,
+          valor_total: pagamento.pag_valor,
+          valor_ja_pago: pagamento.pag_valor_pago || 0,
+          valor_pendente: pagamento.valor_pendente
+        }
+      end
     else
       render json: {
         quitado: false,
-        pagamento_existente: true,
-        valor_total: pagamento.pag_valor,
-        valor_ja_pago: pagamento.pag_valor_pago || 0,
-        valor_pendente: pagamento.valor_pendente
+        pagamento_existente: false,
+        valor_total: Configuracao.valor_mensalidade
       }
     end
-  else
-    render json: {
-      quitado: false,
-      pagamento_existente: false,
-      valor_total: Configuracao.valor_mensalidade
-    }
   end
-end
   
   private
   
-  def calcular_saldo_total
-    Caixa.sum("cai_saldo_inicial") + 
-    Pagamento.where(pag_tipo: 'Entrada').sum(:pag_valor) - 
-    Pagamento.where(pag_tipo: 'Saída').sum(:pag_valor)
+  def render_extrato_pdf
+    pdf = Prawn::Document.new(page_size: 'A4', margin: 40)
+    
+    # Cabeçalho
+    pdf.font 'Helvetica', size: 20, style: :bold
+    pdf.text 'Extrato Financeiro', align: :center
+    pdf.move_down 5
+    
+    pdf.font 'Helvetica', size: 10
+    data_inicio = 1.month.ago.beginning_of_day
+    pdf.text "Período: #{data_inicio.strftime('%d/%m/%Y')} a #{Date.current.strftime('%d/%m/%Y')}", align: :center
+    pdf.text "Gerado em: #{Time.current.strftime('%d/%m/%Y às %H:%M')}", align: :center
+    pdf.move_down 20
+
+    # Totais
+    pdf.font 'Helvetica', size: 12, style: :bold
+    totais_data = [
+      ['ENTRADAS', 'SAÍDAS', 'SALDO'],
+      [
+        number_to_currency(@total_entradas),
+        number_to_currency(@total_saidas),
+        number_to_currency(@saldo_total)
+      ]
+    ]
+    
+    pdf.table(totais_data, width: pdf.bounds.width, cell_style: { align: :center, padding: 8 }) do
+      row(0).background_color = 'E5E5E5'
+      row(0).font_style = :bold
+      row(1).background_color = 'F9F9F9'
+    end
+    
+    pdf.move_down 20
+
+    # Transações
+    pdf.font 'Helvetica', size: 12, style: :bold
+    pdf.text 'Lançamentos'
+    pdf.move_down 10
+
+    if @pagamentos.empty?
+      pdf.font 'Helvetica', size: 10
+      pdf.text 'Nenhum lançamento encontrado no período.', align: :center
+    else
+      transacoes_data = [['Data', 'Descrição', 'Tipo', 'Valor', 'Status']]
+      
+      @pagamentos.each do |p|
+        tipo = p.pag_tipo == 'Entrada' ? 'Entrada' : 'Saída'
+        valor_formatado = "#{p.pag_tipo == 'Entrada' ? '+' : '-'} #{number_to_currency(p.pag_valor)}"
+        
+        transacoes_data << [
+          p.pag_data.strftime('%d/%m/%Y'),
+          p.pag_descricao.presence || 'Lançamento',
+          tipo,
+          valor_formatado,
+          p.pag_status
+        ]
+      end
+
+      pdf.font 'Helvetica', size: 8
+      pdf.table(transacoes_data, width: pdf.bounds.width, cell_style: { padding: 5 }) do
+        row(0).background_color = 'C5A300'
+        row(0).text_color = 'FFFFFF'
+        row(0).font_style = :bold
+        
+        column(3).align = :right
+        
+        cells.border_width = 0.5
+        cells.border_color = 'CCCCCC'
+      end
+    end
+    
+    pdf.number_pages "Página <page> de <total>", 
+                     at: [pdf.bounds.right - 150, 0],
+                     width: 150,
+                     align: :right,
+                     size: 8
+
+    send_data pdf.render,
+              filename: "extrato_financeiro_#{Date.current.strftime('%Y%m%d')}.pdf",
+              type: 'application/pdf',
+              disposition: 'attachment'
   end
   
   include ActionView::Helpers::NumberHelper
