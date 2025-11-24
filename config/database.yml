@@ -1,13 +1,9 @@
-# Arquivo: config/database.yml
-
 default: &default
   adapter: postgresql
   encoding: unicode
-  # Estas variaveis serão lidas do seu arquivo .env local
-  username: <%= ENV.fetch("DB_USERNAME") { 'seu_fallback_user' } %> 
+  username: <%= ENV.fetch("DB_USERNAME") { 'seu_fallback_user' } %>
   password: <%= ENV.fetch("DB_PASSWORD") { 'sua_fallback_senha' } %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-
 
 development:
   <<: *default
@@ -20,7 +16,3 @@ test:
 production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
-
-  cable:
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
