@@ -18,7 +18,17 @@
         <i class="fas fa-times text-2xl"></i>
       </button>
     </div>
+    
     <div class="p-6 overflow-y-auto space-y-4" style="max-height: calc(80vh - 180px);">
+      <div data-financeiro-target="statusPagamentoContainer" class="p-4 rounded-lg bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800">
+        <div class="flex items-center gap-2" data-financeiro-target="statusPagamentoLabel">
+          <i class="fas fa-clock text-yellow-600 dark:text-yellow-400"></i>
+          <div>
+            <div class="font-semibold text-yellow-800 dark:text-yellow-300">Carregando...</div>
+          </div>
+        </div>
+      </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Valor Total da Mensalidade
@@ -30,6 +40,7 @@
           value="<%= @valor_mensalidade %>"
           class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-green-500 focus:border-transparent">
       </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Valor Pago Agora
@@ -41,14 +52,16 @@
           placeholder="0.00"
           class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-green-500 focus:border-transparent">
       </div>
-      <div class="p-3 rounded-lg" data-financeiro-target="statusPagamentoContainer">
+
+      <div class="p-3 rounded-lg bg-gray-50 dark:bg-[#111111]" data-financeiro-target="valorPendenteContainer">
         <div class="flex justify-between items-center">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300" data-financeiro-target="statusPagamentoLabel">Valor Pendente:</span>
-          <span class="text-lg font-bold" data-financeiro-target="valorPendenteMensalidade">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Valor Pendente:</span>
+          <span class="text-lg font-bold text-gray-900 dark:text-[#E5E5E5]" data-financeiro-target="valorPendenteMensalidade">
             R$ 0,00
           </span>
         </div>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Caixa
@@ -62,6 +75,7 @@
           <% end %>
         </select>
       </div>
+
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Método de Pagamento
@@ -77,6 +91,7 @@
         </select>
       </div>
     </div>
+
     <div class="flex gap-3 p-6 border-t border-gray-200 dark:border-[#2E2E2E]">
       <button 
         data-action="click->financeiro#fecharModalMensalidade"

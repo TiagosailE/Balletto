@@ -32,7 +32,7 @@ pt-BR:
 
     registrations:
       signed_up: 'Bem-vindo! Você se registrou com sucesso.'
-      signed_up_but_inactive: 'Você se registrou com sucesso, mas sua conta ainda não foi ativada.'
+      signed_up_but_inactive: 'Você se registrou com sucesso, mas sua conta ainda não está ativada.'
       signed_up_but_locked: 'Você se registrou com sucesso, mas sua conta está bloqueada.'
       signed_up_but_unconfirmed: 'Um link de confirmação foi enviado para o seu e-mail. Verifique e confirme sua conta.'
       update_needs_confirmation: 'Você atualizou seu e-mail com sucesso, mas precisa confirmá-lo. Verifique seu e-mail para completar a alteração.'
@@ -82,3 +82,9 @@ pt-BR:
             EVE_DESC:
               blank: "não pode ficar em branco"
               too_long: "é muito longa (máximo %{count} caracteres)"
+
+        configuracao:
+          attributes:
+            dia_vencimento_mensalidade:
+              less_than_or_equal_to: "deve ser menor ou igual a %{count}"
+              greater_than_or_equal_to: "deve ser maior ou igual a %{count}"

@@ -132,8 +132,6 @@
 
           <% @alunos.each do |aluno| %>
   <div class="group bg-white dark:bg-[#1C1C1C] rounded-xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] hover:shadow-xl hover:scale-[1.03] transition-all duration-200 overflow-hidden relative">
-
-    <%# 1. O LINK TERMINA AQUI, COBRINDO APENAS O CONTEÚDO VISUAL %>
     <%= link_to aluno_path(aluno), class: "block h-full" do %>
       <div class="relative h-28 bg-gradient-to-br from-[#C5A300] to-[#D4AF37] overflow-visible">
         <div class="absolute inset-0 bg-black opacity-0 group-hover:opacity-10 transition-opacity"></div>
@@ -215,9 +213,7 @@
         <span>Visualizar</span>
       </div>
     <% end %> 
-    <%# AQUI O LINK FECHOU %>
 
-    <%# 2. O BOTÃO AGORA ESTÁ FORA DO LINK, MAS DENTRO DA DIV RELATIVE %>
     <button 
       type="button"
       class="absolute bottom-2 right-2 p-2 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-500 transition-colors duration-200 z-50 cursor-pointer"

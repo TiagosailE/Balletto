@@ -1,28 +1,33 @@
-# app/models/configuracao.rb
 class Configuracao < ApplicationRecord
-  self.table_name = 'configuracoes'  # ← ADICIONE ESTA LINHA
-  
-  validates :chave, presence: true, uniqueness: true
-  
-  # Método helper para pegar uma configuração
-  def self.get(chave, default = nil)
-    find_by(chave: chave)&.valor || default
+  self.table_name = 'configuracoes'
+
+  validates :dia_vencimento_mensalidade, 
+            numericality: { 
+              only_integer: true, 
+              greater_than_or_equal_to: 1, 
+              less_than_or_equal_to: 31
+            },
+            allow_nil: true
+
+  def self.instance
+    first_or_create do |config|
+      config.chave = "configuracao_principal"
+      config.valor = "ativo"
+      config.con_nome_academia = "Academia Balletto"
+      config.con_valor_mensalidade = 120.00
+      config.dia_vencimento_mensalidade = 10
+    end
   end
-  
-  # Método helper para setar uma configuração
-  def self.set(chave, valor)
-    config = find_or_initialize_by(chave: chave)
-    config.valor = valor.to_s
-    config.save
+
+  def con_valor_mensalidade
+    read_attribute(:con_valor_mensalidade) || 120.00
   end
-  
-  # Método específico para valor da mensalidade
-  def self.valor_mensalidade
-    valor = get('valor_mensalidade', '120.00')
-    BigDecimal(valor.to_s)
+
+  def dia_vencimento_mensalidade
+    read_attribute(:dia_vencimento_mensalidade) || 10
   end
-  
-  def self.set_valor_mensalidade(valor)
-    set('valor_mensalidade', valor)
+
+  def con_nome_academia
+    read_attribute(:con_nome_academia) || "Academia Balletto"
   end
 end

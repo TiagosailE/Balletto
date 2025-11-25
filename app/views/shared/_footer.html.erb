@@ -23,15 +23,16 @@
       <span class="text-xs md:text-sm font-medium mt-1 md:mt-0 <%= 'font-bold' if current_page?(alunos_path) %>">Alunos</span>
     <% end %>
 
-    <% if current_user.admin? %>
-      <%= link_to pagamentos_path,
-        class: "group flex flex-col md:flex-row md:gap-x-2 items-center justify-center p-2 rounded-xl transition-all duration-300 text-[#6B747A] dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] hover:bg-gray-50 dark:hover:bg-[#1A1A1A]" do %>
-        <div class="relative">
-          <i class="fas fa-wallet text-xl md:text-lg transition-transform duration-300 group-hover:scale-110"></i>
-        </div>
-        <span class="text-xs md:text-sm font-medium mt-1 md:mt-0">Financeiro</span>
-      <% end %>
+    <%= link_to financeiro_path,
+  class: "group flex flex-col md:flex-row md:gap-x-2 items-center justify-center p-2 rounded-xl transition-all duration-300 #{current_page?(financeiro_path) ? 'text-[#C5A300] dark:text-[#D4AF37]' : 'text-[#6B747A] dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] hover:bg-gray-50 dark:hover:bg-[#1A1A1A]'}" do %>
+  <div class="relative">
+    <i class="fas fa-wallet text-xl md:text-lg transition-transform duration-300 group-hover:scale-110"></i>
+    <% if current_page?(financeiro_path) %>
+      <div class="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-[#C5A300] rounded-full"></div>
     <% end %>
+  </div>
+  <span class="text-xs md:text-sm font-medium mt-1 md:mt-0 <%= 'font-bold' if current_page?(financeiro_path) %>">Financeiro</span>
+<% end %>
 
     <%= link_to turmas_path,
       class: "group flex flex-col md:flex-row md:gap-x-2 items-center justify-center p-2 rounded-xl transition-all duration-300 #{current_page?(turmas_path) ? 'text-[#C5A300] dark:text-[#D4AF37]' : 'text-[#6B747A] dark:text-gray-400 hover:text-[#C5A300] dark:hover:text-[#D4AF37] hover:bg-gray-50 dark:hover:bg-[#1A1A1A]'}" do %>

@@ -1,59 +1,87 @@
 class Pagamento < ApplicationRecord
   self.primary_key = 'pag_codigo'
-
+  
   belongs_to :caixa, foreign_key: 'caixa_id', primary_key: 'cai_codigo'
-  belongs_to :aluno, optional: true, foreign_key: 'aluno_id', primary_key: 'alu_codigo'
-  belongs_to :evento, optional: true, foreign_key: 'evento_id', primary_key: 'EVE_CODIGO'
+  belongs_to :aluno, foreign_key: 'aluno_id', primary_key: 'alu_codigo', optional: true
+  belongs_to :evento, foreign_key: 'evento_id', primary_key: 'EVE_CODIGO', optional: true
 
-  TIPOS_PERMITIDOS = %w(Entrada Saída)
-  STATUS_PERMITIDOS = %w(Pendente Pago Atrasado)
+  validates :pag_tipo, presence: true
+  validates :pag_valor, presence: true, numericality: { greater_than: 0 }
 
-  validates :pag_tipo, inclusion: { 
-    in: TIPOS_PERMITIDOS, 
-    message: "%{value} não é um tipo válido" 
+  scope :entradas, -> { where(pag_tipo: 'Entrada') }
+  scope :saidas, -> { where(pag_tipo: 'Saída') }
+  scope :do_mes, ->(data = Date.current) { 
+    where(pag_data: data.beginning_of_month..data.end_of_month) 
   }
-  validates :pag_status, inclusion: { 
-    in: STATUS_PERMITIDOS, 
-    message: "%{value} não é um status válido" 
-  }, allow_blank: true  # ← ADICIONE ESTA LINHA
+  scope :mensalidades, -> { where("pag_descricao LIKE ?", "Mensalidade%") }
+  scope :atrasados, -> { where(pag_status: 'Atrasado') }
 
-  def self.tipos_para_select
-    TIPOS_PERMITIDOS.map { |tipo| [tipo.capitalize, tipo] }
-  end
-
-  def self.statuses_para_select
-    STATUS_PERMITIDOS.map { |status| [status.capitalize, status] }
-  end
-  
-  validates :pag_data, presence: true
-  validates :pag_valor, presence: true, numericality: { greater_than_or_equal_to: 0 }
-  validates :pag_valor_pago, numericality: { greater_than_or_equal_to: 0 }, allow_nil: true
-  validates :caixa_id, presence: true
-
-  # Calcula quanto falta pagar
-  def valor_pendente
-    (pag_valor || 0) - (pag_valor_pago || 0)
-  end
-
-  # Verifica se está quitado
-  def quitado?
-    valor_pendente <= 0
-  end
-
-  # Atualiza o status baseado no valor pago
-  before_validation :atualizar_status  # ← MUDEI DE before_save PARA before_validation
-  
-  def atualizar_status
-    if quitado?
-      self.pag_status = 'Pago'
-    elsif pag_valor_pago && pag_valor_pago > 0
-      self.pag_status = 'Pendente'
-    else
-      self.pag_status = 'Pendente'  # ← DEFINE PENDENTE COMO PADRÃO
-    end
-  end
+  before_save :atualizar_status_pagamento
 
   def entrada?
     pag_tipo == 'Entrada'
+  end
+
+  def saida?
+    pag_tipo == 'Saída'
+  end
+
+  def quitado?
+    pag_status == 'Pago'
+  end
+
+  def valor_pendente
+    return 0 if quitado?
+    pag_valor - (pag_valor_pago || 0)
+  end
+
+  def mensalidade?
+    pag_descricao&.include?('Mensalidade')
+  end
+
+  def data_vencimento
+    return nil unless mensalidade?
+    
+    match = pag_descricao.match(/Mensalidade - (\d{2})\/(\d{4})/)
+    return nil unless match
+    
+    mes = match[1].to_i
+    ano = match[2].to_i
+    dia_vencimento = Configuracao.instance.dia_vencimento_mensalidade
+    
+    Date.new(ano, mes, dia_vencimento)
+  rescue
+    nil
+  end
+
+  def dias_atraso
+    return 0 if quitado? || data_vencimento.nil?
+    dias = (Date.current - data_vencimento).to_i
+    dias > 0 ? dias : 0
+  end
+
+  def atrasado?
+    return false if quitado?
+    data_vencimento.present? && Date.current > data_vencimento
+  end
+
+  def self.atualizar_status_mensalidades
+    mensalidades.where.not(pag_status: 'Pago').find_each do |pagamento|
+      pagamento.save
+    end
+  end
+
+  private
+
+  def atualizar_status_pagamento
+    if mensalidade?
+      if pag_valor_pago.present? && pag_valor_pago >= pag_valor
+        self.pag_status = 'Pago'
+      elsif atrasado?
+        self.pag_status = 'Atrasado'
+      else
+        self.pag_status = 'Pendente'
+      end
+    end
   end
 end

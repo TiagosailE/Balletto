@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_23_043332) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_24_234224) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,6 +95,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_23_043332) do
     t.datetime "updated_at", null: false
     t.string "chave", null: false
     t.text "valor"
+    t.string "con_nome_academia"
+    t.decimal "con_valor_mensalidade", precision: 10, scale: 2, default: "120.0"
+    t.integer "dia_vencimento_mensalidade", default: 10
     t.index ["chave"], name: "index_configuracoes_on_chave", unique: true
   end
 
