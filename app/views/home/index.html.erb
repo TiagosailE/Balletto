@@ -1,5 +1,23 @@
+<%# Estilo para personalizar a barra de rolagem (fina e discreta) %>
+<style>
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #D1D5DB; /* gray-300 */
+    border-radius: 20px;
+  }
+  .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: #374151; /* gray-700 */
+  }
+</style>
+
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
   
+  <%# --- CABEÇALHO --- %>
   <div class="flex justify-between items-center mb-8">
     <div>
       <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
@@ -10,7 +28,9 @@
     <%= button_to "Sair", destroy_user_session_path, method: :delete, class: "px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-semibold rounded-lg border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1C1C1C] hover:text-[#D4AF37] transition-all duration-200" %>
   </div>
 
+  <%# --- CARDS DE RESUMO (KPIs) --- %>
   <div class="grid grid-cols-3 gap-3 sm:gap-6 mb-8">
+    <%# Card Total Alunos %>
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
       <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
         <div class="text-center sm:text-left">
@@ -23,6 +43,7 @@
       </div>
     </div>
 
+    <%# Card Turmas Ativas %>
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
       <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
         <div class="text-center sm:text-left">
@@ -35,6 +56,7 @@
       </div>
     </div>
 
+    <%# Card Eventos Futuros %>
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-3 sm:p-6 border border-gray-200 dark:border-[#2E2E2E]">
       <div class="flex flex-col sm:flex-row items-center sm:justify-between gap-2 sm:gap-0">
         <div class="text-center sm:text-left">
@@ -49,128 +71,145 @@
   </div>
 
   <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6">
-      <div class="flex items-center justify-between mb-6">
+    
+    <%# --- ANIVERSARIANTES --- %>
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 flex flex-col max-h-[400px]">
+      <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fas fa-birthday-cake text-pink-500"></i>
           Aniversariantes do Mês
         </h2>
         <span class="px-3 py-1 bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400 text-xs font-semibold rounded-full"><%= @aniversariantes.count %></span>
       </div>
-      <div class="space-y-3">
-        <% if @aniversariantes.any? %>
-          <% @aniversariantes.each do |aluno| %>
-            <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
-              <% if aluno.foto.attached? %>
-                <%= image_tag aluno.foto.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 rounded-full object-cover" %>
-              <% else %>
-                <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold">
-                  <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+      
+      <%# Container com Rolagem %>
+      <div class="overflow-y-auto custom-scrollbar pr-2 flex-1">
+        <div class="space-y-3">
+          <% if @aniversariantes.any? %>
+            <% @aniversariantes.each do |aluno| %>
+              <div class="flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors">
+                <% if aluno.foto.attached? %>
+                  <%= image_tag aluno.foto.variant(resize_to_fill: [40, 40]), class: "w-10 h-10 rounded-full object-cover" %>
+                <% else %>
+                  <div class="w-10 h-10 bg-gradient-to-br from-pink-400 to-pink-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                    <%= aluno.alu_nome.split.map(&:first).join.upcase[0..1] %>
+                  </div>
+                <% end %>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-gray-900 dark:text-white truncate"><%= aluno.alu_nome %></p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400"><%= aluno.alu_data_nascimento.strftime("%d de %B") %></p>
                 </div>
-              <% end %>
-              <div class="flex-1">
-                <p class="font-semibold text-gray-900 dark:text-white"><%= aluno.alu_nome %></p>
-                <p class="text-sm text-gray-500 dark:text-gray-400"><%= aluno.alu_data_nascimento.strftime("%d de %B") %></p>
+                <i class="fas fa-gift text-pink-500"></i>
               </div>
-              <i class="fas fa-gift text-pink-500"></i>
+            <% end %>
+          <% else %>
+            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <i class="fas fa-birthday-cake text-3xl mb-2 opacity-50"></i>
+              <p class="text-sm">Nenhum aniversariante este mês</p>
             </div>
           <% end %>
-        <% else %>
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <i class="fas fa-birthday-cake text-3xl mb-2 opacity-50"></i>
-            <p class="text-sm">Nenhum aniversariante este mês</p>
-          </div>
-        <% end %>
+        </div>
       </div>
     </div>
 
-    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6">
-      <div class="flex items-center justify-between mb-6">
+    <%# --- PAGAMENTOS ATRASADOS --- %>
+    <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 flex flex-col max-h-[400px]">
+      <div class="flex items-center justify-between mb-4">
         <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
           <i class="fas fa-exclamation-circle text-red-500"></i>
           Pagamentos Atrasados
         </h2>
         <span class="px-3 py-1 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 text-xs font-semibold rounded-full"><%= @pagamentos_atrasados.count %></span>
       </div>
-      <div class="space-y-3">
-        <% if @pagamentos_atrasados.any? %>
-          <% @pagamentos_atrasados.limit(3).each do |pagamento| %>
-            <% 
-              dias_atraso = (Date.current - pagamento.pag_data.to_date).to_i
-              nome_devedor = pagamento.aluno.present? ? pagamento.aluno.alu_nome : (pagamento.evento.present? ? pagamento.evento.EVE_NOME : "Lançamento Interno")
-              iniciais = nome_devedor.split.map(&:first).join.upcase[0..1]
-            %>
-            <%= link_to pagamentos_path, class: "flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors" do %>
-              <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white font-bold">
-                <%= iniciais %>
-              </div>
-              <div class="flex-1">
-                <p class="font-semibold text-gray-900 dark:text-white"><%= nome_devedor %></p>
-                <p class="text-sm text-gray-500 dark:text-gray-400">Vencido há <%= dias_atraso %> <%= dias_atraso == 1 ? 'dia' : 'dias' %></p>
-              </div>
-              <span class="text-red-600 dark:text-red-400 font-bold text-sm"><%= number_to_currency(pagamento.pag_valor) %></span>
+
+      <%# Container com Rolagem %>
+      <div class="overflow-y-auto custom-scrollbar pr-2 flex-1">
+        <div class="space-y-3">
+          <% if @pagamentos_atrasados.any? %>
+            <%# REMOVIDO O LIMIT(3) para permitir a rolagem de todos %>
+            <% @pagamentos_atrasados.each do |pagamento| %>
+              <% 
+                dias_atraso = (Date.current - pagamento.pag_data.to_date).to_i
+                nome_devedor = pagamento.aluno.present? ? pagamento.aluno.alu_nome : (pagamento.evento.present? ? pagamento.evento.EVE_NOME : "Lançamento Interno")
+                iniciais = nome_devedor.split.map(&:first).join.upcase[0..1]
+              %>
+              <%= link_to pagamentos_path, class: "flex items-center gap-4 p-3 bg-gray-50 dark:bg-[#0F0F0F] rounded-lg hover:bg-gray-100 dark:hover:bg-[#1A1A1A] transition-colors" do %>
+                <div class="w-10 h-10 bg-gradient-to-br from-red-400 to-red-600 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                  <%= iniciais %>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="font-semibold text-gray-900 dark:text-white truncate"><%= nome_devedor %></p>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">Vencido há <%= dias_atraso %> <%= dias_atraso == 1 ? 'dia' : 'dias' %></p>
+                </div>
+                <span class="text-red-600 dark:text-red-400 font-bold text-sm whitespace-nowrap"><%= number_to_currency(pagamento.pag_valor) %></span>
+              <% end %>
             <% end %>
+          <% else %>
+            <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+              <i class="fas fa-check-circle text-3xl mb-2 opacity-50"></i>
+              <p class="text-sm">Nenhum pagamento atrasado</p>
+            </div>
           <% end %>
-        <% else %>
-          <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-            <i class="fas fa-check-circle text-3xl mb-2 opacity-50"></i>
-            <p class="text-sm">Nenhum pagamento atrasado</p>
-          </div>
-        <% end %>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 mb-8">
-    <div class="flex items-center justify-between mb-6">
+  <%# --- PRÓXIMOS EVENTOS --- %>
+  <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg border border-gray-200 dark:border-[#2E2E2E] p-6 mb-8 flex flex-col max-h-[500px]">
+    <div class="flex items-center justify-between mb-4">
       <h2 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
         <i class="fas fa-calendar-alt text-purple-500"></i>
         Próximos Eventos
       </h2>
       <span class="px-3 py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400 text-xs font-semibold rounded-full"><%= @proximos_eventos.count %></span>
     </div>
-    <% if @proximos_eventos.any? %>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <% 
-          cores = ['purple', 'blue', 'green', 'orange', 'pink', 'teal', 'indigo', 'red']
-          meses_pt = {
-            1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN',
-            7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'
-          }
-        %>
-        <% @proximos_eventos.each_with_index do |evento, index| %>
+
+    <%# Container com Rolagem %>
+    <div class="overflow-y-auto custom-scrollbar pr-2 flex-1">
+      <% if @proximos_eventos.any? %>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <% 
-            cor = cores[index % cores.length]
-            dias_ate = (evento.EVE_DATA.to_date - Date.today).to_i
-            mes_abrev = meses_pt[evento.EVE_DATA.month]
+            cores = ['purple', 'blue', 'green', 'orange', 'pink', 'teal', 'indigo', 'red']
+            meses_pt = {
+              1 => 'JAN', 2 => 'FEV', 3 => 'MAR', 4 => 'ABR', 5 => 'MAI', 6 => 'JUN',
+              7 => 'JUL', 8 => 'AGO', 9 => 'SET', 10 => 'OUT', 11 => 'NOV', 12 => 'DEZ'
+            }
           %>
-          <div class="p-4 bg-gradient-to-br from-<%= cor %>-50 to-<%= cor %>-100 dark:from-<%= cor %>-900/20 dark:to-<%= cor %>-800/20 rounded-xl border border-<%= cor %>-200 dark:border-<%= cor %>-800/50 hover:shadow-md transition-shadow">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-12 h-12 bg-<%= cor %>-500 rounded-lg flex items-center justify-center text-white font-bold">
-                <div class="text-center">
-                  <div class="text-xs"><%= mes_abrev %></div>
-                  <div class="text-lg leading-none"><%= evento.EVE_DATA.day %></div>
+          <% @proximos_eventos.each_with_index do |evento, index| %>
+            <% 
+              cor = cores[index % cores.length]
+              dias_ate = (evento.EVE_DATA.to_date - Date.today).to_i
+              mes_abrev = meses_pt[evento.EVE_DATA.month]
+            %>
+            <div class="p-4 bg-gradient-to-br from-<%= cor %>-50 to-<%= cor %>-100 dark:from-<%= cor %>-900/20 dark:to-<%= cor %>-800/20 rounded-xl border border-<%= cor %>-200 dark:border-<%= cor %>-800/50 hover:shadow-md transition-shadow">
+              <div class="flex items-center gap-3 mb-3">
+                <div class="w-12 h-12 bg-<%= cor %>-500 rounded-lg flex items-center justify-center text-white font-bold flex-shrink-0">
+                  <div class="text-center">
+                    <div class="text-xs"><%= mes_abrev %></div>
+                    <div class="text-lg leading-none"><%= evento.EVE_DATA.day %></div>
+                  </div>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-bold text-gray-900 dark:text-white text-sm truncate"><%= evento.EVE_NOME %></h3>
+                  <p class="text-xs text-gray-600 dark:text-gray-400">
+                    <%= dias_ate == 0 ? 'Hoje' : dias_ate == 1 ? 'Amanhã' : "Em #{dias_ate} dias" %>
+                  </p>
                 </div>
               </div>
-              <div class="flex-1">
-                <h3 class="font-bold text-gray-900 dark:text-white text-sm"><%= evento.EVE_NOME %></h3>
-                <p class="text-xs text-gray-600 dark:text-gray-400">
-                  <%= dias_ate == 0 ? 'Hoje' : dias_ate == 1 ? 'Amanhã' : "Em #{dias_ate} dias" %>
-                </p>
-              </div>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate">
+                <%= evento.EVE_LOCAL %> - <%= evento.EVE_DATA.strftime('%H:%M') %>h
+              </p>
             </div>
-            <p class="text-xs text-gray-500 dark:text-gray-400">
-              <%= evento.EVE_LOCAL %> - <%= evento.EVE_DATA.strftime('%H:%M') %>h
-            </p>
-          </div>
-        <% end %>
-      </div>
-    <% else %>
-      <div class="text-center py-8 text-gray-500 dark:text-gray-400">
-        <i class="fas fa-calendar-times text-3xl mb-2 opacity-50"></i>
-        <p class="text-sm">Nenhum evento agendado</p>
-      </div>
-    <% end %>
+          <% end %>
+        </div>
+      <% else %>
+        <div class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <i class="fas fa-calendar-times text-3xl mb-2 opacity-50"></i>
+          <p class="text-sm">Nenhum evento agendado</p>
+        </div>
+      <% end %>
+    </div>
   </div>
 
 </div>
