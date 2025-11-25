@@ -84,24 +84,73 @@
     
     <div class="bg-white dark:bg-[#1C1C1C] rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-[#2E2E2E]">
       <div class="mb-6 pb-6 border-b border-gray-200 dark:border-[#2E2E2E]">
-        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Valor Mensal Padrão
-        </label>
-        <div class="flex flex-col sm:flex-row gap-3">
-          <input 
-            type="number" 
-            step="0.01"
-            value="<%= @valor_mensalidade %>"
-            data-financeiro-target="valorMensalidade"
-            class="flex-1 px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-[#C5A300] focus:border-transparent"
-            placeholder="120.00">
-          <button 
-            data-action="click->financeiro#atualizarValorMensalidade"
-            class="w-full sm:w-auto px-6 py-2 bg-[#C5A300] text-white font-semibold rounded-lg hover:bg-[#D4AF37] transition-colors whitespace-nowrap">
-            Atualizar
-          </button>
-        </div>
-      </div>
+  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">
+    Configurações de Mensalidade
+  </label>
+  
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+    <div>
+      <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2">
+        <i class="fas fa-dollar-sign mr-1"></i>
+        Valor Mensal Padrão
+      </label>
+      <input 
+        type="number" 
+        step="0.01"
+        value="<%= @valor_mensalidade %>"
+        data-financeiro-target="valorMensalidade"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-[#C5A300] focus:border-transparent"
+        placeholder="120.00">
+    </div>
+    
+    <div>
+      <label class="block text-xs text-gray-600 dark:text-gray-400 mb-2">
+        <i class="fas fa-calendar-day mr-1"></i>
+        Dia de Vencimento (1-31)
+      </label>
+      <input 
+        type="number" 
+        min="1"
+        max="31"
+        value="<%= @dia_vencimento %>"
+        data-financeiro-target="diaVencimento"
+        class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-[#C5A300] focus:border-transparent"
+        placeholder="10">
+    </div>
+  </div>
+  
+  <button 
+    data-action="click->financeiro#atualizarValorMensalidade"
+    class="w-full sm:w-auto px-6 py-2 bg-[#C5A300] text-white font-semibold rounded-lg hover:bg-[#D4AF37] transition-colors">
+    <i class="fas fa-save mr-2"></i>
+    Atualizar Configurações
+  </button>
+  
+  <div class="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+  <p class="text-xs text-blue-700 dark:text-blue-300 flex items-center gap-2">
+    <i class="fas fa-info-circle"></i>
+
+    <%
+      ano = Date.current.year
+      mes = Date.current.month
+      dia = @dia_vencimento.to_i
+
+      data_vencimento =
+        if Date.valid_date?(ano, mes, dia)
+          Date.new(ano, mes, dia)
+        else
+          Date.new(ano, mes, -1)
+        end
+    %>
+
+    <span>
+      Vencimento do mês atual:
+      <strong class="font-bold"><%= data_vencimento.strftime('%d/%m/%Y') %></strong>
+    </span>
+  </p>
+</div>
+
+</div>
 
       <div>
         <h3 class="text-lg font-semibold text-gray-900 dark:text-[#E5E5E5] mb-4">Alunos</h3>

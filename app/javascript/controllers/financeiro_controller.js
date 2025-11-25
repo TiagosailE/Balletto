@@ -8,26 +8,28 @@ import { FormHelpers } from "controllers/helpers/form_helpers"
 
 export default class extends Controller {
   static targets = [
-    "valorMensalidade",
-    "modalParticipantes",
-    "modalMensalidade",
-    "modalDespesa",
-    "listaParticipantes",
-    "modalEventoNome",
-    "modalEventoValor",
-    "modalAlunoNome",
-    "valorTotalMensalidade",
-    "valorPagoMensalidade",
-    "valorPendenteMensalidade",
-    "caixaMensalidade",
-    "metodoMensalidade",
-    "statusPagamentoContainer",
-    "statusPagamentoLabel",
-    "descricaoDespesa",
-    "valorDespesa",
-    "caixaDespesa",
-    "metodoDespesa"
-  ]
+  "valorMensalidade",
+  "diaVencimento",
+  "modalParticipantes",
+  "modalMensalidade",
+  "modalDespesa",
+  "listaParticipantes",
+  "modalEventoNome",
+  "modalEventoValor",
+  "modalAlunoNome",
+  "valorTotalMensalidade",
+  "valorPagoMensalidade",
+  "valorPendenteMensalidade",
+  "valorPendenteContainer",
+  "caixaMensalidade",
+  "metodoMensalidade",
+  "statusPagamentoContainer",
+  "statusPagamentoLabel",
+  "descricaoDespesa",
+  "valorDespesa",
+  "caixaDespesa",
+  "metodoDespesa"
+]
 
   connect() {
     console.log("Financeiro controller conectado!")
