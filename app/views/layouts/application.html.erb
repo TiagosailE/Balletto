@@ -18,7 +18,8 @@
 
   <body class="bg-[#F0E9DF] text-gray-900 dark:bg-[#0A0A0A] dark:text-[#E5E5E5] antialiased">
 
-    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3">
+    <%# --- NOTIFICAÇÕES (FLASH MESSAGES) --- %>
+    <div class="fixed top-4 left-1/2 -translate-x-1/2 z-[99999] w-full max-w-md space-y-3 pointer-events-none px-4">
       <% flash.each do |type, message| %>
         <% next if message.blank? %>
         <% color =
@@ -28,8 +29,15 @@
           else "bg-gray-700/90 border-gray-500"
           end
         %>
-        <div class="<%= color %> text-white p-4 rounded-xl shadow-lg text-center border backdrop-blur-lg animate-fade-in-down">
-          <p class="font-semibold"><%= message %></p>
+        
+        <%# ADICIONEI: data-auto-dismiss="true" e pointer-events-auto %>
+        <div data-auto-dismiss="true" class="<%= color %> text-white p-4 rounded-xl shadow-lg text-center border backdrop-blur-lg animate-fade-in-down pointer-events-auto flex items-center justify-between gap-3">
+          <p class="font-semibold flex-1"><%= message %></p>
+          
+          <%# Botão X para fechar manualmente %>
+          <button onclick="this.parentElement.remove()" class="text-white/70 hover:text-white transition-colors cursor-pointer">
+            <i class="fas fa-times"></i>
+          </button>
         </div>
       <% end %>
     </div>
@@ -48,5 +56,42 @@
     </div>
 
     <%= render 'shared/confirm_modal' %>
+
+    <%# --- SCRIPT PARA SUMIR AUTOMATICAMENTE (CORRIGIDO) --- %>
+    <script>
+      (function() {
+        var fadeTime = 2000; // 3 segundos de leitura
+
+        function dismissFlashMessages() {
+          var messages = document.querySelectorAll('[data-auto-dismiss="true"]');
+          
+          messages.forEach(function(msg) {
+            // Evita agendar duas vezes a mesma mensagem
+            if (msg.getAttribute('data-dismiss-scheduled')) return;
+            msg.setAttribute('data-dismiss-scheduled', 'true');
+
+            setTimeout(function() {
+              // Inicia a transição visual
+              msg.style.transition = "opacity 0.5s ease, transform 0.5s ease";
+              msg.style.opacity = "0";
+              msg.style.transform = "translateY(-20px)";
+              
+              // Remove do DOM após a animação
+              setTimeout(function() {
+                if (msg && msg.parentNode) {
+                  msg.parentNode.removeChild(msg);
+                }
+              }, 500); // Tempo da transição CSS
+            }, fadeTime);
+          });
+        }
+
+        // Executa imediatamente (pois o script está no final do body)
+        dismissFlashMessages();
+        
+        // Garante execução em navegações do Turbo (caso use Turbo Drive)
+        document.addEventListener("turbo:load", dismissFlashMessages, { once: true });
+      })();
+    </script>
   </body>
 </html>
