@@ -10,7 +10,7 @@ services:
     runtime: ruby
     plan: free
     buildCommand: "./bin/render-build.sh"
-    startCommand: "bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"
+    startCommand: "bundle exec rails server -b 0.0.0.0"
     envVars:
       - key: DATABASE_URL
         fromDatabase:
