@@ -56,42 +56,6 @@
     </div>
 
     <%= render 'shared/confirm_modal' %>
-
-    <%# --- SCRIPT PARA SUMIR AUTOMATICAMENTE (CORRIGIDO) --- %>
-    <script>
-      (function() {
-        var fadeTime = 2000; // 3 segundos de leitura
-
-        function dismissFlashMessages() {
-          var messages = document.querySelectorAll('[data-auto-dismiss="true"]');
-          
-          messages.forEach(function(msg) {
-            // Evita agendar duas vezes a mesma mensagem
-            if (msg.getAttribute('data-dismiss-scheduled')) return;
-            msg.setAttribute('data-dismiss-scheduled', 'true');
-
-            setTimeout(function() {
-              // Inicia a transição visual
-              msg.style.transition = "opacity 0.5s ease, transform 0.5s ease";
-              msg.style.opacity = "0";
-              msg.style.transform = "translateY(-20px)";
-              
-              // Remove do DOM após a animação
-              setTimeout(function() {
-                if (msg && msg.parentNode) {
-                  msg.parentNode.removeChild(msg);
-                }
-              }, 500); // Tempo da transição CSS
-            }, fadeTime);
-          });
-        }
-
-        // Executa imediatamente (pois o script está no final do body)
-        dismissFlashMessages();
-        
-        // Garante execução em navegações do Turbo (caso use Turbo Drive)
-        document.addEventListener("turbo:load", dismissFlashMessages, { once: true });
-      })();
-    </script>
+    
   </body>
 </html>
