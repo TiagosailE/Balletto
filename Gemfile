@@ -7,7 +7,7 @@ end
 
 ruby file: ".ruby-version"
 
-gem "rails", "= 8.0.3"
+gem "rails", "8.1.1"
 gem 'devise'
 gem "image_processing", "~> 1.2"
 gem "ruby-vips"
