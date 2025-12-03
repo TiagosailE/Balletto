@@ -1,16 +1,12 @@
-# app/controllers/pagamentos_controller.rb
 class PagamentosController < ApplicationController
   before_action :authenticate_user!
   before_action :set_pagamento, only: [:show, :edit, :update, :destroy]
   before_action :load_form_data, only: [:new, :edit, :create, :update]
-
-  # GET /pagamentos (redireciona para financeiro)
   def index
     redirect_to financeiro_path
   end
 
   def show
-    # Não vamos usar
   end
 
   def new
@@ -18,7 +14,6 @@ class PagamentosController < ApplicationController
   end
 
   def edit
-    # @pagamento já carregado
   end
 
   def create
