@@ -2,8 +2,12 @@ class Turma < ApplicationRecord
   self.table_name = 'turmas'
   self.primary_key = 'tur_codigo'
 
-  validates :tur_nome, presence: true, length: { maximum: 50 }
-  validates :tur_capacidade, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to:255 }, allow_nil: true
+  validates :tur_nome, presence: { message: "não pode ficar em branco" }, length: { maximum: 50 }
+  validates :tur_capacidade, presence: { message: "não pode ficar em branco" },
+                             numericality: { only_integer: true, greater_than: 0, less_than_or_equal_to: 255, message: "deve ser maior que 0 e menor ou igual a 255" }
+  validates :tur_horario, presence: { message: "não pode ficar em branco" }
+  
+  validate :verificar_dias_da_semana
 
   has_many :alunos, foreign_key: 'alu_tur_codigo', primary_key: 'tur_codigo', dependent: :nullify
   has_many :turma_x_eventos, foreign_key: 'TUR_CODIGO', primary_key: 'tur_codigo', dependent: :destroy
@@ -11,7 +15,9 @@ class Turma < ApplicationRecord
 
   belongs_to :professor, class_name: 'User', foreign_key: 'user_id', optional: true
 
-serialize :tur_dia_da_semana, coder: JSON
+  serialize :tur_dia_da_semana, coder: JSON
+
+  before_validation :limpar_dias_vazios
 
   def vagas_ocupadas
     alunos.count
@@ -24,11 +30,20 @@ serialize :tur_dia_da_semana, coder: JSON
     "#{vagas_ocupadas}/#{cap}"
   end
 
-  before_validation :set_default_capacidade
-
   private
 
-  def set_default_capacidade
-    self.tur_capacidade ||= 0
+  def limpar_dias_vazios
+    if tur_dia_da_semana.is_a?(Array)
+      self.tur_dia_da_semana = tur_dia_da_semana.reject(&:blank?)
+    elsif tur_dia_da_semana.is_a?(String)
+      self.tur_dia_da_semana = [tur_dia_da_semana].reject(&:blank?)
+    end
+  end
+
+  def verificar_dias_da_semana
+    dias_limpos = Array(tur_dia_da_semana).reject(&:blank?)
+    if dias_limpos.empty?
+      errors.add(:tur_dia_da_semana, "selecione pelo menos um dia da semana")
+    end
   end
 end

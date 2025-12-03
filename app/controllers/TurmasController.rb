@@ -4,7 +4,7 @@ class TurmasController < ApplicationController
   before_action :set_professores, only: [:new, :edit, :create, :update, :show]
 
   def index
-    @turmas = Turma.includes(:professor).order(:tur_nome)
+    @turmas = Turma.includes(:professor, :alunos).order(:tur_nome)
   end
 
   def show
@@ -97,14 +97,10 @@ class TurmasController < ApplicationController
   end
   
   def turma_params
-    # CORREÇÃO AQUI: 'tur_dia_da_semana' não é um array
-    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :user_id, :tur_dia_da_semana)
+    params.require(:turma).permit(:tur_nome, :tur_horario, :tur_capacidade, :user_id, tur_dia_da_semana: [])
   end
 
   def set_professores
-    # MUDANÇA PRINCIPAL AQUI:
-    # 1. Filtra para encontrar usuários que TENHAM o cargo de 'professor'
-    # 2. Ordena pela nova coluna 'usu_nome'
     @professores = User.joins(:cargos)
                        .where(cargos: { car_nome: 'professor' })
                        .order(:usu_nome)

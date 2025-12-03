@@ -9,6 +9,7 @@ pin "alunos_modal"
 pin "configuracoes", to: "configuracoes.js"
 pin "gerenciar_usuarios", to: "gerenciar_usuarios.js"
 pin "gerenciar_alunos_turma", to: "gerenciar_alunos_turma.js"
+pin "evento_form", to: "evento_form.js"
 
 # Services
 pin "controllers/services/evento_service", to: "controllers/services/evento_service.js"
