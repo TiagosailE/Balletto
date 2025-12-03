@@ -6,6 +6,7 @@ import "alunos_modal"
 import "configuracoes"
 import "gerenciar_usuarios"
 import "gerenciar_alunos_turma"
+import "evento_form"
 
 // --- Lógica Global de UI ---
 

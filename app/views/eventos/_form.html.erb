@@ -23,6 +23,7 @@
             class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
       </div>
     </div>
+
     <div>
       <%= form.label :EVE_DATA, "Data e Hora", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
       <% border_class = form.object.errors[:EVE_DATA].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
@@ -32,10 +33,10 @@
         </div>
         <%= form.datetime_local_field :EVE_DATA,
             class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0",
-            max: "9999-12-31T23:59",
-            oninput: "limitarAno(this)" %>
+            max: "9999-12-31T23:59" %>
       </div>
     </div>
+
     <div>
       <%= form.label :EVE_LOCAL, "Local do Evento", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
       <% border_class = form.object.errors[:EVE_LOCAL].any? ? 'border-red-600 ring-1 ring-red-600' : 'border-gray-200 dark:border-[#2E2E2E] focus-within:border-[#C5A300] focus-within:ring-2 focus-within:ring-[#C5A300]' %>
@@ -47,29 +48,82 @@
             class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
       </div>
     </div>
-    
-    <div class="md:col-span-2">
+
+    <div class="md:col-span-2" id="turma-selector">
       <%= form.label :turma_ids, "Turmas Participantes", class: "text-sm font-medium text-gray-900 dark:text-gray-300 mb-1.5" %>
-      <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-200 dark:border-[#2E2E2E] p-3 max-h-48 overflow-y-auto">
-        <div class="flex flex-wrap gap-2">
+
+      <div class="relative mb-3">
+        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+          <i class="fas fa-search text-gray-400"></i>
+        </div>
+        <input type="text" 
+               id="turma-search" 
+               placeholder="Buscar turma..." 
+               class="block w-full bg-gray-50 dark:bg-[#0A0A0A] text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-10 pr-4 py-2.5 border border-gray-200 dark:border-[#2E2E2E] focus:border-[#C5A300] focus:ring-2 focus:ring-[#C5A300] focus:outline-none">
+      </div>
+
+      <div id="selected-turmas" class="flex flex-wrap gap-2 mb-3">
+        <% if form.object.persisted? %>
+          <% form.object.turmas.each do |turma| %>
+            <div class="selected-turma-badge inline-flex items-center gap-2 bg-[#C5A300] text-black font-semibold px-3 py-1.5 rounded-full text-sm" data-turma-id="<%= turma.tur_codigo %>">
+              <span><%= turma.tur_nome %></span>
+              <button type="button" class="remove-turma hover:bg-black hover:bg-opacity-20 rounded-full p-0.5 transition-colors">
+                <i class="fas fa-times text-xs"></i>
+              </button>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="flex gap-2 mb-3">
+        <button type="button" 
+                id="select-all-turmas"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-[#C5A300] bg-opacity-10 text-[#C5A300] text-sm font-medium rounded-lg border border-[#C5A300] hover:bg-opacity-20 transition-colors">
+          <i class="fas fa-check-double text-xs"></i>
+          <span>Selecionar Todas</span>
+        </button>
+        <button type="button" 
+                id="clear-all-turmas"
+                class="flex-1 inline-flex items-center justify-center gap-2 px-3 py-2 bg-gray-200 dark:bg-[#2E2E2E] text-gray-700 dark:text-gray-300 text-sm font-medium rounded-lg border border-gray-300 dark:border-[#3A3A3A] hover:bg-gray-300 dark:hover:bg-[#3A3A3A] transition-colors">
+          <i class="fas fa-times-circle text-xs"></i>
+          <span>Limpar Todas</span>
+        </button>
+      </div>
+
+      <div class="bg-gray-50 dark:bg-[#0A0A0A] rounded-lg border border-gray-200 dark:border-[#2E2E2E] max-h-64 overflow-y-auto">
+        <div id="turma-list" class="divide-y divide-gray-200 dark:divide-[#2E2E2E]">
           <% Turma.order(:tur_nome).each do |turma| %>
             <% checked = form.object.persisted? ? form.object.turmas.pluck(:tur_codigo).include?(turma.tur_codigo) : false %>
-            <% if checked %>
-              <% label_classes = "bg-[#C5A300] text-black dark:text-black font-bold hover:bg-[#C5A300] dark:hover:bg-[#C5A300]" %>
-            <% else %>
-              <% label_classes = "bg-gray-200 dark:bg-[#2E2E2E] text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-[#3A3A3A]" %>
-            <% end %>
-    
-            <label for="turma_<%= turma.tur_codigo %>"
-                   class="turma-label inline-flex items-center gap-1.5 cursor-pointer py-1.5 px-3 rounded-full text-sm font-medium transition-colors duration-150 
-                          <%= label_classes %>">
-              <%= check_box_tag "evento[turma_ids][]",
-                                turma.tur_codigo,
-                                checked,
-                                id: "turma_#{turma.tur_codigo}",
-                                class: "hidden turma-checkbox" %>
-              <span><%= turma.tur_nome %></span>
-            </label>
+            <% item_classes = checked ? 'bg-[#C5A300] bg-opacity-10 border-l-4 border-[#C5A300]' : 'border-l-4 border-transparent' %>
+            
+            <div class="turma-item <%= item_classes %> p-3 hover:bg-gray-100 dark:hover:bg-[#1A1A1A] cursor-pointer transition-colors" 
+                 data-turma-name="<%= turma.tur_nome %>">
+              <label class="flex items-center gap-3 cursor-pointer">
+                <%= check_box_tag "evento[turma_ids][]",
+                                  turma.tur_codigo,
+                                  checked,
+                                  id: "turma_#{turma.tur_codigo}",
+                                  class: "turma-checkbox w-5 h-5 text-[#C5A300] bg-gray-100 dark:bg-[#0A0A0A] border-gray-300 dark:border-[#3A3A3A] rounded focus:ring-[#C5A300] focus:ring-2 cursor-pointer" %>
+                
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <i class="fas fa-user-graduate text-gray-400 text-sm"></i>
+                    <span class="text-gray-900 dark:text-gray-100 font-medium"><%= turma.tur_nome %></span>
+                  </div>
+                  
+                  <% if turma.respond_to?(:alunos) && turma.alunos.any? %>
+                    <div class="mt-1 flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
+                      <i class="fas fa-users text-xs"></i>
+                      <span><%= pluralize(turma.alunos.count, 'aluno', 'alunos') %></span>
+                    </div>
+                  <% end %>
+                </div>
+
+                <% if checked %>
+                  <i class="fas fa-check-circle text-[#C5A300] text-lg"></i>
+                <% end %>
+              </label>
+            </div>
           <% end %>
         </div>
       </div>
@@ -88,8 +142,7 @@
             rows: 4, 
             maxlength: 300,
             placeholder: "Descreva os detalhes do evento (máx. 300 caracteres)",
-            class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0",
-            oninput: "document.getElementById('desc-count').textContent = `${this.value.length}/300`" %>
+            class: "block w-full bg-transparent text-gray-600 dark:text-[#E5E5E5] rounded-lg pl-2.5 pr-4 py-3 border-none focus:outline-none focus:ring-0" %>
       </div>
 
       <div class="text-right text-xs text-gray-500 mt-1">
@@ -110,39 +163,3 @@
         class: 'w-full sm:w-auto inline-flex justify-center items-center gap-2 px-6 py-2.5 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-50 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer'
   %>
 </div>
-
-
-<script>
-  function limitarAno(input) {
-    if (input.value) {
-      const parts = input.value.split('T');
-      const [year, month, day] = parts[0].split('-');
-      if (year && year.length > 4) {
-        const novoAno = year.slice(0, 4);
-        input.value = `${novoAno}-${month}-${day}T${parts[1] || '00:00'}`;
-      }
-    }
-  }
-
-  document.addEventListener('turbo:load', function() {
-    const checkboxes = document.querySelectorAll('.turma-checkbox');
-
-    const selectedClasses = ['bg-[#C5A300]', 'text-black', 'dark:text-black', 'font-bold', 'hover:bg-[#C5A300]', 'dark:hover:bg-[#C5A300]'];
-    const unselectedClasses = ['bg-gray-200', 'dark:bg-[#2E2E2E]', 'text-gray-700', 'dark:text-gray-300', 'hover:bg-gray-300', 'dark:hover:bg-[#3A3A3A]'];
-
-    checkboxes.forEach(function(checkbox) {
-      checkbox.addEventListener('change', function() {
-        
-        const label = this.closest('.turma-label');
-
-        if (this.checked) {
-          label.classList.add(...selectedClasses);
-          label.classList.remove(...unselectedClasses);
-        } else {
-          label.classList.remove(...selectedClasses);
-          label.classList.add(...unselectedClasses);
-        }
-      });
-    });
-  });
-</script>
