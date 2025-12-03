@@ -103,7 +103,7 @@ function confirmarExclusao(userId, userName) {
 }
 
 function excluirUsuario(userId) {
-  fetch(`/configuracoes/excluir_usuario/${userId}`, {
+  fetch(`/configuracoes/excluir_usuario/${userId}`, {  
     method: 'DELETE',
     headers: {
       'X-CSRF-Token': document.querySelector('[name="csrf-token"]').content,

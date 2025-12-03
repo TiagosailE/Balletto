@@ -3,33 +3,32 @@ class UsersController < ApplicationController
   before_action :authenticate_admin!
   before_action :set_user, only: [:edit, :update, :destroy]
 
- def index
-  @users = User.order(:usu_nome)
+  def index
+    @users = User.order(:usu_nome)
 
-  if params[:query].present?
-    query_term = "%#{params[:query]}%"
-    @users = @users.where(
-      "usu_nome ILIKE ? OR usu_login ILIKE ? OR email ILIKE ?",
-      query_term, query_term, query_term
-    )
-  end
+    if params[:query].present?
+      query_term = "%#{params[:query]}%"
+      @users = @users.where(
+        "usu_nome ILIKE ? OR usu_login ILIKE ? OR email ILIKE ?",
+        query_term, query_term, query_term
+      )
+    end
 
-  respond_to do |format|
-    format.html
-    format.json do
-      render json: @users.map { |u|
-        {
-          id: u.id,
-          usu_nome: u.usu_nome,
-          usu_login: u.usu_login,
-          foto_url: u.foto.attached? ? url_for(u.foto) : nil,
-          iniciais: u.usu_nome.split.map(&:first).join.upcase[0..1]
+    respond_to do |format|
+      format.html
+      format.json do
+        render json: @users.map { |u|
+          {
+            id: u.id,
+            usu_nome: u.usu_nome,
+            usu_login: u.usu_login,
+            foto_url: u.foto.attached? ? url_for(u.foto) : nil,
+            iniciais: u.usu_nome.split.map(&:first).join.upcase[0..1]
+          }
         }
-      }
+      end
     end
   end
-end
-
 
   def new
     @user = User.new
@@ -69,8 +68,25 @@ end
   end
 
   def destroy
-    @user.destroy
-    redirect_to configuracoes_path, notice: 'Usuário excluído com sucesso.', status: :see_other
+    if @user.id == current_user.id
+      redirect_to configuracoes_path, alert: 'Você não pode excluir a si mesmo.', status: :see_other
+      return
+    end
+
+    begin
+      ActiveRecord::Base.transaction do
+        alunos_count = Aluno.where(user_id: @user.id).update_all(user_id: current_user.id)
+        
+        Rails.logger.info "=== Reatribuídos #{alunos_count} alunos do usuário #{@user.id} para #{current_user.id} ==="
+
+        @user.destroy!
+      end
+      
+      redirect_to configuracoes_path, notice: 'Usuário excluído com sucesso.', status: :see_other
+    rescue StandardError => e
+      Rails.logger.error "=== Erro ao excluir usuário: #{e.message} ==="
+      redirect_to configuracoes_path, alert: "Erro ao excluir usuário: #{e.message}", status: :see_other
+    end
   end
 
   private

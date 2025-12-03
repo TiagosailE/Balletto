@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_11_24_234224) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_03_010734) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -133,6 +133,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_11_24_234224) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "pag_valor_pago", precision: 10, scale: 2, default: "0.0"
+    t.datetime "editado_em"
+    t.bigint "editado_por_id"
+    t.jsonb "historico_edicoes", default: []
     t.index ["aluno_id"], name: "index_pagamentos_on_aluno_id"
     t.index ["caixa_id"], name: "index_pagamentos_on_caixa_id"
     t.index ["evento_id"], name: "index_pagamentos_on_evento_id"

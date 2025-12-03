@@ -57,21 +57,32 @@ class ConfiguracoesController < ApplicationController
   end
 
   def excluir_usuario
-    unless current_user.admin?
-      render json: { success: false, error: 'Acesso negado' }, status: :forbidden
-      return
-    end
-
-    user = User.find(params[:id])
-    
-    if user.id == current_user.id
-      render json: { success: false, error: 'Você não pode excluir a si mesmo' }
-    elsif user.destroy
-      render json: { success: true }
-    else
-      render json: { success: false, error: 'Erro ao excluir usuário' }
-    end
+  unless current_user.admin?
+    render json: { success: false, error: 'Acesso negado' }, status: :forbidden
+    return
   end
+
+  user = User.find(params[:id])
+  
+  if user.id == current_user.id
+    render json: { success: false, error: 'Você não pode excluir a si mesmo' }
+    return
+  end
+
+  begin
+    ActiveRecord::Base.transaction do
+      ActiveRecord::Base.connection.execute(
+        "UPDATE alunos SET user_id = #{current_user.id} WHERE user_id = #{user.id}"
+      )
+      user.destroy!
+    end
+    
+    render json: { success: true }
+  rescue => e
+    Rails.logger.error "Erro ao excluir usuário: #{e.message}"
+    render json: { success: false, error: "Erro ao excluir usuário: #{e.message}" }
+  end
+end
 
   private
 

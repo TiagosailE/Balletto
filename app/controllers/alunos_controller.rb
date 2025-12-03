@@ -56,9 +56,44 @@ class AlunosController < ApplicationController
   end
 
   def destroy
-    @aluno.destroy
-    redirect_to alunos_path, notice: 'Aluno excluído com sucesso.'
+  begin
+    ActiveRecord::Base.transaction do
+      pagamentos = Pagamento.where(aluno_id: @aluno.alu_codigo)
+
+      if pagamentos.exists?
+        pagamentos.find_each do |pagamento|
+          descricao_atual = pagamento.pag_descricao.to_s
+
+          nova_descricao =
+            if descricao_atual.blank?
+              "Pagamento de #{@aluno.alu_nome} (aluno excluído)"
+            else
+              "#{descricao_atual} - #{@aluno.alu_nome} (aluno excluído)"
+            end
+
+          pagamento.update_columns(
+            pag_descricao: nova_descricao,
+            aluno_id: nil
+          )
+        end
+      end
+
+      @aluno.aluno_x_eventos.delete_all
+
+      aluno_nome = @aluno.alu_nome
+      @aluno.destroy!
+
+      Rails.logger.info "=== Aluno #{aluno_nome} excluído com sucesso ==="
+    end
+
+    redirect_to alunos_path, notice: 'Aluno excluído com sucesso. O histórico de pagamentos foi preservado.'
+  rescue StandardError => e
+    Rails.logger.error "=== Erro ao excluir aluno: #{e.message} ==="
+    Rails.logger.error e.backtrace.join("\n")
+    redirect_to alunos_path, alert: "Erro ao excluir aluno: #{e.message}"
   end
+end
+
 
   private
 
