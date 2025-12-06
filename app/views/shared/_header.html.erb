@@ -2,14 +2,15 @@
   <nav class="px-6 h-14 flex items-center justify-between">
 
     <%= link_to (user_signed_in? ? root_path : new_user_session_path), class: "flex items-center gap-3 group hover:opacity-80 transition-opacity duration-300" do %>
-      
-      <%= image_tag "balletto.png", class: "h-10 w-10 rounded-full object-cover border border-[#B88B00]/30 shadow-sm" %>
+
+      <%= image_tag "balletto-white.png", class: "h-10 w-10 rounded-full object-cover border border-[#B88B00]/30 shadow-sm dark:hidden" %>
+      <%= image_tag "balletto.png", class: "h-10 w-10 rounded-full object-cover border border-[#B88B00]/30 shadow-sm hidden dark:block" %>
       
       <div class="flex flex-col">
         <span class="text-xl font-serif font-bold tracking-[0.2em] uppercase text-[#B88B00] group-hover:text-[#D4AF37] transition-colors">
           Balletto
         </span>
-        </div>
+      </div>
     <% end %>
 
     <div class="flex items-center gap-3">

@@ -1,36 +1,25 @@
-<!-- 
-  Container principal: texto escuro por padrão, texto claro no modo escuro.
-  A cor de fundo (bg-white dark:bg-...) já vem do <body> no layout.
--->
 <div class="min-h-full flex items-center justify-center text-gray-900 dark:text-white">
-  
-  <!-- 
-    Card de Login: Padrão branco, escuro no modo escuro 
-  -->
+
   <div class="bg-white dark:bg-[#1c1c1c]/80 border border-gray-200 dark:border-[#2c2c2c] shadow-2xl backdrop-blur-md rounded-2xl p-10 w-full max-w-sm text-center">
 
     <div class="flex justify-center mb-6">
       <div class="w-32 h-32 rounded-full overflow-hidden">
-        <%= image_tag "balletto.png", alt: "Logo Balletto", class: "w-full h-full object-cover" %>
+        <%= image_tag "balletto-white.png", alt: "Logo Balletto", class: "w-full h-full object-cover dark:hidden" %>
+        <%= image_tag "balletto.png", alt: "Logo Balletto", class: "w-full h-full object-cover hidden dark:block" %>
       </div>
     </div>
-
-    <!-- Cor da marca (dourado) - mantida em ambos os modos -->
+    
     <h2 class="text-3xl font-semibold text-[#C5A300] mb-8">Login</h2>
 
     <%= form_for(resource, as: resource_name, url: session_path(resource_name),
           html: { class: "flex flex-col items-center" }) do |f| %>
-
-      <!-- Input de Usuário (Modo claro e escuro) -->
       <%= f.text_field :usu_login,
             autofocus: true,
-            autocomplete: "Usuário",
+            autocomplete: "username",
             placeholder: "Usuário",
             class: "w-80 mb-4 px-4 py-3 bg-white dark:bg-[#111]/60 border border-gray-300 dark:border-[#444] rounded-md text-gray-900 dark:text-[wheat]
                     placeholder-gray-500 dark:placeholder-gray-400 focus:border-[#c5a300] focus:ring-1 focus:ring-[#c5a300]
                     outline-none transition" %>
-
-      <!-- Input de Senha (Modo claro e escuro) -->
       <%= f.password_field :password,
             autocomplete: "current-password",
             placeholder: "Senha",
@@ -44,8 +33,6 @@
           <%= f.label :remember_me, "Lembrar-me" %>
         </div>
       <% end %>
-
-      <!-- Botão de Login (Estilo "marca") -->
       <%= f.submit "Entrar",
             class: "w-80 inline-flex justify-center items-center gap-2 px-6 py-3 bg-white dark:bg-black text-[#C5A300] font-bold rounded-lg shadow-md border border-[#C5A300] hover:bg-gray-100 dark:hover:bg-[#1A1A1A] hover:text-[#D4AF37] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white dark:focus:ring-offset-black focus:ring-[#C5A300] transition-all transform hover:scale-105 cursor-pointer" %>
 
