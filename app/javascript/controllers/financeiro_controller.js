@@ -8,28 +8,28 @@ import { FormHelpers } from "controllers/helpers/form_helpers"
 
 export default class extends Controller {
   static targets = [
-  "valorMensalidade",
-  "diaVencimento",
-  "modalParticipantes",
-  "modalMensalidade",
-  "modalDespesa",
-  "listaParticipantes",
-  "modalEventoNome",
-  "modalEventoValor",
-  "modalAlunoNome",
-  "valorTotalMensalidade",
-  "valorPagoMensalidade",
-  "valorPendenteMensalidade",
-  "valorPendenteContainer",
-  "caixaMensalidade",
-  "metodoMensalidade",
-  "statusPagamentoContainer",
-  "statusPagamentoLabel",
-  "descricaoDespesa",
-  "valorDespesa",
-  "caixaDespesa",
-  "metodoDespesa"
-]
+    "valorMensalidade",
+    "diaVencimento",
+    "modalParticipantes",
+    "modalMensalidade",
+    "modalDespesa",
+    "listaParticipantes",
+    "modalEventoNome",
+    "modalEventoValor",
+    "modalAlunoNome",
+    "valorTotalMensalidade",
+    "valorPagoMensalidade",
+    "valorPendenteMensalidade",
+    "valorPendenteContainer",
+    "caixaMensalidade",
+    "metodoMensalidade",
+    "statusPagamentoContainer",
+    "statusPagamentoLabel",
+    "descricaoDespesa",
+    "valorDespesa",
+    "caixaDespesa",
+    "metodoDespesa"
+  ]
 
   connect() {
     console.log("Financeiro controller conectado!")
@@ -52,6 +52,11 @@ export default class extends Controller {
     if (this.hasValorTotalMensalidadeTarget && this.hasValorPagoMensalidadeTarget) {
       this.valorTotalMensalidadeTarget.addEventListener('input', () => this.calcularPendenteMensalidade())
       this.valorPagoMensalidadeTarget.addEventListener('input', () => this.calcularPendenteMensalidade())
+    }
+
+    const campoValorPagarAgora = document.querySelector('[data-mensalidade-target="valorPagarAgora"]')
+    if (campoValorPagarAgora) {
+      campoValorPagarAgora.addEventListener('input', () => this.calcularPendenteMensalidade())
     }
   }
 
@@ -99,6 +104,10 @@ export default class extends Controller {
 
   async confirmarPagamentoMensalidade() {
     await this.mensalidadeService.confirmarPagamento()
+  }
+
+  habilitarEdicaoMensalidade() {
+    this.mensalidadeService.habilitarEdicao()
   }
 
   fecharModalMensalidade() {

@@ -20,19 +20,29 @@ Rails.application.routes.draw do
       post 'turmas/:turma_id/alunos/:aluno_id/toggle', to: 'eventos#toggle_aluno'
     end
   end
+
+  # Rotas de Financeiro
   get 'financeiro', to: 'financeiro#index', as: 'financeiro'
   
+  # Eventos
   post 'financeiro/atualizar_valor_evento', to: 'financeiro#atualizar_valor_evento'
   get 'financeiro/participantes_evento/:evento_id', to: 'financeiro#participantes_evento'
   post 'financeiro/registrar_pagamento_evento', to: 'financeiro#registrar_pagamento_evento'
+  
+  # Mensalidades
   post 'financeiro/atualizar_valor_mensalidade', to: 'financeiro#atualizar_valor_mensalidade'
   post 'financeiro/registrar_pagamento_mensalidade', to: 'financeiro#registrar_pagamento_mensalidade'
+  post 'financeiro/editar_pagamento_mensalidade', to: 'financeiro#editar_pagamento_mensalidade'
+  get 'financeiro/info_mensalidade_aluno/:aluno_id', to: 'financeiro#info_mensalidade_aluno'
+  
+  # Despesas
   post 'financeiro/registrar_despesa', to: 'financeiro#registrar_despesa'
- get 'financeiro/info_mensalidade_aluno/:aluno_id', to: 'financeiro#info_mensalidade_aluno' 
+  
   resources :pagamentos
 
   root 'home#index'
 
+  # Configurações
   get 'configuracoes', to: 'configuracoes#index', as: 'configuracoes'
   patch 'configuracoes', to: 'configuracoes#update'
   get 'configuracoes/listar_usuarios', to: 'configuracoes#listar_usuarios'

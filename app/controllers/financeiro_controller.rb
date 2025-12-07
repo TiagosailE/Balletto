@@ -3,27 +3,27 @@ class FinanceiroController < ApplicationController
   include ActionView::Helpers::NumberHelper
 
   def index
-  @configuracao = Configuracao.instance
-  @valor_mensalidade = @configuracao.con_valor_mensalidade
-  @dia_vencimento = @configuracao.dia_vencimento_mensalidade
-  
-  @alunos = Aluno.order(:alu_nome)
-  @caixas = Caixa.order(:cai_nome)
-  @eventos = Evento.where('"EVE_DATA" >= ?', Date.current).order('"EVE_DATA" ASC')
-  
-  Pagamento.atualizar_status_mensalidades
-  
-  @pagamentos = Pagamento.includes(:caixa, :aluno, :evento)
-                         .where('pag_data >= ?', 1.month.ago)
-                         .order(pag_data: :desc)
-  
-  calcular_totais
+    @configuracao = Configuracao.instance
+    @valor_mensalidade = @configuracao.con_valor_mensalidade
+    @dia_vencimento = @configuracao.dia_vencimento_mensalidade
+    
+    @alunos = Aluno.order(:alu_nome)
+    @caixas = Caixa.order(:cai_nome)
+    @eventos = Evento.where('"EVE_DATA" >= ?', Date.current).order('"EVE_DATA" ASC')
+    
+    Pagamento.atualizar_status_mensalidades
+    
+    @pagamentos = Pagamento.includes(:caixa, :aluno, :evento)
+                           .where('pag_data >= ?', 1.month.ago)
+                           .order(pag_data: :desc)
+    
+    calcular_totais
 
-  respond_to do |format|
-    format.html
-    format.pdf { render_extrato_pdf }
+    respond_to do |format|
+      format.html
+      format.pdf { render_extrato_pdf }
+    end
   end
-end
 
   def atualizar_valor_evento
     evento = Evento.find(params[:evento_id])
@@ -104,13 +104,30 @@ end
     if pagamento.persisted?
       render json: { 
         success: true, 
-        mensagem: pagamento.quitado? ? 'Mensalidade quitada!' : "Pagamento registrado! Faltam #{number_to_currency(pagamento.valor_pendente)}",
+        message: pagamento.quitado? ? 'Mensalidade quitada!' : "Pagamento registrado! Faltam #{number_to_currency(pagamento.valor_pendente)}",
         status: pagamento.pag_status,
         atrasado: pagamento.atrasado?,
         dias_atraso: pagamento.dias_atraso
       }
     else
-      render json: { success: false, mensagem: pagamento.errors.full_messages.join(', ') }, status: :unprocessable_entity
+      render json: { success: false, message: pagamento.errors.full_messages.join(', ') }, status: :unprocessable_entity
+    end
+  end
+
+  def editar_pagamento_mensalidade
+    service = Financeiro::MensalidadeService.new(params[:aluno_id], params)
+    pagamento = service.editar_pagamento(params[:pagamento_id])
+    
+    if pagamento.persisted?
+      render json: { 
+        success: true, 
+        message: pagamento.quitado? ? 'Pagamento atualizado e quitado!' : "Pagamento atualizado! Faltam #{number_to_currency(pagamento.valor_pendente)}",
+        status: pagamento.pag_status,
+        atrasado: pagamento.atrasado?,
+        dias_atraso: pagamento.dias_atraso
+      }
+    else
+      render json: { success: false, message: pagamento.errors.full_messages.join(', ') }, status: :unprocessable_entity
     end
   end
   
