@@ -28,7 +28,6 @@
           </div>
         </div>
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Valor Total da Mensalidade
@@ -40,19 +39,35 @@
           value="<%= @valor_mensalidade %>"
           class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-green-500 focus:border-transparent">
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-          Valor Pago Agora
+          Valor Já Pago
         </label>
         <input 
           type="number" 
           step="0.01"
           data-financeiro-target="valorPagoMensalidade"
           placeholder="0.00"
-          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-green-500 focus:border-transparent">
+          readonly
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-gray-100 dark:bg-[#0A0A0A] text-gray-600 dark:text-gray-400 cursor-not-allowed">
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          Este é o valor total já pago anteriormente
+        </p>
       </div>
-
+      <div data-mensalidade-campo="valorPagarAgora">
+        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        Valor a Pagar
+        </label>
+        <input 
+          type="number" 
+          step="0.01"
+          data-mensalidade-target="valorPagarAgora"
+          placeholder="0.00"
+          class="w-full px-4 py-2 border border-gray-300 dark:border-[#2E2E2E] rounded-lg bg-white dark:bg-[#0A0A0A] text-gray-900 dark:text-[#E5E5E5] focus:ring-2 focus:ring-green-500 focus:border-transparent">
+        <p class="text-xs text-blue-600 dark:text-blue-400 mt-1">
+         Digite o valor que está pagando agora
+        </p>
+      </div>
       <div class="p-3 rounded-lg bg-gray-50 dark:bg-[#111111]" data-financeiro-target="valorPendenteContainer">
         <div class="flex justify-between items-center">
           <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Valor Pendente:</span>
@@ -61,7 +76,6 @@
           </span>
         </div>
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Caixa
@@ -75,7 +89,6 @@
           <% end %>
         </select>
       </div>
-
       <div>
         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
           Método de Pagamento
@@ -91,7 +104,6 @@
         </select>
       </div>
     </div>
-
     <div class="flex gap-3 p-6 border-t border-gray-200 dark:border-[#2E2E2E]">
       <button 
         data-action="click->financeiro#fecharModalMensalidade"

@@ -8,9 +8,6 @@ import "gerenciar_usuarios"
 import "gerenciar_alunos_turma"
 import "evento_form"
 
-// --- Lógica Global de UI ---
-
-// Animação de fade-out para mensagens flash (Alertas/Notificações)
 function fadeFlashMessages() {
   const flashes = document.querySelectorAll(".animate-fade-in-down");
 
